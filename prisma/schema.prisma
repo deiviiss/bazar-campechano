@@ -1,0 +1,210 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Size {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+  XXXL
+}
+
+enum Gender {
+  men
+  women
+  kid
+  unisex
+}
+
+enum Role {
+  admin
+  user
+}
+
+enum Status {
+  unpaid
+  paided
+  shipped
+  delivered
+}
+
+enum ShippingMethod {
+  pickup
+  delivery
+}
+
+enum PaymentMethod {
+  paypal
+  mercadopago
+  cash
+  transfer
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+  price       Float   @default(0)
+  slug        String  @unique
+  gender      Gender
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  productImage ProductImage[]
+  orderItem    OrderItem[]
+  productStock ProductStock[]
+
+  @@index([gender])
+  @@map("products")
+}
+
+model ProductStock {
+  id      String @id @default(uuid())
+  size    Size
+  inStock Int
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("product_stocks")
+}
+
+model ProductImage {
+  id  String @id @default(uuid())
+  url String
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("product_images")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  phoneNumber   String
+  role          Role      @default(user)
+  isActive      Boolean   @default(true)
+
+  address UserAddress?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  order     Order[]
+
+  @@map("users")
+}
+
+model Country {
+  id           String         @id
+  name         String
+  userAddress  UserAddress[]
+  OrderAddress OrderAddress[]
+
+  @@map("countries")
+}
+
+model UserAddress {
+  id         String  @id @default(uuid())
+  firstName  String
+  lastName   String
+  address    String
+  address2   String?
+  postalCode String
+  phone      String
+  city       String
+
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  @@map("user_addresses")
+}
+
+model Order {
+  id             String         @id @default(uuid())
+  subtotal       Float
+  tax            Float
+  total          Float
+  itemsInOrder   Int
+  status         Status         @default(unpaid)
+  shippingMethod ShippingMethod
+  paymentMethod  PaymentMethod
+  isPaid         Boolean        @default(false)
+  paidAt         DateTime?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  orderItem      OrderItem[]
+  orderAddresses OrderAddress?
+
+  transactionId String?
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  quantity Int
+  price    Float
+  size     Size
+
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  @@map("order_items")
+}
+
+model OrderAddress {
+  id         String  @id @default(uuid())
+  firstName  String
+  lastName   String
+  address    String
+  address2   String?
+  postalCode String
+  city       String
+  phone      String
+
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId String
+
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String @unique
+
+  @@map("order_addresses")
+}
