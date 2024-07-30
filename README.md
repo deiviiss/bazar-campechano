@@ -28,10 +28,7 @@ npm run dev
 ```
 
 # Notes: default user
-__user__ moda.shop.ecommerce@hotmail.com
-
-__password__ useradmin
-
+Default user data in the seed file
 
 # Prisma commands
 ```

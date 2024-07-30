@@ -1,7 +1,7 @@
 import { type Metadata, type ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPaginationProductsWithImages } from '@/actions'
-import { Pagination, ProductGrid, ProductSearch, Title } from '@/components'
+import { Pagination, ProductGridLight, ProductSearch, Title } from '@/components'
 import { type ValidGender } from '@/interfaces'
 
 interface Props {
@@ -75,7 +75,7 @@ export default async function GenderByPage({ params, searchParams }: Props) {
         products.length > 0
           ? (
             <>
-              <ProductGrid products={processedProducts} />
+              <ProductGridLight products={processedProducts} />
 
               <Pagination totalPages={totalPages} />
             </>)

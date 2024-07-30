@@ -40,6 +40,7 @@ export { getProductByIdSize } from './products/get-product-by-id-size'
 export { getSizesProductStock } from './products/get-sizes-product-stock'
 export { deleteProductById } from './products/delete-product-by-id'
 export { deleteProductByIdAndSize } from './products/delete-product-by-id-size'
+export { getPaginationFeaturedProductsWithImages } from './products/featured-product-pagination'
 
 // users
 export { getPaginatedUsers } from './users/get-paginated-users'

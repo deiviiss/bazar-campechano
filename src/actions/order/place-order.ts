@@ -1,6 +1,7 @@
 'use server'
 
 import { type PaymentMethod, type ShippingMethod } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
 import { getUserSessionServer, sendNotificationsPaymentMethod } from '@/actions'
 import { type UserAddress, type Size } from '@/interfaces'
 import prisma from '@/lib/prisma'
@@ -190,6 +191,8 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
     if (paymentMethod === 'transfer') {
       await sendNotificationsPaymentMethod({ userName: user.name, paymentMethod })
     }
+
+    revalidatePath('/')
 
     return { ok: true, order: prismaTX.order }
   } catch (error) {

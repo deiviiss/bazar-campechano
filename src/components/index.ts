@@ -19,8 +19,10 @@ export { TransferButton } from './payment-methods/transfer/TransferButton'
 export { CashButton } from './payment-methods/cash/CashButton'
 
 // Products
-export * from './products/product-grid/ProductGrid'
-export * from './products/product-grid/ProductGridItem'
+export { ProductGridDark } from './products/product-grid/ProductGridDark'
+export { ProductGridLight } from './products/product-grid/ProductGridLight'
+export { ProductGridItemDark } from './products/product-grid/ProductGridItemDark'
+export { ProductGridItemLight } from './products/product-grid/ProductGridItemLight'
 
 // Product
 export * from './product/quantity-selector/QuantitySelector'

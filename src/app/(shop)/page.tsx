@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
-import { getPaginationProductsWithImages } from '@/actions'
-import { Pagination, ProductGrid, ProductSearch, Title } from '@/components'
+import { getPaginationFeaturedProductsWithImages, getPaginationProductsWithImages } from '@/actions'
+import { ProductGridDark, ProductGridLight, Title } from '@/components'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   searchParams: {
@@ -15,12 +16,20 @@ export default async function ShopPage({ searchParams }: Props) {
   const page = searchParams.page ? Number(searchParams.page) : 1
 
   const result = await getPaginationProductsWithImages({ page, query })
+  const { products: featuredProducts } = await getPaginationFeaturedProductsWithImages({ page, query })
 
-  if (!result) {
+  console.log(!featuredProducts)
+
+  if (!result || !featuredProducts) {
     return notFound()
   }
 
-  const { products, totalPages } = result
+  const { products } = result
+
+  const processedFeaturedProducts = featuredProducts.map(product => ({
+    ...product,
+    description: product.description || 'Sin descripción'
+  }))
 
   const processedProducts = products.map(product => ({
     ...product,
@@ -29,28 +38,45 @@ export default async function ShopPage({ searchParams }: Props) {
 
   return (
     <>
-      <Title
-        title="Tienda de ropa"
-        subtitle="Toda la ropa que necesitas para estar a la moda."
-        className="mb-2" />
+      <div className='bg-black pb-10 mb-10'>
+        <Title
+          title="Lo más nuevo"
+          subtitle="Rebajas"
+          className='text-center uppercase text-white pt-10'
+        />
 
-      <div className='flex justify-end mb-6 gap-2'>
-        <ProductSearch placeholder='Buscar producto...' />
+        {
+          products.length > 0
+            ? (
+              <>
+                <ProductGridDark products={processedProducts} />
+                <Button variant='outline' className='flex justify-center mx-auto w-3/4 max-w-40 capitalize bg-transparent text-white mt-[52px]'>ver todo</Button>
+              </>)
+            : (
+              <div className='flex w-full items-center justify-center h-36'>
+                <p>No hay productos con ese nombre</p>
+              </div>)
+        }
       </div>
 
-      {
-        products.length > 0
-          ? (
-            <>
-              <ProductGrid products={processedProducts} />
+      <div className='pb-10 mb-10'>
+        <Title
+          title="Las últimas"
+          subtitle="ofertas"
+          className='text-center uppercase pt-10'
+        />
 
-              <Pagination totalPages={totalPages} />
-            </>)
-          : (
-            <div className='flex w-full items-center justify-center h-36'>
-              <p>No hay productos con ese nombre</p>
-            </div>)
-      }
+        {
+          featuredProducts.length > 0
+            ? (
+              <ProductGridLight products={processedFeaturedProducts} />)
+            : (
+              <div className='flex w-full items-center justify-center h-36'>
+                <p>No hay productos con ese nombre</p>
+              </div>)
+        }
+
+      </div>
     </>
   )
 }
