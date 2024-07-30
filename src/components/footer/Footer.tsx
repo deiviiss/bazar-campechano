@@ -19,6 +19,13 @@ export const Footer = () => {
       </Link>
 
       <Link
+        href={'/refunds'}
+        className='mx-2 text-center'
+      >
+        Política de devoluciones
+      </Link>
+
+      <Link
         href="/"
         className='mx-2 col-span-2 sm:col-auto text-center'
       >
