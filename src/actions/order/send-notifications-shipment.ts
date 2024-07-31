@@ -1,14 +1,13 @@
 'use server'
 
-import { sendWhatsappMessage, sendSmsMessage, getUserSessionServer, getPhoneNumberAdmin, getEmailAdmin, sendEmail } from '@/actions'
+import { getUserSessionServer, getEmailAdmin, sendEmail } from '@/actions'
 
 interface Props {
-  userPhoneNumber?: string
   userEmail?: string
   userName?: string
 }
 
-export const sendNotificationsShipment = async ({ userEmail, userName, userPhoneNumber }: Props) => {
+export const sendNotificationsShipment = async ({ userEmail, userName }: Props) => {
   const user = await getUserSessionServer()
 
   if (!user) {
@@ -19,30 +18,16 @@ export const sendNotificationsShipment = async ({ userEmail, userName, userPhone
   }
 
   const email = userEmail || user.email
-  const phoneNumber = userPhoneNumber || user.phoneNumber
   const name = userName || user.name
 
-  const { phoneNumberAdmin } = await getPhoneNumberAdmin()
   const { emailAdmin } = await getEmailAdmin()
 
-  if (!user || phoneNumberAdmin === null || emailAdmin === null) {
+  if (!user || emailAdmin === null) {
     return {
       ok: false,
       message: 'No se pudo enviar la notificación de pago'
     }
   }
-
-  // send whatsapp to user to notify shipment
-  await sendWhatsappMessage(phoneNumber, `¡${name}, su pedido ha sido enviado y llegará al final del día! Si no recibe su pedido hoy, por favor contáctenos.`)
-
-  // send whatsapp to admin to notify shipment
-  await sendWhatsappMessage(`${phoneNumberAdmin.phoneNumber}`, `¡El pedido de ${name} ha sido enviado y debe llegar al final del día! Si no se ha recibido, por favor revise.`)
-
-  // send sms to user to notify shipment
-  await sendSmsMessage(phoneNumber, `¡${name}, su pedido ha sido enviado y llegará al final del día! Si no recibe su pedido hoy, por favor contáctenos.`)
-
-  // send sms to admin to notify shipment
-  await sendSmsMessage(`${phoneNumberAdmin.phoneNumber}`, `¡El pedido de ${name} ha sido enviado y debe llegar al final del día! Si no se ha recibido, por favor revise.`)
 
   // send email to user to notify shipment
   await sendEmail({
