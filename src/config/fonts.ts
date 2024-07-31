@@ -1,8 +1,11 @@
-import { Inter, Montserrat_Alternates } from 'next/font/google'
+import { Asap_Condensed, Lato } from 'next/font/google'
 
-export const inter = Inter({ subsets: ['latin'] })
-
-export const titleFont = Montserrat_Alternates({
+export const bodyFont = Lato({
   subsets: ['latin'],
-  weight: ['500', '700']
+  weight: ['400', '700']
+})
+
+export const titleFont = Asap_Condensed({
+  subsets: ['latin'],
+  weight: '400'
 })
