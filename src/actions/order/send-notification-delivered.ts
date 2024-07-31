@@ -1,14 +1,13 @@
 'use server'
 
-import { sendWhatsappMessage, sendSmsMessage, getUserSessionServer, getPhoneNumberAdmin, getEmailAdmin, sendEmail } from '@/actions'
+import { getUserSessionServer, getEmailAdmin, sendEmail } from '@/actions'
 
 interface Props {
-  userPhoneNumber?: string
   userEmail?: string
   userName?: string
 }
 
-export const sendNotificationsDelivered = async ({ userEmail, userName, userPhoneNumber }: Props) => {
+export const sendNotificationsDelivered = async ({ userEmail, userName }: Props) => {
   const user = await getUserSessionServer()
 
   if (!user) {
@@ -19,30 +18,16 @@ export const sendNotificationsDelivered = async ({ userEmail, userName, userPhon
   }
 
   const email = userEmail || user.email
-  const phoneNumber = userPhoneNumber || user.phoneNumber
   const name = userName || user.name
 
-  const { phoneNumberAdmin } = await getPhoneNumberAdmin()
   const { emailAdmin } = await getEmailAdmin()
 
-  if (!user || phoneNumberAdmin === null || emailAdmin === null) {
+  if (!user || emailAdmin === null) {
     return {
       ok: false,
       message: 'No se pudo enviar la notificación de entrega'
     }
   }
-
-  // send whatsapp to user to notify delivery
-  await sendWhatsappMessage(phoneNumber, `¡${name}, su pedido ha sido entregado! Gracias por su compra.`)
-
-  // send whatsapp to admin to notify delivery
-  await sendWhatsappMessage(`${phoneNumberAdmin.phoneNumber}`, `¡El pedido de ${name} ha sido entregado!`)
-
-  // send sms to user to notify delivery
-  await sendSmsMessage(phoneNumber, `¡${name}, su pedido ha sido entregado! Gracias por su compra.`)
-
-  // send sms to admin to notify delivery
-  await sendSmsMessage(`${phoneNumberAdmin.phoneNumber}`, `¡El pedido de ${name} ha sido entregado!`)
 
   // send email to user to notify delivery
   await sendEmail({

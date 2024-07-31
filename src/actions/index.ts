@@ -50,8 +50,6 @@ export { getEmailAdmin } from './users/get-email-admin'
 export { toggleUserStatus } from './users/toggle-user-status'
 
 // notify
-export { sendWhatsappMessage } from './notifications/whatsapp/send-whatsapp-message'
-export { sendSmsMessage } from './notifications/sms/send-sms-message'
 export { sendEmail } from './notifications/email/send-email-message'
 export { sendNotificationsPayment } from './payments/send-notifications-payment'
 export { sendNotificationsShipment } from './order/send-notifications-shipment'
