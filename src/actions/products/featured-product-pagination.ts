@@ -14,7 +14,7 @@ interface PaginationOptions {
   gender?: Gender
 }
 
-export const getPaginationFeaturedProductsWithImages = async ({ page = 1, take = 12, gender, query = '' }: PaginationOptions): Promise<{ currentPage: number, totalPages: number, products: Product[] }> => {
+export const getPaginationFeaturedProductsWithImages = async ({ page = 1, take = 8, gender, query = '' }: PaginationOptions): Promise<{ currentPage: number, totalPages: number, products: Product[] }> => {
   page = validatePageNumber(page)
 
   try {

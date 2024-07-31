@@ -7,7 +7,7 @@ interface ProductGridProps {
 
 export const ProductGridLight = ({ products }: ProductGridProps) => {
   return (
-    <div className="flex w-full overflow-x-scroll" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div className="grid grid-cols-2 min-[760px]:grid-cols-3 lg:grid-cols-4 w-full overflow-x-scroll" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       {
         products.map((product) => (
           <ProductGridItemLight key={product.slug} product={product} />
