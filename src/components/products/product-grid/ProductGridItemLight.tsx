@@ -56,7 +56,7 @@ export const ProductGridItemLight = ({ product }: ProductGridItemProps) => {
   const handleMouseLeave = () => { setDisplayImage(product.images[0].url) }
 
   return (
-    <div className='flex-shrink-0 items-center max-w-[340px] px-2'>
+    <div className='flex-shrink-0 flex flex-col justify-self-center max-w-[340px] px-2'>
       <Link href={`/product/${product.slug}`}>
         <ProductImage src={displayImage}
           alt={product.title}
