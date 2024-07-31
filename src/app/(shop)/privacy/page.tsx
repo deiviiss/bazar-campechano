@@ -9,7 +9,7 @@ export default async function PrivacyPage() {
       <Title title="Políticas de privacidad" subtitle='' />
       <div className='max-w-[920px] mx-auto'>
         <div className='px-3 py-4'>
-          <p>
+          <p className='text-base antialiased'>
             En nuestro sitio web, valoramos y respetamos su privacidad. Esta Política de Privacidad explica cómo recopilamos y utilizamos su información personal a través de nuestro sitio web y los servicios que ofrecemos.
           </p>
         </div>
@@ -24,8 +24,8 @@ export default async function PrivacyPage() {
           <p className='pb-4'>
             Utilizamos su información personal para los siguientes fines:
           </p>
-          <ul className='list-disc pl-6'>
-            <li>Para procesar simulaciones de pedidos.</li>
+          <ul className='list-disc pl-6 pb-4'>
+            <li>Para procesar sus pedidos y entregarlos en la dirección proporcionada.</li>
             <li>Para gestionar su cuenta y ofrecerle soporte.</li>
             <li>Para recopilar y analizar feedback y comentarios proporcionados por usted para mejorar nuestros servicios.</li>
           </ul>
@@ -46,7 +46,7 @@ export default async function PrivacyPage() {
           </p>
 
           <p>
-            Si tiene alguna pregunta sobre esta política de privacidad o cómo manejamos su información, no dude en ponerse en contacto con nosotros a través de nuestro formulario de contacto.
+            Si tiene alguna pregunta sobre esta política de privacidad o cómo manejamos su información, no dude en ponerse en contacto con nosotros a través de nuestro correo electrónico.
           </p>
         </div>
 

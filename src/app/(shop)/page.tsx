@@ -18,8 +18,6 @@ export default async function ShopPage({ searchParams }: Props) {
   const result = await getPaginationProductsWithImages({ page, query })
   const { products: featuredProducts } = await getPaginationFeaturedProductsWithImages({ page, query })
 
-  console.log(!featuredProducts)
-
   if (!result || !featuredProducts) {
     return notFound()
   }
