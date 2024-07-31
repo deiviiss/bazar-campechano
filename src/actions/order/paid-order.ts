@@ -25,7 +25,7 @@ export const paidOrder = async (orderId: string, userId: string) => {
     })
 
     // send notifications to user and admin
-    await sendNotificationsPayment({ userEmail: user.email, userPhoneNumber: user.phoneNumber, userName: user.name })
+    await sendNotificationsPayment({ userEmail: user.email, userName: user.name })
 
     revalidatePath(`/orders/${orderId}`)
 

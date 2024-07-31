@@ -44,7 +44,7 @@ export const changeOrderStatus = async (id: string, status: Status) => {
     })
 
     if (status === 'shipped') {
-      await sendNotificationsShipment({ userEmail: order.user.email, userName: order.user.name, userPhoneNumber: order.user.phoneNumber })
+      await sendNotificationsShipment({ userEmail: order.user.email, userName: order.user.name })
     }
 
     if (status === 'delivered') {
