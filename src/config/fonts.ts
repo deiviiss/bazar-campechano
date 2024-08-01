@@ -7,5 +7,5 @@ export const bodyFont = Lato({
 
 export const titleFont = Asap_Condensed({
   subsets: ['latin'],
-  weight: '400'
+  weight: ['400', '600', '700']
 })
