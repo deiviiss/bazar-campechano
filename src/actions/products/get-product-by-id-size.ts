@@ -1,6 +1,6 @@
 'use server'
 
-import { getSizesProductStock } from './get-sizes-product-stock'
+import { getSizesProductStock } from './get-sizes-product-clothe-stock'
 import { type Size } from '@/interfaces'
 import prisma from '@/lib/prisma'
 

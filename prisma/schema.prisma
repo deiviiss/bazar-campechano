@@ -64,25 +64,25 @@ model Category {
 }
 
 model Product {
-  id          String  @id @default(uuid())
+  id          String @id @default(uuid())
   title       String
-  description String?
-  price       Float   @default(0)
-  slug        String  @unique
-  gender      Gender
+  description String
+  price       Float  @default(0)
+  slug        String @unique
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
   productImage ProductImage[]
   orderItem    OrderItem[]
-  productStock ProductStock[]
+  clotheStock  ClotheStock[]
+  toyStock     ToyStock[]
+  shoeStock    ShoeStock[]
 
-  @@index([gender])
   @@map("products")
 }
 
-model ProductStock {
+model ClotheStock {
   id      String @id @default(uuid())
   size    Size
   inStock Int
@@ -90,7 +90,29 @@ model ProductStock {
   productId String
   product   Product @relation(fields: [productId], references: [id])
 
-  @@map("product_stocks")
+  @@map("clothe_stocks")
+}
+
+model ShoeStock {
+  id      String @id @default(uuid())
+  size    Int
+  inStock Int
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("shoe_stocks")
+}
+
+model ToyStock {
+  id       String @id @default(uuid())
+  ageRange String
+  inStock  Int
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("toy_stocks")
 }
 
 model ProductImage {

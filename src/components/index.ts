@@ -19,10 +19,15 @@ export { TransferButton } from './payment-methods/transfer/TransferButton'
 export { CashButton } from './payment-methods/cash/CashButton'
 
 // Products
-export { ProductGridDark } from './products/product-grid/ProductGridDark'
-export { ProductGridLight } from './products/product-grid/ProductGridLight'
-export { ProductGridItemDark } from './products/product-grid/ProductGridItemDark'
-export { ProductGridItemLight } from './products/product-grid/ProductGridItemLight'
+export { NewProductsGrid } from './products/product-grid/NewProductsGrid'
+export { NewProductItemClothe } from './products/product-grid/NewProductItemClothe'
+export { NewProductItemShoe } from './products/product-grid/NewProductItemShoe'
+export { NewProductItemToy } from './products/product-grid/NewProductItemToy'
+
+export { FeaturedProductsGrid } from './products/product-grid/FeaturedProductsGrid'
+export { FeaturedProductItemClothe } from './products/product-grid/FeaturedProductItemClothe'
+export { FeaturedProductItemShoe } from './products/product-grid/FeaturedProductItemShoe'
+export { FeaturedProductItemToy } from './products/product-grid/FeaturedProductItemToy'
 
 // Product
 export * from './product/quantity-selector/QuantitySelector'

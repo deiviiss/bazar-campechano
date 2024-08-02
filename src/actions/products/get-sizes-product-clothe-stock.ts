@@ -1,6 +1,6 @@
 'use server'
 
-import { type Size } from '@/interfaces'
+import { type SizeClothe } from '@/interfaces'
 import prisma from '@/lib/prisma'
 
 const sizeOrder = {
@@ -13,9 +13,9 @@ const sizeOrder = {
   XXXL: 7
 }
 
-export const getSizesProductStock = async (id: string): Promise<Size[]> => {
+export const getSizesProductClotheStock = async (id: string): Promise<SizeClothe[]> => {
   try {
-    const sizesProduct = await prisma.productStock.findMany({
+    const sizesProduct = await prisma.clotheStock.findMany({
       where: {
         productId: id
       },
