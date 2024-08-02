@@ -13,11 +13,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { type Size, type Product, type CartProduct } from '@/interfaces'
+import { type SizeClothe, type CartProduct, type ProductClothe, type Product } from '@/interfaces'
 import { useCartStore } from '@/store'
 
-interface ProductGridItemProps {
-  product: Product
+interface NewProductItemProps {
+  product: Product | ProductClothe
 }
 
 const noticeAddToCart = () => {
@@ -27,9 +27,9 @@ const noticeAddToCart = () => {
   })
 }
 
-export const ProductGridItemDark = ({ product }: ProductGridItemProps) => {
-  const [displayImage, setDisplayImage] = useState(product.images[0].url)
-  const [selectedSize, setSelectedSize] = useState<Size | null>(null)
+export const NewProductItemClothe = ({ product }: NewProductItemProps) => {
+  const [displayImage, setDisplayImage] = useState(product.productImage[0].url)
+  const [selectedSize, setSelectedSize] = useState<SizeClothe | null>(null)
   const addProductToCart = useCartStore(state => state.addProductToCart)
   const isSelectSize = selectedSize !== null
 
@@ -41,7 +41,7 @@ export const ProductGridItemDark = ({ product }: ProductGridItemProps) => {
       slug: product.slug,
       title: product.title,
       price: product.price,
-      image: product.images[0].url,
+      image: product.productImage[0].url,
       size: selectedSize,
       quantity: 1
     }
@@ -52,8 +52,8 @@ export const ProductGridItemDark = ({ product }: ProductGridItemProps) => {
     noticeAddToCart()
   }
 
-  const handleMouseEnter = () => { setDisplayImage(product.images[1].url) }
-  const handleMouseLeave = () => { setDisplayImage(product.images[0].url) }
+  const handleMouseEnter = () => { setDisplayImage(product.productImage[1].url) }
+  const handleMouseLeave = () => { setDisplayImage(product.productImage[0].url) }
 
   return (
     <div className='flex-shrink-0 max-w-[300px] px-2 min-[400px]:max-w-[400px] md:max-w-[200px] lg:max-w-[200px]'>
@@ -75,10 +75,10 @@ export const ProductGridItemDark = ({ product }: ProductGridItemProps) => {
         </Link>
         <p>Color: VERDES</p>
         {
-          product.sizes.length > 0
+          'sizes' in product && product.sizes.length > 0
             ? (<div className='flex flex-col gap-1 my-3'>
               <Select
-                onValueChange={(value) => { setSelectedSize(value as Size) }}
+                onValueChange={(value) => { setSelectedSize(value as SizeClothe) }}
               >
                 <SelectTrigger className="w-full bg-transparent">
                   <SelectValue placeholder='TALLA'>

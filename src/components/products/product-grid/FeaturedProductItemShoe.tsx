@@ -13,11 +13,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { type Size, type Product, type CartProduct } from '@/interfaces'
+import { type SizeShoe, type CartProduct, type ProductShoe } from '@/interfaces'
 import { useCartStore } from '@/store'
 
 interface ProductGridItemProps {
-  product: Product
+  product: ProductShoe
 }
 
 const noticeAddToCart = () => {
@@ -27,9 +27,9 @@ const noticeAddToCart = () => {
   })
 }
 
-export const ProductGridItemLight = ({ product }: ProductGridItemProps) => {
-  const [displayImage, setDisplayImage] = useState(product.images[0].url)
-  const [selectedSize, setSelectedSize] = useState<Size | null>(null)
+export const FeaturedProductItemShoe = ({ product }: ProductGridItemProps) => {
+  const [displayImage, setDisplayImage] = useState(product.productImage[0].url)
+  const [selectedSize, setSelectedSize] = useState<SizeShoe | null>(null)
   const addProductToCart = useCartStore(state => state.addProductToCart)
   const isSelectSize = selectedSize !== null
 
@@ -41,7 +41,7 @@ export const ProductGridItemLight = ({ product }: ProductGridItemProps) => {
       slug: product.slug,
       title: product.title,
       price: product.price,
-      image: product.images[0].url,
+      image: product.productImage[0].url,
       size: selectedSize,
       quantity: 1
     }
@@ -52,11 +52,11 @@ export const ProductGridItemLight = ({ product }: ProductGridItemProps) => {
     noticeAddToCart()
   }
 
-  const handleMouseEnter = () => { setDisplayImage(product.images[1].url) }
-  const handleMouseLeave = () => { setDisplayImage(product.images[0].url) }
+  const handleMouseEnter = () => { setDisplayImage(product.productImage[1].url) }
+  const handleMouseLeave = () => { setDisplayImage(product.productImage[0].url) }
 
   return (
-    <div className='flex-shrink-0 flex flex-col justify-self-center max-w-[340px] px-2'>
+    <div className='flex-shrink-0 max-w-[300px] px-2 min-[400px]:max-w-[400px] md:max-w-[200px] lg:max-w-[200px]'>
       <Link href={`/product/${product.slug}`}>
         <ProductImage src={displayImage}
           alt={product.title}
@@ -73,12 +73,12 @@ export const ProductGridItemLight = ({ product }: ProductGridItemProps) => {
           href={`/product/${product.slug}`}>
           {product.title}
         </Link>
-        <p>Color: VERDES</p>
+        <p>Color: Zapatos</p>
         {
-          product.sizes.length > 0
+          'sizes' in product && product.sizes.length > 0
             ? (<div className='flex flex-col gap-1 my-3'>
               <Select
-                onValueChange={(value) => { setSelectedSize(value as Size) }}
+                onValueChange={(value) => { setSelectedSize(Number(value)) }}
               >
                 <SelectTrigger className="w-full bg-transparent">
                   <SelectValue placeholder='TALLA'>
@@ -92,7 +92,7 @@ export const ProductGridItemLight = ({ product }: ProductGridItemProps) => {
                         <SelectItem
                           key={size}
                           className='capitalize'
-                          value={size}
+                          value={`${size}`}
                         >{size}</SelectItem>
                       ))
                     }

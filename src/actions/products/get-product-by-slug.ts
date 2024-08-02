@@ -1,6 +1,6 @@
 'use server'
 
-import { getSizesProductStock } from './get-sizes-product-stock'
+import { getSizesProductStock } from './get-sizes-product-clothe-stock'
 import prisma from '@/lib/prisma'
 
 export const getProductBySlug = async (slug: string) => {

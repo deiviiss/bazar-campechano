@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getPaginationFeaturedProductsWithImages, getPaginationProductsWithImages } from '@/actions'
-import { ProductGridDark, ProductGridLight, Title } from '@/components'
+import { NewProductsGrid, FeaturedProductsGrid, Title } from '@/components'
 import { Button } from '@/components/ui/button'
 
 interface Props {
@@ -15,24 +15,12 @@ export default async function ShopPage({ searchParams }: Props) {
   const query = searchParams.query || ''
   const page = searchParams.page ? Number(searchParams.page) : 1
 
-  const result = await getPaginationProductsWithImages({ page, query })
+  const { products } = await getPaginationProductsWithImages({ page, query })
   const { products: featuredProducts } = await getPaginationFeaturedProductsWithImages({ page, query })
 
-  if (!result || !featuredProducts) {
+  if (!products || !featuredProducts) {
     return notFound()
   }
-
-  const { products } = result
-
-  const processedFeaturedProducts = featuredProducts.map(product => ({
-    ...product,
-    description: product.description || 'Sin descripción'
-  }))
-
-  const processedProducts = products.map(product => ({
-    ...product,
-    description: product.description || 'Sin descripción'
-  }))
 
   return (
     <>
@@ -47,7 +35,7 @@ export default async function ShopPage({ searchParams }: Props) {
           products.length > 0
             ? (
               <>
-                <ProductGridDark products={processedProducts} />
+                <NewProductsGrid products={products} />
                 <Button variant='outline' className='flex justify-center mx-auto w-3/4 max-w-40 capitalize bg-transparent text-white mt-[52px]'>ver todo</Button>
               </>)
             : (
@@ -67,7 +55,7 @@ export default async function ShopPage({ searchParams }: Props) {
         {
           featuredProducts.length > 0
             ? (
-              <ProductGridLight products={processedFeaturedProducts} />)
+              <FeaturedProductsGrid products={featuredProducts} />)
             : (
               <div className='flex w-full items-center justify-center h-36'>
                 <p>No hay productos con ese nombre</p>

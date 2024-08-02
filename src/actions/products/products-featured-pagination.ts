@@ -1,6 +1,5 @@
 'use server'
 
-import { getSizesProductStock } from './get-sizes-product-clothe-stock'
 import { type Product } from '@/interfaces'
 import prisma from '@/lib/prisma'
 import { validatePageNumber } from '@/utils'
@@ -11,7 +10,7 @@ interface PaginationOptions {
   take?: number
 }
 
-export const getPaginationProductsWithImages = async ({ page = 1, take = 12, query = '' }: PaginationOptions): Promise<{ currentPage: number, totalPages: number, products: Product[] }> => {
+export const getPaginationFeaturedProductsWithImages = async ({ page = 1, take = 8, query = '' }: PaginationOptions): Promise<{ currentPage: number, totalPages: number, products: Product[] }> => {
   page = validatePageNumber(page)
 
   try {
@@ -26,6 +25,12 @@ export const getPaginationProductsWithImages = async ({ page = 1, take = 12, que
             id: true,
             url: true
           }
+        },
+        category: {
+          select: {
+            id: true,
+            name: true
+          }
         }
       },
       where: {
@@ -33,6 +38,9 @@ export const getPaginationProductsWithImages = async ({ page = 1, take = 12, que
           contains: query,
           mode: 'insensitive'
         }
+      },
+      orderBy: {
+        title: 'asc'
       }
     })
 
@@ -47,21 +55,10 @@ export const getPaginationProductsWithImages = async ({ page = 1, take = 12, que
 
     const totalPages = Math.ceil(totalCount / take)
 
-    const productsWithSizesAndImages = await Promise.all(productsDB.map(async (product) => {
-      const sizesProduct = await getSizesProductStock(product.id)
-      const { productImage, ...restProduct } = product
-
-      return {
-        ...restProduct,
-        sizes: sizesProduct,
-        images: productImage
-      }
-    }))
-
     return {
       currentPage: page,
       totalPages,
-      products: productsWithSizesAndImages
+      products: productsDB
     }
   } catch (error) {
     if (error instanceof Error) {

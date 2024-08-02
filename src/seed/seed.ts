@@ -1,13 +1,12 @@
 import bcrypt from 'bcryptjs'
 
 interface SeedProduct {
+  title: string
   description: string
-  images: string[]
   price: number
   slug: string
-  title: string
-  type: ValidTypes
-  gender: 'men' | 'women' | 'kid' | 'unisex'
+  images: string[]
+  type: Categories
 }
 
 interface SeedUser {
@@ -18,16 +17,16 @@ interface SeedUser {
   role: 'admin' | 'user'
 }
 
-type ValidTypes = 'camisas' | 'pants' | 'sudaderas' | 'gorros'
+type Categories = 'clothes' | 'shoes' | 'toys'
 
 interface SeedData {
-  categories: ValidTypes[]
+  categories: Categories[]
   products: SeedProduct[]
   users: SeedUser[]
 }
 
 export const initialData: SeedData = {
-  categories: ['camisas', 'pants', 'sudaderas', 'gorros'],
+  categories: ['clothes', 'shoes', 'toys'],
 
   products: [
     {
@@ -40,9 +39,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'sudadera_cuello_mens_chill',
-      type: 'camisas',
       title: 'Sudadera Chill de cuello redondo para hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'La chaqueta camisera acolchada para hombre presenta un diseño acolchado de ajuste único para brindar calidez y movilidad en las estaciones de clima frío. Con una estética urbana general, la chaqueta presenta sutiles logotipos de ModaShop inyectados con silicona debajo del cuello trasero y en la manga derecha, así como tiradores de cremallera de metal mate personalizados. Fabricado con 87% nailon y 13% poliuretano.',
@@ -54,9 +52,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'chaqueta_camisa_acolchada_hombre',
-      type: 'camisas',
       title: 'Chaqueta camisera acolchada para hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la colección ModaShop Raven. La cazadora bomber ligera con cremallera Raven para hombre tiene una silueta moderna y de primera calidad confeccionada con una mezcla de algodón de bambú sostenible para brindar versatilidad en cualquier temporada. La sudadera con capucha presenta sutiles logotipos de ModaShop de poliuretano termoplástico en el lado izquierdo del pecho y debajo del cuello trasero, un bolsillo oculto en el pecho con tiradores de cremallera mate personalizados y un interior de felpa francesa. Fabricada en 70% bambú y 30% algodón.',
@@ -68,9 +65,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'men_raven_lightweight_zip_up_bomber_jacket',
-      type: 'camisas',
       title: 'Chaqueta bomber ligera con cremallera Raven para hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la colección Turbine de ModaShop. Diseñada para brindar estilo, comodidad y estilo de vida cotidiano, la camiseta de manga larga Turbine para hombre presenta un sutil logotipo de T a base de agua en el lado izquierdo del pecho y nuestra marca ModaShop debajo del cuello trasero. El material liviano está teñido doblemente, lo que crea un estilo suave e informal ideal para usar en cualquier época del año. Confeccionada en 50% algodón y 50% poliéster.',
@@ -82,9 +78,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'men_turbine_camiseta_de_manga_larga',
-      type: 'camisas',
       title: 'Camiseta de manga larga Turbine para hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la colección Turbine de ModaShop. Diseñada para brindar estilo, comodidad y estilo de vida cotidiano, la camiseta de manga corta Turbine para hombre presenta una sutil marca denominativa ModaShop a base de agua en el pecho y nuestro logotipo M debajo del cuello trasero. El material liviano está teñido doblemente, lo que crea un estilo suave e informal ideal para usar en cualquier época del año. Confeccionada en 50% algodón y 50% poliéster.',
@@ -96,9 +91,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'men_turbine_camiseta_de_manga_corta',
-      type: 'camisas',
       title: 'Camiseta de manga corta Turbine para hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para brindar comodidad, la camiseta Cybertruck Owl está hecha de 100% algodón y presenta nuestro ícono Cybertruck característico en la parte posterior.',
@@ -110,9 +104,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_de_buho_cybertruck_para_hombre',
-      type: 'camisas',
       title: 'Camiseta Cybertruck Owl para hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Inspirada en nuestro sistema de almacenamiento y energía solar doméstico totalmente integrado, la camiseta para techo solar ModaShop aboga por la energía limpia y sostenible dondequiera que vaya. Diseñada para brindar ajuste, comodidad y estilo, la camiseta presenta una vista aérea de nuestro diseño Solar Roof sin costuras en el frente con nuestro logotipo M característico sobre "Solar Roof" en la parte posterior. Confeccionada en 100% algodón peruano.',
@@ -124,9 +117,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'men_solar_roof_tee',
-      type: 'camisas',
       title: 'Camiseta con techo solar para hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: "Inspirado en nuestro sistema de almacenamiento y energía solar totalmente integrado para el hogar, la camiseta ModaShop Solar Roof aboga por una energía limpia y sostenible dondequiera que vayas. Diseñada para ajuste, comodidad y estilo, la camiseta presenta una vista aérea de nuestro diseño Solar Roof sin costuras en el frente con nuestro logotipo T en la parte superior de 'Solar Roof' en la parte trasera. Hecha de 100% algodón peruano.",
@@ -138,9 +130,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_solar_roof_hombre',
-      type: 'camisas',
       title: 'Camiseta Solar Roof para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: "Diseñada para ajuste, comodidad y estilo, la Camiseta 3D Large Wordmark para Hombre está hecha de 100% algodón peruano con una palabra 'ModaShop' impresa en silicona 3D en el pecho.",
@@ -152,9 +143,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_3d_large_wordmark_hombre',
-      type: 'camisas',
       title: 'Camiseta 3D Large Wordmark para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para ajuste, comodidad y estilo, la Camiseta M Logo de ModaShop está hecha de 100% algodón peruano y presenta un logotipo M impreso en silicona en el pecho izquierdo.',
@@ -166,9 +156,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_3d_t_logo_hombre',
-      type: 'camisas',
       title: 'Camiseta 3D M Logo para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para comodidad y estilo en cualquier tamaño, la Camiseta Small Wordmark de ModaShop está hecha de 100% algodón peruano y presenta una palabra impresa en silicona 3D en el pecho izquierdo.',
@@ -180,9 +169,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_3d_small_wordmark_hombre',
-      type: 'camisas',
       title: 'Camiseta 3D Small Wordmark para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para celebrar el increíble modo de rendimiento de ModaShop, la Camiseta Plaid Mode ofrece un gran ajuste, comodidad y estilo. Hecha de 100% algodón, es lo mejor después de ir de copiloto en el Nürburgring.',
@@ -194,9 +182,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_plaid_mode_hombre',
-      type: 'camisas',
       title: 'Camiseta Plaid Mode para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: "Inspirada en nuestra popular batería doméstica, la Camiseta Powerwall de ModaShop está hecha de 100% algodón y presenta la frase 'Pure Energy' debajo de nuestro logotipo en la parte trasera. Diseñada para ajuste, comodidad y estilo, la exclusiva camiseta promueve la energía sostenible en cualquier entorno.",
@@ -208,9 +195,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_powerwall_hombre',
-      type: 'camisas',
       title: 'Camiseta Powerwall para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Inspirada en el Día de la Batería de ModaShop y presentando la celda de batería sin lengüeta revelada, la Camiseta del Día de la Batería celebra el futuro del almacenamiento de energía y la fabricación de celdas. Diseñada para ajuste, comodidad y estilo, la Camiseta del Día de la Batería está hecha de 100% algodón con una celda estilizada impresa en el pecho. Hecha en Perú.',
@@ -222,9 +208,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_dia_bateria_hombre',
-      type: 'camisas',
       title: 'Camiseta del Día de la Batería para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para una comodidad excepcional e inspirada en el evento de presentación de la Cybertruck, la Camiseta a Prueba de Balas Cybertruck está hecha de 100% algodón y presenta nuestro ícono característico de Cybertruck en la parte trasera.',
@@ -236,9 +221,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_prueba_balas_cybertruck_hombre',
-      type: 'camisas',
       title: 'Camiseta a Prueba de Balas Cybertruck para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Inspirada en el gráfico de confirmación de pedido del Model Y, la Camiseta Haha Yes de edición limitada está diseñada para comodidad y estilo. Hecha de 100% algodón peruano y con el logotipo de ModaShop en el pecho, esta camiseta exclusiva conmemorará tu pedido durante años.',
@@ -250,9 +234,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_haha_yes_hombre',
-      type: 'camisas',
       title: 'Camiseta Haha Yes para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: "Diseñada para ajuste, comodidad y estilo, la Camiseta S3XY de edición limitada está hecha de 100% algodón con el logotipo 'S3XY' impreso en 3D en silicona en el pecho. Hecha en Perú. Disponible en negro.",
@@ -264,9 +247,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_s3xy_hombre',
-      type: 'camisas',
       title: 'Camiseta S3XY para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para ajuste, comodidad y estilo, la Camiseta de Manga Larga 3D M Logo para Hombre está hecha de 100% algodón y presenta un discreto logotipo T en el pecho izquierdo.',
@@ -278,9 +260,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_manga_larga_3d_t_logo_hombre',
-      type: 'camisas',
       title: 'Camiseta de Manga Larga 3D M Logo para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la Colección Raven de ModaShop. La Sudadera Ligera con Capucha Raven para Hombre tiene una silueta premium y relajada hecha de una mezcla sostenible de bambú y algodón. La sudadera cuenta con sutiles logotipos de ModaShop de poliuretano termoplástico en el pecho y en la manga, con un interior de french terry para versatilidad en cualquier temporada. Hecha de 70% bambú y 30% algodón.',
@@ -292,9 +273,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'sudadera_ligera_con_capucha_raven_hombre',
-      type: 'sudaderas',
       title: 'Sudadera Ligera con Capucha Raven para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la Colección Chill de ModaShop. La Sudadera con Capucha Chill Pullover tiene un exterior premium y pesado, con un interior suave de fleece para confort en cualquier temporada. La sudadera unisex cuenta con sutiles logotipos de ModaShop de poliuretano termoplástico en el pecho y en la manga, una capucha de doble capa con costura simple y bolsillos con tiradores de cremallera mate personalizados. Hecha de 60% algodón y 40% poliéster reciclado.',
@@ -306,9 +286,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'sudadera_con_capucha_chill_pullover',
-      type: 'sudaderas',
       title: 'Sudadera con Capucha Chill Pullover',
-      gender: 'unisex'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la Colección Chill de ModaShop. La Sudadera con Capucha Completa Chill para Hombre tiene un exterior premium y pesado, con un interior suave de fleece para confort en cualquier temporada. La sudadera con capucha presenta sutiles logotipos de ModaShop de poliuretano termoplástico en el pecho izquierdo y en la manga, una capucha de doble capa con costura simple y bolsillos con tiradores de cremallera mate personalizados. Hecha de 60% algodón y 40% poliéster reciclado.',
@@ -320,9 +299,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'sudadera_con_capucha_completa_chill_para_hombre',
-      type: 'camisas',
       title: 'Sudadera con Capucha Completa Chill para Hombre',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la Colección Chill de ModaShop. El Pullover de Cuarto de Cremallera Chill para Hombre tiene un exterior premium y pesado, con un interior suave de fleece para confort en cualquier temporada. El pullover presenta sutiles logotipos de ModaShop de poliuretano termoplástico en el pecho izquierdo y debajo del cuello trasero, así como un tirador de cremallera mate personalizado. Hecho de 60% algodón y 40% poliéster reciclado.',
@@ -334,9 +312,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'pullover_de_cuarto_de_cremallera_chill_para_hombre_gris',
-      type: 'camisas',
       title: 'Pullover de Cuarto de Cremallera Chill para Hombre - Gris',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la Colección Chill de ModaShop. El Pullover de Cuarto de Cremallera Chill para Hombre tiene un exterior premium y pesado, con un interior suave de fleece para confort en cualquier temporada. El pullover presenta sutiles logotipos de ModaShop de poliuretano termoplástico en el pecho izquierdo y debajo del cuello trasero, así como un tirador de cremallera mate personalizado. Hecho de 60% algodón y 40% poliéster reciclado.',
@@ -348,9 +325,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'pullover_de_cuarto_de_cremallera_chill_para_hombre_blanco',
-      type: 'camisas',
       title: 'Pullover de Cuarto de Cremallera Chill para Hombre - Blanco',
-      gender: 'men'
+      type: 'clothes'
     },
     {
       description: 'La Sudadera con Capucha 3D Large Wordmark presenta un suave fleece y una capucha ajustable forrada en jersey para mayor comodidad y cobertura. Diseñada en un estilo unisex, la sudadera incluye un logotipo en 3D impreso en silicona tono sobre tono en el pecho.',
@@ -362,9 +338,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'sudadera_con_capucha_3d_large_wordmark',
-      type: 'sudaderas',
       title: 'Sudadera con Capucha 3D Large Wordmark',
-      gender: 'unisex'
+      type: 'clothes'
     },
     {
       description: 'Al igual que con el icónico logo de ModaShop, la Sudadera Cybertruck Graffiti es un clásico en proceso. Estilo unisex con fleece suave y una capucha ajustable forrada en jersey para una cobertura cómoda.',
@@ -376,9 +351,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'sudadera_cybertruck_graffiti',
-      type: 'sudaderas',
       title: 'Sudadera Cybertruck Graffiti',
-      gender: 'unisex'
+      type: 'clothes'
     },
     {
       description: 'La Gorra Relaxed M Logo es una silueta clásica combinada con detalles modernos, con un logo M en 3D y un cierre personalizado de hebilla metálica. El diseño ultrasuave es flexible y resistente a la abrasión, mientras que la banda interior incluye acolchado acolchado para mayor comodidad y absorción de la humedad. La visera está completamente hecha de botellas de plástico recicladas. 100% Algodón.',
@@ -390,9 +364,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'gorra_relaxed_m_logo',
-      type: 'gorros',
       title: 'Gorra Relaxed M Logo',
-      gender: 'unisex'
+      type: 'clothes'
     },
     {
       description: 'El Gorro Beanie con Puños Térmicos es una silueta clásica combinada con detalles modernos, que incluye un logo M en 3D y un cierre personalizado de hebilla metálica. El diseño ultrasuave es flexible y resistente a la abrasión, mientras que la banda interior incluye acolchado acolchado para mayor comodidad y absorción de la humedad. La visera está completamente hecha de botellas de plástico recicladas. 100% Algodón.',
@@ -404,9 +377,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'gorro_con_punos_termicos',
-      type: 'gorros',
       title: 'Gorro con Puños Térmicos',
-      gender: 'unisex'
+      type: 'clothes'
     },
     {
       description: 'La Chaqueta Acolchada Corta para Mujer presenta una silueta única corta para un estilo moderno perfecto para la temporada acogedora que se avecina. El acolchado incluye sutiles logotipos de ModaShop inyectados con silicona debajo del cuello trasero y en la manga derecha, tiradores de cremallera personalizados de metal mate y un cuello forrado de suave fleece. Hecha de 87% nylon y 13% poliuretano.',
@@ -418,9 +390,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'chaqueta_acolchada_corta_mujer',
-      type: 'sudaderas',
       title: 'Chaqueta Acolchada Corta para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la Colección Chill de ModaShop. La Sudadera con Capucha Corta y Cremallera Media para Mujer tiene un exterior premium de suave fleece y una silueta corta para mayor comodidad en el estilo de vida diario. La sudadera cuenta con un dobladillo elástico que se ajusta en la cintura, sutiles logotipos de ModaShop de poliuretano termoplástico a lo largo de la capucha y en la manga, una capucha de doble capa y costura simple, y un tirador de cremallera personalizado. Hecha de 60% algodón y 40% poliéster reciclado.',
@@ -432,9 +403,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'sudadera_capucha_corta_cremallera_media_mujer',
-      type: 'sudaderas',
       title: 'Sudadera con Capucha Corta y Cremallera Media para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la Colección Raven de ModaShop. La Sudadera Slouchy de Cuello Redondo para Mujer tiene una silueta relajada y premium hecha de una mezcla sostenible de bambú y algodón. El diseño incluye un sutil logotipo de ModaShop de poliuretano termoplástico en la manga izquierda y un interior de french terry para una apariencia y sensación acogedora en todas las estaciones. Combínala con tus Joggers Raven o tu conjunto favorito para estar cómoda en movimiento. Hecha de 70% bambú y 30% algodón.',
@@ -446,9 +416,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'sudadera_slouchy_cuello_redondo_mujer_raven',
-      type: 'sudaderas',
       title: 'Sudadera Slouchy de Cuello Redondo para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la Colección Turbine de ModaShop. Diseñada para estilo, comodidad y el estilo de vida diario, la Camiseta de Manga Larga Corta para Mujer Turbine presenta un sutil logotipo de ModaShop a base de agua en el pecho y nuestro logo M debajo del cuello trasero. El material ligero está teñido doblemente, creando un estilo suave y casual con una silueta corta. Hecha de 50% algodón y 50% poliéster.',
@@ -460,9 +429,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_manga_larga_corta_mujer_turbine',
-      type: 'camisas',
       title: 'Camiseta de Manga Larga Corta para Mujer Turbine',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Presentamos la Colección Turbine de ModaShop. Diseñada para estilo, comodidad y el estilo de vida diario, la Camiseta de Manga Corta Corta para Mujer Turbine presenta un sutil logotipo de ModaShop a base de agua en el pecho y nuestro logo M debajo del cuello trasero. El material ligero está teñido doblemente, creando un estilo suave y casual con una silueta corta. Hecha de 50% algodón y 50% poliéster.',
@@ -474,9 +442,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_manga_corta_cortada_mujer_turbine',
-      type: 'camisas',
       title: 'Camiseta de Manga Corta Cortada para Mujer Turbine',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para estilo y comodidad, la suave Camiseta de Cuello Redondo de Manga Corta con logo M para Mujer presenta un sutil logo M impreso en 3D en tono sobre el pecho izquierdo. Hecha de 50% algodón peruano y 50% viscosa peruana.',
@@ -488,9 +455,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_cuello_redondo_manga_corta_logo_t_mujer',
-      type: 'camisas',
       title: 'Camiseta de Cuello Redondo de Manga Corta con logo M para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para estilo y comodidad, la suave Camiseta de Cuello Redondo de Manga Larga con logo M para Mujer presenta un sutil logo M impreso en 3D en tono sobre el pecho izquierdo. Hecha de 50% algodón peruano y 50% viscosa peruana.',
@@ -502,9 +468,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_cuello_redondo_manga_larga_logo_t_mujer',
-      type: 'camisas',
       title: 'Camiseta de Cuello Redondo de Manga Larga con logo M para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para estilo y comodidad, la Camiseta de Cuello en V de Manga Corta con Pequeño Logo en el Pecho Izquierdo para Mujer presenta un sutil logo impreso en 3D en tono sobre el pecho izquierdo. Hecha de 100% algodón peruano.',
@@ -516,9 +481,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_cuello_v_manga_corta_logo_pequeno_mujer',
-      type: 'camisas',
-      title: 'Camiseta de Cuello en V de Manga Corta con Pequeño Logo en el Pecho Izquierdo para Mujer',
-      gender: 'women'
+      title: 'Camiseta de Cuello en V de Manga Corta Logo en el Pecho para Mujer',
+      type: 'clothes'
     },
     {
       description: 'Diseñada para estilo y comodidad, la Camiseta de Cuello Redondo de Manga Corta con Gran Logo en el Pecho para Mujer presenta un sutil logo impreso en 3D en tono sobre el pecho. Hecha de 100% algodón pima peruano.',
@@ -530,9 +494,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_cuello_redondo_manga_corta_gran_logo_mujer',
-      type: 'camisas',
       title: 'Camiseta de Cuello Redondo de Manga Corta para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para celebrar el increíble modo de rendimiento de ModaShop, la Camiseta Modo Tartán ofrece un ajuste excelente, comodidad y estilo. Hecha de 100% algodón, es lo más parecido a estar al lado del conductor en el Nürburgring.',
@@ -544,9 +507,8 @@ export const initialData: SeedData = {
       ],
       price: 150,
       slug: 'camiseta_modo_tartan_mujer',
-      type: 'camisas',
       title: 'Camiseta Modo Tartán para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: "Inspirada en nuestra popular batería doméstica, la Camiseta Powerwall de ModaShop está hecha de 100% algodón y presenta la frase 'Energía Pura' debajo de nuestro logo característico en la parte posterior. Diseñada para ajuste, comodidad y estilo, esta camiseta exclusiva promueve la energía sostenible en cualquier lugar.",
@@ -558,9 +520,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'camiseta_powerwall_mujer',
-      type: 'camisas',
       title: 'Camiseta Powerwall para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: "Totalmente personalizada y con un estilo único, la Chaqueta Corp para Mujer presenta un logo 'M' impreso en silicona en el pecho izquierdo y el destacado wordmark de ModaShop en la parte trasera.",
@@ -572,9 +533,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'chaqueta_corp_mujer',
-      type: 'camisas',
       title: 'Chaqueta Corp para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Presentando la Colección Raven de ModaShop. Los Joggers Raven para Mujer tienen una silueta relajada y premium hecha de una mezcla sostenible de bambú y algodón. Estos joggers cuentan con un sutil wordmark y logo M de ModaShop en termoplástico poliuretano, y un interior de felpa francesa para una apariencia y sensación acogedora en todas las estaciones. Combínalos con tu sudadera Raven Slouchy Crew, chaqueta Raven Lightweight Zip Up u otra prenda favorita para estar cómoda en cualquier ocasión. Hechos de 70% bambú y 30% algodón.',
@@ -586,9 +546,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'joggers_raven_mujer',
-      type: 'camisas',
       title: 'Joggers Raven para Mujer',
-      gender: 'women'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para ajuste, comodidad y estilo, la Camiseta de Manga Larga Niño Cybertruck Graffiti presenta un wordmark graffiti Cybertruck a base de agua en el pecho, un wordmark de ModaShop en el brazo izquierdo y nuestro logo M distintivo en el cuello trasero. Hecha de 50% algodón y 50% poliéster.',
@@ -600,9 +559,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'camiseta_manga_larga_nino_cybertruck',
-      type: 'camisas',
       title: 'Camiseta de Manga Larga Niño Cybertruck',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'La Camiseta Niño Scribble M Logo está hecha de 100% algodón peruano y presenta un logo M de ModaShop dibujado para que cada joven artista la use.',
@@ -614,9 +572,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'camiseta_nino_scribble_t_logo',
-      type: 'camisas',
       title: 'Camiseta Niño Scribble M Logo',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'La Camiseta Niño Cybertruck presenta el icónico logotipo de graffiti Cybertruck y está hecha de 100% algodón peruano para máxima comodidad.',
@@ -628,9 +585,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'camiseta_ninos_cybertruck',
-      type: 'camisas',
       title: 'Camiseta Niño Cybertruck',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'La Camiseta Niño Racing Stripe renovada está hecha de 100% algodón peruano, con una franja de carreras mejorada recientemente y un logotipo de ModaShop cepillado perfecto para cualquier corredor de velocidad.',
@@ -642,9 +598,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'camiseta_nino_racing_stripe',
-      type: 'camisas',
       title: 'Camiseta Niño Racing Stripe',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'Diseñada para ajuste, comodidad y estilo, la Camiseta ModaShop M Logo está hecha de 100% algodón peruano y presenta un logotipo T impreso en silicona en el pecho izquierdo.',
@@ -656,9 +611,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'camiseta_nino_t_logo_3d',
-      type: 'camisas',
       title: 'Camiseta Niño 3D M Logo',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'La camiseta a cuadros está hecha de algodón peruano de grano largo, libre de OMG. Perú es el único país en el mundo donde el algodón se recoge a mano a gran escala. Esta tradición de 4,500 años evita daños a la fibra durante el proceso de recolección y elimina la necesidad de usar productos químicos para abrir las plantas de algodón antes de la cosecha. Este proceso respetuoso con el medio ambiente resulta en algodón suave, resistente y brillante, y la camiseta se volverá aún más suave con cada lavado.',
@@ -670,9 +624,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'camiseta_nino_a_cuadros',
-      type: 'camisas',
       title: 'Camiseta Niño a Cuadros',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'Para el futuro viajero espacial con un gusto exigente, un mono de algodón suave con cierre de broche en la parte inferior. Etiquetado claro proporcionado en caso de contacto con una nueva civilización espacial. 100% algodón. Hecho en Perú.',
@@ -684,9 +637,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'mono_made_on_earth_by_humans',
-      type: 'camisas',
       title: 'Mono Made on Earth by Humans',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'El Mono Scribble M Logo está hecho de 100% algodón peruano y presenta un logo ModaShop T dibujado a mano para que cada pequeño artista lo use.',
@@ -698,9 +650,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'scribble_t_logo_onesie',
-      type: 'camisas',
       title: 'Scribble M Logo Onesie',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'Demuestra tu compromiso con la energía sostenible con este gracioso onesie para tu pequeño. Nota: No previene emisiones. 100% algodón. Hecho en Perú.',
@@ -712,9 +663,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'zero_emissions_(almost)_onesie',
-      type: 'camisas',
       title: 'Zero Emissions (Almost) Onesie',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'Usa tu chaqueta bomber Niño Cyberquad durante tus aventuras en el Cyberquad para niños. La chaqueta bomber presenta una ilustración de estilo graffiti de nuestro perfil Cyberquad y wordmark. Con tres bolsillos con cremallera y nuestro logo M y wordmark de ModaShop impresos a lo largo de las mangas, la chaqueta bomber Niño Cyberquad es perfecta para cualquier lugar donde te lleve el camino. Hecha de 60% algodón y 40% poliéster.',
@@ -726,9 +676,8 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'nino_cyberquad_bomber_jacket',
-      type: 'camisas',
       title: 'Niño Cyberquad Bomber Jacket',
-      gender: 'kid'
+      type: 'clothes'
     },
     {
       description: 'Cruza el patio de recreo con estilo con la chaqueta Niño Corp. Modelada según la chaqueta original de ModaShop Corp, la chaqueta Niño Corp presenta el mismo estilo discreto y materiales de alta calidad pero a escala miniatura.',
@@ -740,9 +689,73 @@ export const initialData: SeedData = {
       ],
       price: 100,
       slug: 'nino_corp_jacket',
-      type: 'camisas',
       title: 'Niño Corp Jacket',
-      gender: 'kid'
+      type: 'clothes'
+    },
+    {
+      description: 'Robot de gorila de juguete con 4 extremidades móviles y cabeza giratoria. Hecho de plástico ABS duradero y resistente a los golpes. Recomendado para niños de 3 años en adelante.',
+      images: [
+        'robot-1_A.jpg',
+        'robot-1_B.jpg',
+        'robot-1_C.jpg',
+        'robot-1_D.jpg'
+      ],
+      price: 100,
+      slug: 'robot_gorila',
+      title: 'Robot de Gorila',
+      type: 'toys'
+    },
+    {
+      description: 'Robot de perro de juguete con 4 extremidades móviles y cabeza giratoria. Hecho de plástico ABS duradero y resistente a los golpes. Recomendado para niños de 3 años en adelante.',
+      images: [
+        'robot-1_A.jpg',
+        'robot-1_B.jpg',
+        'robot-1_C.jpg',
+        'robot-1_D.jpg'
+      ],
+      price: 100,
+      slug: 'robot_perro',
+      title: 'Robot de Perro',
+      type: 'toys'
+    },
+    {
+      description: 'Robot de gato de juguete con 4 extremidades móviles y cabeza giratoria. Hecho de plástico ABS duradero y resistente a los golpes. Recomendado para niños de 3 años en adelante.',
+      images: [
+        'robot-1_A.jpg',
+        'robot-1_B.jpg',
+        'robot-1_C.jpg',
+        'robot-1_D.jpg'
+      ],
+      price: 100,
+      slug: 'robot_gato',
+      title: 'Robot de Gato',
+      type: 'toys'
+    },
+    {
+      description: 'Zapatos de vestir de alta calidad con suela de goma y parte superior de cuero sintético. Disponible en tallas para niños y adultos.',
+      images: [
+        'shoe-1_A.jpg',
+        'shoe-1_B.jpg',
+        'shoe-1_C.jpg',
+        'shoe-1_D.jpg'
+      ],
+      price: 100,
+      slug: 'zapatos_de_vestir',
+      title: 'Zapatos de vestir',
+      type: 'shoes'
+    },
+    {
+      description: 'Zapatillas de deporte de alta calidad con suela de goma y parte superior de cuero sintético. Disponible en tallas para niños y adultos.',
+      images: [
+        'shoe-1_A.jpg',
+        'shoe-1_B.jpg',
+        'shoe-1_C.jpg',
+        'shoe-1_D.jpg'
+      ],
+      price: 100,
+      slug: 'zapatillas_de_deporte',
+      title: 'Zapatillas de Deporte',
+      type: 'shoes'
     }
   ],
 

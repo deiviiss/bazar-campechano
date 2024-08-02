@@ -4,20 +4,25 @@ export interface Product {
   description?: string | null
   price: number
   slug: string
-  gender: ValidGender
-  sizes: Size[]
-  images: ProductImage[]
+  productImage: ProductImage[]
   categoryId: string
+  category: Category
 }
 
-export interface Stock {
-  id: string
-  size: Size
-  inStock: number
+export type SizeClothe = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL'
+
+export interface ProductClothe extends Product {
+  sizes: SizeClothe[]
 }
 
-export interface ProductWithStock extends Product {
-  stock: Stock
+export type SizeShoe = number
+
+export interface ProductShoe extends Product {
+  sizes: SizeShoe[]
+}
+
+export interface ProductToy extends Product {
+  ageRange: string
 }
 
 export interface CartProduct {
@@ -25,16 +30,13 @@ export interface CartProduct {
   slug: string
   title: string
   price: number
-  size: Size
+  size?: SizeClothe | SizeShoe
+  ageRange?: string
   quantity: number
   image: string
 }
 
-export type ValidGender = 'men' | 'women' | 'kid' | 'unisex'
-
-export type Size = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL'
-
-export type ValidType = 'shirts' | 'pants' | 'hoodies' | 'hats'
+export type CategoryType = 'shoes' | 'toys' | 'clothes'
 
 export interface ProductImage {
   id: string
@@ -43,6 +45,16 @@ export interface ProductImage {
 
 export interface Category {
   id: string
-  description: string | null
+  description?: string
   name: string
+}
+
+export interface Stock {
+  id: string
+  size: SizeClothe
+  inStock: number
+}
+
+export interface ProductWithStock extends Product {
+  stock: Stock
 }
