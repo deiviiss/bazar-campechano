@@ -6,7 +6,8 @@
   },
   "extends": [
     "plugin:react/recommended",
-    "standard-with-typescript"
+    "standard-with-typescript",
+    "prettier"
   ],
   "settings": {
     "react": {
@@ -42,6 +43,13 @@
           "order": "asc",
           "caseInsensitive": true
         }
+      }
+    ],
+    "no-trailing-spaces": "error", // Sin espacios al final de línea
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 1
       }
     ],
     "@typescript-eslint/space-before-function-paren": "off",
