@@ -1,8 +1,8 @@
-import { Inter, Montserrat_Alternates } from 'next/font/google'
+import { Poppins, Anton } from "next/font/google";
 
-export const inter = Inter({ subsets: ['latin'] })
+export const textFont = Poppins({ subsets: ["latin"], weight: "400" });
 
-export const titleFont = Montserrat_Alternates({
-  subsets: ['latin'],
-  weight: ['500', '700']
-})
+export const titleFont = Anton({
+  subsets: ["latin"],
+  weight: ["400"],
+});
