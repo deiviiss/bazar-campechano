@@ -99,6 +99,39 @@
   animation-name: fadeIn;
 }
 
+.slide-track {
+  animation: scroll 20s linear infinite;
+  -webkit-animation: scroll 20s linear infinite;
+}
+
+.slide-track2 {
+  animation: scroll2 40s linear infinite;
+  -webkit-animation: scroll2 40s linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+  }
+}
+
+@keyframes scroll2 {
+  0% {
+    transform: translateX(100);
+    -webkit-transform: translateX(100);
+  }
+
+  100% {
+    transform: translateX(-200%);
+    -webkit-transform: translateX(-200%);
+  }
+}
 
 .btn-primary {
   @apply bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded transition-all;

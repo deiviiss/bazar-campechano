@@ -1,11 +1,8 @@
-import { Asap_Condensed, Lato } from 'next/font/google'
+import { Poppins, Anton } from 'next/font/google'
 
-export const bodyFont = Lato({
-  subsets: ['latin'],
-  weight: ['400', '700']
-})
+export const textFont = Poppins({ subsets: ['latin'], weight: '400' })
 
-export const titleFont = Asap_Condensed({
+export const titleFont = Anton({
   subsets: ['latin'],
-  weight: ['400', '600', '700']
+  weight: ['400']
 })
