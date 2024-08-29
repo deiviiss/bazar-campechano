@@ -46,6 +46,7 @@ export { ProductPurchaseOptions } from './product/product-purchased-options/Prod
 
 // UI
 export * from './ui/sidebar/Sidebar'
+export { HeaderHero } from './ui/header/HeaderHero'
 export { Title } from './ui/title/Title'
 export { TitleHome } from './ui/title-home/TitleHome'
 export { TitleCategory } from './ui/title-category/TitleCategory'

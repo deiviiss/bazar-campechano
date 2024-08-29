@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import { FaMoneyBillWave, FaCreditCard, FaUniversity, FaPaypal } from 'react-icons/fa'
 
 import { ButtonMethodPay } from './ui/ButtonMethodPay'
-import { Title } from '@/components'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 
 interface Props {
@@ -24,10 +23,7 @@ export default async function PaymentMethodPage({ searchParams }: Props) {
   }
 
   return (
-    <>
-      <Title title="Forma de Pago" subtitle='' />
-
-      <Card className="overflow-hidden max-w-[500px] mx-auto mb-10 shadow-lg rounded-lg border border-gray-200">
+<Card className="overflow-hidden max-w-[500px] mx-auto mb-10 shadow-lg rounded-lg border border-gray-200">
         <CardHeader className="bg-gray-100 text-lg font-medium text-center py-4">
           Elige el método de pago
         </CardHeader>
@@ -46,6 +42,5 @@ export default async function PaymentMethodPage({ searchParams }: Props) {
           <ButtonMethodPay icon={<FaUniversity />} methodName='Transferencia' methodValue='transfer' />
         </CardFooter>
       </Card>
-    </>
   )
 }

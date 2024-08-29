@@ -2,21 +2,22 @@ import Link from 'next/link'
 import { OrderSummary } from './ui/OrderSummary'
 import { ProductsInCart } from './ui/ProductsInCart'
 import { Title } from '@/components'
+import { Button } from '@/components/ui/button'
 
 export default function CartPage() {
   return (
-    <>
+    <div className='mt-16 pt-10 px-1 sm:px-5 md:px-10 lg:px-14 xl:px-20'>
       <Title title='Carrito' subtitle="Tus compras en el carrito" />
-      <div className="flex justify-center items-center mb-72 px-1 sm:px-0">
+      <div className="flex justify-start items-center mb-72 px-1 sm:px-0">
 
-        <div className="flex flex-col w-[1000px]">
+        <div className="flex flex-col w-full">
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
 
             {/* cart */}
             <div className="flex flex-col gap-1 mt-3">
               <span className=" text-xl">Agregar más artículos</span>
-              <Link href="/" className="underline mb-5 hover:text-blue-600">
+              <Link href="/" className="underline mb-5 hover:text-black/80">
                 Continua comprando
               </Link>
 
@@ -32,18 +33,22 @@ export default function CartPage() {
               <OrderSummary />
 
               <div className='mt-5 mb-2 w-full'>
-                <Link
-                  href="/checkout/shipping-method"
-                  className='flex btn-primary justify-center'
+                <Button
+                  asChild
+                  className='w-full'
                 >
-                  Comprar
-                </Link>
+                  <Link
+                    href="/checkout/shipping-method"
+                  >
+                    Comprar
+                  </Link>
+                </Button>
               </div>
             </div>
 
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

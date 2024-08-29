@@ -26,7 +26,6 @@ export const ButtonMethodPay = ({ methodName, icon, methodValue, isDisabled }: P
     <Button
       disabled={isDisabled}
       onClick={handledClickMethodPay}
-      variant='primary'
       className="w-full gap-1"
     >
       {icon}

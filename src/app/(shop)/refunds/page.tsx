@@ -10,12 +10,12 @@ export default async function RefundsPage() {
   }
 
   return (
-    <div className='px-1 sm:px-3'>
-      <Title title="Política de Reembolsos y Devoluciones" subtitle='' />
+    <div className='px-1 sm:px-3 mt-16 pt-10'>
+      <Title title="Política de Reembolso y Devoluciones" subtitle='' />
       <div className='max-w-[920px]'>
         <div className='px-3 py-4'>
           <p>
-            En Bazar Campechano, nos esforzamos por garantizar la satisfacción de nuestros clientes. Sin embargo, debido a la naturaleza de nuestros productos de segunda mano, no ofrecemos devoluciones ni reembolsos una vez que la mercancía ha sido entregada.
+            En Bazar Campechano, nos esforzamos por garantizar la satisfacción de nuestros clientes. Sin embargo, debido a la naturaleza de nuestros productos de segunda mano, no ofrecemos devoluciones ni reembolso una vez que la mercancía ha sido entregada.
           </p>
         </div>
 
@@ -25,9 +25,9 @@ export default async function RefundsPage() {
             Todos los productos que vendemos son de segunda mano y pueden mostrar señales de uso. Antes de realizar una compra, le recomendamos revisar detalladamente la descripción y las fotos del producto.
           </p>
 
-          <Title title="2. No Reembolsos ni Devoluciones" subtitle='' />
+          <Title title="2. No Reembolso ni Devoluciones" subtitle='' />
           <p className='pb-4'>
-            Una vez que el producto ha sido entregado, no aceptamos devoluciones ni ofrecemos reembolsos. Esta política se debe a la naturaleza de los productos de segunda mano que vendemos.
+            Una vez que el producto ha sido entregado, no aceptamos devoluciones ni ofrecemos reembolso. Esta política se debe a la naturaleza de los productos de segunda mano que vendemos.
           </p>
 
           <Title title="3. Productos Dañados o Incorrectos" subtitle='' />
@@ -42,7 +42,7 @@ export default async function RefundsPage() {
 
           <Title title="5. Contacto" subtitle='' />
           <p className='pb-4'>
-            Si tiene alguna pregunta sobre nuestra política de reembolsos y devoluciones, no dude en ponerse en contacto con nosotros a través de nuestro correo electrónico.
+            Si tiene alguna pregunta sobre nuestra política de reembolso y devoluciones, no dude en ponerse en contacto con nosotros a través de nuestro correo electrónico.
           </p>
         </div>
 

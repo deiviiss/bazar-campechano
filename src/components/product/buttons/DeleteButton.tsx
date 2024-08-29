@@ -25,7 +25,8 @@ export const DeleteButtonProduct = ({ id, productName }: IProps) => {
       },
       actionButtonStyle: {
         color: 'white',
-        backgroundColor: '#1E40AF',
+        backgroundColor: '#000000',
+        borderRadius: '0px',
         font: 'message-box',
         padding: '0.5rem 1rem',
         height: '2rem'
@@ -42,6 +43,7 @@ export const DeleteButtonProduct = ({ id, productName }: IProps) => {
       cancelButtonStyle: {
         color: 'white',
         backgroundColor: 'red',
+        borderRadius: '0px',
         font: 'message-box',
         padding: '0.5rem 1rem',
         height: '2rem'
@@ -76,7 +78,7 @@ export const DeleteButtonProduct = ({ id, productName }: IProps) => {
             <Button
               variant='destructive'
               size='icon'
-              className='w-10 h-10 md:w-7 md:h-7'
+              className='w-10 h-10 md:w-7 md:h-7 border border-white'
               onClick={() => { openConfirmationDelete() }}
               disabled={deleting}
             >

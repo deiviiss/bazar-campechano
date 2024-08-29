@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPaginationFeaturedProducts, getPaginationProducts } from '@/actions'
-import { NewProductsGrid, FeaturedProductsGrid, CurrentProductsGrid, TitleHome } from '@/components'
+import { NewProductsGrid, FeaturedProductsGrid, CurrentProductsGrid, TitleHome, HeaderHero } from '@/components'
 import { Button } from '@/components/ui/button'
 
 interface Props {
@@ -32,6 +32,8 @@ export default async function ShopPage({ searchParams }: Props) {
 
   return (
     <>
+      <HeaderHero />
+
       {/* new products */}
       <div className='pb-10 mb-10'>
         <TitleHome

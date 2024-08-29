@@ -16,13 +16,13 @@ export const HeaderHero = () => {
             className={`${titleFont.className} w-full flex items-center gap-2 text-white text-2xl tracking-wider`}
           >
             <LiaShippingFastSolid className="w-10 h-10" />ENVIÓ GRATIS A TIENDA
-            SIEMPRE Y A DOMICILIO A PARTIR DE $599
+            SIEMPRE Y A DOMICILIO A PARTIR DE $199
           </span>
           <span
             className={`${titleFont.className} w-full flex items-center gap-2 text-white text-2xl tracking-wider`}
           >
             <LiaShippingFastSolid className="w-10 h-10" /> ENVIÓ GRATIS A TIENDA
-            SIEMPRE Y A DOMICILIO A PARTIR DE $599
+            SIEMPRE Y A DOMICILIO A PARTIR DE $199
           </span>
         </div>
       </div>

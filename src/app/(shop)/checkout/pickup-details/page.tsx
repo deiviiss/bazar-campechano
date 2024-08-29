@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { FaStore } from 'react-icons/fa'
 import { getUserSessionServer } from '@/actions'
-import { Title } from '@/components'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 
@@ -24,12 +23,9 @@ export default async function PickupDetailsPage() {
   }
 
   return (
-    <>
-      <Title title="Detalles de Entrega" subtitle='' />
-
-      <Card className="overflow-hidden max-w-[600px] mx-auto mb-10 shadow-lg rounded-lg border border-gray-200">
+          <Card className="overflow-hidden max-w-[600px] mx-auto mb-10 shadow-lg rounded-lg border border-gray-200">
         <CardHeader className="bg-gray-100 text-lg font-medium text-center py-4">
-          ¡Vamos a prepar tu pedido!
+          ¡Vamos a preparar tu pedido!
         </CardHeader>
 
         <CardContent className="p-6 pb-4 text-gray-700">
@@ -49,7 +45,6 @@ export default async function PickupDetailsPage() {
         <CardFooter className='flex justify-center gap-4 w-full px-4 pb-6 bg-white'>
           <Button
             asChild
-            variant='primary'
             className="w-3/4" >
             <Link href="/checkout/way-to-pay?shipping-method=pickup" className="text-white no-underline flex items-center justify-center">
               <FaStore className='mx-1 w-3.5 h-3.5' />
@@ -58,6 +53,5 @@ export default async function PickupDetailsPage() {
           </Button>
         </CardFooter>
       </Card>
-    </>
   )
 }

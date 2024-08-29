@@ -22,7 +22,8 @@ export const openConfirmationDelete = (orderId: string, isPaid: boolean) => {
     },
     actionButtonStyle: {
       color: 'white',
-      backgroundColor: '#1E40AF',
+      backgroundColor: '#000000',
+      borderRadius: '0px',
       font: 'message-box',
       padding: '0.5rem 1rem',
       height: '2rem'
@@ -39,6 +40,7 @@ export const openConfirmationDelete = (orderId: string, isPaid: boolean) => {
     cancelButtonStyle: {
       color: 'white',
       backgroundColor: 'red',
+      borderRadius: '0px',
       font: 'message-box',
       padding: '0.5rem 1rem',
       height: '2rem'
@@ -100,7 +102,8 @@ export const openConfirmationChangeStatus = async (orderId: string, status: Stat
     },
     actionButtonStyle: {
       color: 'white',
-      backgroundColor: '#1E40AF',
+      backgroundColor: '#000000',
+      borderRadius: '0px',
       font: 'message-box',
       padding: '0.5rem 1rem',
       height: '2rem'
@@ -117,6 +120,7 @@ export const openConfirmationChangeStatus = async (orderId: string, status: Stat
     cancelButtonStyle: {
       color: 'white',
       backgroundColor: 'red',
+      borderRadius: '0px',
       font: 'message-box',
       padding: '0.5rem 1rem',
       height: '2rem'
@@ -176,7 +180,8 @@ export const openConfirmationPaid = async (orderId: string, isPaid: boolean, pay
     },
     actionButtonStyle: {
       color: 'white',
-      backgroundColor: '#1E40AF',
+      backgroundColor: '#000000',
+      borderRadius: '0px',
       font: 'message-box',
       padding: '0.5rem 1rem',
       height: '2rem'
@@ -193,6 +198,7 @@ export const openConfirmationPaid = async (orderId: string, isPaid: boolean, pay
     cancelButtonStyle: {
       color: 'white',
       backgroundColor: 'red',
+      borderRadius: '0px',
       font: 'message-box',
       padding: '0.5rem 1rem',
       height: '2rem'

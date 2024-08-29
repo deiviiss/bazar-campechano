@@ -87,7 +87,7 @@ export default async function OrdersByIdPage({ params }: Props) {
 
               <div className='grid grid-cols-2'>
                 <span className='text-right'>No. Productos</span>
-                <span className='text-right'>{order.itemsInOrder === 1 ? '1 artículo' : `${order.itemsInOrder} artíulos`}</span>
+                <span className='text-right'>{order.itemsInOrder === 1 ? '1 artículo' : `${order.itemsInOrder} artículos`}</span>
 
                 <span className='text-right'>Subtotal</span>
                 <span className='text-right'>{currencyFormat(order.subtotal)}</span>

@@ -97,7 +97,7 @@ export const CardProduct = ({ product }: Props) => {
         </Link>
 
         <div className='absolute flex gap-2 top-6 right-28 min-[700px]:right-[124px] min-[720px]:right-[128px] min-[735px]:right-[134px] min-[750px]:right-[140px] min-[760px]:right-[150px] md:right-0 transform translate-x-full transition-transform duration-300 md:group-hover:translate-x-[calc(-100%+40px)]'>
-          <Button asChild variant='primary' size='icon' className='w-10 h-10 md:w-7 md:h-7' >
+          <Button asChild size='icon' className='w-10 h-10 md:w-7 md:h-7 border border-white' >
             <Link href={`/admin/product/${product.slug}?size=${product.id}`}>
               <IoCreateOutline />
             </Link>

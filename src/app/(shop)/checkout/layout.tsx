@@ -12,10 +12,10 @@ export default async function CheckoutLayout({
     redirect('/auth/login?redirectTo=/checkout/shipping-method')
   }
   return (
-    <>
+    <div className='mt-16 pt-10 sm:px-5 md:px-10 lg:px-14 xl:px-20'>
       {
         children
       }
-    </>
+    </div>
   )
 }

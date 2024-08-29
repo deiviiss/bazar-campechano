@@ -31,19 +31,19 @@ export const TopMenu = () => {
       {/* center menu */}
       <div className="hidden sm:flex">
         <Link
-          href={'/gender/men'}
+          href={'/category/clothe'}
           className={`${titleFont.className} m-2 p-2 text-lg transition-all hover:bg-black hover:text-white`}
         >
           Ropa
         </Link>
         <Link
-          href={'/gender/women'}
+          href={'/category/shoe'}
           className={`${titleFont.className} m-2 p-2 text-lg transition-all hover:bg-black hover:text-white`}
         >
           Zapatos
         </Link>
         <Link
-          href={'/gender/kid'}
+          href={'/category/toy'}
           className={`${titleFont.className} m-2 p-2 text-lg transition-all hover:bg-black hover:text-white`}
         >
           Juguetes
@@ -65,7 +65,7 @@ export const TopMenu = () => {
         >
           <div className="relative">
             {loaded && totalItems > 0 && (
-              <span className="absolute text-xs rounded-full px-1 font-bold -top-2 -right-2 bg-blue-700 text-white fade-in">
+              <span className="absolute text-xs rounded-full px-1 font-bold -top-2 -right-2 bg-black text-white fade-in">
                 {totalItems}
               </span>
             )}
@@ -76,7 +76,7 @@ export const TopMenu = () => {
         <button
           type="button"
           onClick={openMenu}
-          className={`${titleFont.className} m-2 p-2 rounded-md text-lg transition-all  hover:bg-black hover:text-white`}
+          className={`${titleFont.className} m-2 p-2 rounded-none text-lg transition-all  hover:bg-black hover:text-white`}
         >
           Menú
         </button>
