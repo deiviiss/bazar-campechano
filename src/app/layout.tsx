@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Providers } from '@/components'
-import { bodyFont } from '@/config/fonts'
+import { textFont } from '@/config/fonts'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     template: '%s - Bazar Campechano',
     default: 'Bazar Campechano'
   },
-  description: 'Tienda de ropa online. Encuentra la ropa que necesitas para estar a la moda.'
+  description:
+    'Tienda de ropa online. Encuentra la ropa que necesitas para estar a la moda.'
 }
 
 export default function RootLayout({
@@ -19,8 +20,8 @@ export default function RootLayout({
   return (
     <html lang="es">
       <Providers>
-        <body className={bodyFont.className}>{children}</body>
-      </Providers>
-    </html>
+        <body className={textFont.className}>{children}</body>
+      </Providers >
+    </html >
   )
 }
