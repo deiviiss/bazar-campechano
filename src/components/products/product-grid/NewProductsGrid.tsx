@@ -1,48 +1,17 @@
-import { NewProductItemClothe } from './NewProductItemClothe'
-import { NewProductItemShoe } from './NewProductItemShoe'
-import { NewProductItemToy } from './NewProductItemToy'
-import { getSizesProductClotheStock, getSizesProductShoeStock } from '@/actions'
-import { type ProductClothe, type Product, type ProductShoe } from '@/interfaces'
+import { ProductItem } from '@/components'
+import { type ProductType } from '@/interfaces'
 
-interface NewProductsGridProps {
-  products: Product[]
+interface Props {
+  products: ProductType[]
 }
 
-export const NewProductsGrid = ({ products }: NewProductsGridProps) => {
+export const NewProductsGrid = ({ products }: Props) => {
   return (
     <div className="flex w-full overflow-x-scroll" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       {
         products.map(async (product) => {
-          // let productProcessed: Product | ProductClothes = product
-
-          if (product.category.name === 'clothes') {
-            const sizesProduct = await getSizesProductClotheStock(product.id)
-
-            const productProcessed: ProductClothe = {
-              ...product,
-              sizes: sizesProduct
-            }
-
-            return (
-              <NewProductItemClothe key={product.id} product={productProcessed} />
-            )
-          }
-
-          if (product.category.name === 'shoes') {
-            const sizesProduct = await getSizesProductShoeStock(product.id)
-
-            const productProcessed: ProductShoe = {
-              ...product,
-              sizes: sizesProduct
-            }
-
-            return (
-              <NewProductItemShoe key={product.id} product={productProcessed} />
-            )
-          }
-
           return (
-            <NewProductItemToy key={product.slug} product={product} />
+            <ProductItem key={product.slug} product={product} className='text-white' />
           )
         })
       }

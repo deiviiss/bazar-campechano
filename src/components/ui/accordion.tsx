@@ -3,7 +3,7 @@
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 import * as React from 'react'
 
-import { HiOutlinePlus } from 'react-icons/hi'
+import { IoChevronForwardSharp } from 'react-icons/io5'
 import { cn } from '@/lib/utils'
 
 const Accordion = AccordionPrimitive.Root
@@ -30,7 +30,7 @@ const AccordionTrigger = React.forwardRef<React.ElementRef<typeof AccordionPrimi
       {...props}
     >
       {children}
-      <HiOutlinePlus className="h-4 w-4 shrink-0 transition-transform duration-200" />
+      <IoChevronForwardSharp className="h-4 w-4 shrink-0 transition-transform duration-200" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))

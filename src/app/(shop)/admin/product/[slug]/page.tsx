@@ -1,25 +1,25 @@
 import { redirect } from 'next/navigation'
-import { getCategories, getProductBySlugSize } from '@/actions'
-import { ProductForm, Title } from '@/components'
-import { type Size } from '@/interfaces'
+import { IoArrowBackOutline } from 'react-icons/io5'
+import { getCategories, getProductBySlug } from '@/actions'
+import { ButtonBack, ProductForm, Title } from '@/components'
 
 interface Props {
-  searchParams: {
-    size: Size
-  }
   params: {
     slug: string
   }
 }
 
-export default async function ProductPage({ params, searchParams }: Props) {
+export default async function ProductPage({ params }: Props) {
   const { slug } = params
-  const { size } = searchParams
 
   const [product, categories] = await Promise.all([
-    getProductBySlugSize({ slug, size }),
+    getProductBySlug(slug),
     getCategories()
   ])
+
+  if (!categories) {
+    redirect('/admin/products')
+  }
 
   if (!product && slug !== 'create') {
     redirect('/admin/products')
@@ -30,9 +30,13 @@ export default async function ProductPage({ params, searchParams }: Props) {
 
   return (
     <>
-      <Title title={title} subtitle={subtitle} className=' text-lg' />
+      <div className='flex w-full justify-between items-start'>
+        <Title title={title} subtitle={subtitle} className='text-lg' />
 
-      <ProductForm product={product ?? {}} categories={categories ?? []} params={params} />
+        <ButtonBack className=' text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 min-[960px]:hidden rounded-none border-black border bg-white' icon={<IoArrowBackOutline />} />
+        <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl hidden min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
+      </div>
+      <ProductForm product={product} categories={categories} />
     </>
   )
 }

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { QuantitySelector, SizeSelector } from '@/components'
-import { type Size, type Product, type CartProduct } from '@/interfaces'
+import { type ClotheSize, type Product, type CartProduct } from '@/interfaces'
 import { useCartStore } from '@/store'
 
 interface Props {
@@ -27,7 +27,7 @@ const noticeCopyLinkProduct = () => {
 export const AddToCart = ({ product }: Props) => {
   const addProductToCart = useCartStore(state => state.addProductToCart)
 
-  const [size, setSize] = useState<Size | undefined>()
+  const [size, setSize] = useState<ClotheSize | undefined>()
   const [quantity, setQuantity] = useState<number>(1)
   const [attempted, setAttempted] = useState<boolean>(false)
 
@@ -41,8 +41,10 @@ export const AddToCart = ({ product }: Props) => {
       slug: product.slug,
       title: product.title,
       price: product.price,
-      image: product.images[0].url,
-      size,
+      image: product.productImage[0].url,
+      clotheSize: size,
+      shoeSize: undefined,
+      ageRange: null,
       quantity
     }
 
@@ -70,7 +72,7 @@ export const AddToCart = ({ product }: Props) => {
       {/* size selector */}
       <SizeSelector
         selectedSize={size}
-        availableSizes={product.sizes}
+        availableSizes={['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']}
         onSizeChange={setSize}
       />
 

@@ -1,13 +1,18 @@
-import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { getEmailAdmin } from '@/actions'
-import { ButtonBackPage, Title } from '@/components'
+import { NavigationAndContactButtons, Title } from '@/components'
 
 export default async function PrivacyPage() {
   const { emailAdmin } = await getEmailAdmin()
+
+  if (!emailAdmin) {
+    notFound()
+  }
+
   return (
-    <>
+    <div className='px-1 sm:px-3'>
       <Title title="Políticas de privacidad" subtitle='' />
-      <div className='max-w-[920px] mx-auto'>
+      <div className='max-w-[920px]'>
         <div className='px-3 py-4'>
           <p className='text-base antialiased'>
             En nuestro sitio web, valoramos y respetamos su privacidad. Esta Política de Privacidad explica cómo recopilamos y utilizamos su información personal a través de nuestro sitio web y los servicios que ofrecemos.
@@ -50,14 +55,8 @@ export default async function PrivacyPage() {
           </p>
         </div>
 
-        <div className='flex justify-center w-full gap-4  m-8 text-center mx-auto'>
-          <Link className='btn-primary' target='_blank' href={`mailto:${emailAdmin?.email}?subject=Consulta%20sobre%20Política%20de%20Privacidad`}>
-            Contáctanos
-          </Link>
-
-          <ButtonBackPage />
-        </div>
+        <NavigationAndContactButtons email={emailAdmin.email} />
       </div>
-    </>
+    </div>
   )
 }

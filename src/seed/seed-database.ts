@@ -1,5 +1,6 @@
 import { initialData } from './seed'
 import { countries } from './seed-countries'
+import { type ClotheSize } from '../interfaces'
 import prisma from '../lib/prisma'
 
 const main = async () => {
@@ -62,35 +63,35 @@ const main = async () => {
       data: imagesData
     })
 
-    if (type === 'clothes') {
+    if (type === 'clothe') {
       const productStockDataSizeXs = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 'XS' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
+        inStock: 16,
+        clotheSize: 'XS' as ClotheSize
       }
 
       const productStockDataSizeS = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 'S' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
+        inStock: 15,
+        clotheSize: 'S' as ClotheSize
       }
 
       const productStockDataSizeM = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 'M' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
+        inStock: 18,
+        clotheSize: 'M' as ClotheSize
       }
 
       const productStockDataSizeL = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 'L' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
+        inStock: 11,
+        clotheSize: 'L' as ClotheSize
       }
 
       const productStockDataSizeXL = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 'XL' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
+        inStock: 8,
+        clotheSize: 'XL' as ClotheSize
       }
 
       await prisma.clotheStock.create({
@@ -114,11 +115,11 @@ const main = async () => {
       })
     }
 
-    if (type === 'toys') {
+    if (type === 'toy') {
       const productStockData = {
         productId: dbProduct.id,
-        inStock: 1,
-        ageRange: '3-5'
+        inStock: 9,
+        ageRange: '3 - 5'
       }
 
       await prisma.toyStock.create({
@@ -126,35 +127,35 @@ const main = async () => {
       })
     }
 
-    if (type === 'shoes') {
+    if (type === 'shoe') {
       const productStockDataSize25 = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 25
+        inStock: 2,
+        shoeSize: 25
       }
 
       const productStockDataSize26 = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 26
+        inStock: 3,
+        shoeSize: 26
       }
 
       const productStockDataSize27 = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 27
+        inStock: 21,
+        shoeSize: 27
       }
 
       const productStockDataSize24 = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 24
+        inStock: 5,
+        shoeSize: 24
       }
 
       const productStockDataSize23 = {
         productId: dbProduct.id,
-        inStock: 1,
-        size: 23
+        inStock: 12,
+        shoeSize: 23
       }
 
       await prisma.shoeStock.create({

@@ -41,7 +41,7 @@ export const ProductsInCart = () => {
     <>
       {
         productsInCart.map(product => (
-          <div key={`${product.slug}-${product.size}`} className="flex flex-col gap-1 mt-5">
+          <div key={`${product.slug}-${product.clotheSize || product.shoeSize || product.ageRange}`} className="flex flex-col gap-1 mt-5">
 
             <ProductImage
               src={product.image}
@@ -55,7 +55,7 @@ export const ProductsInCart = () => {
               <Link
                 className='hover:underline cursor-pointer'
                 href={`/product/${product.slug}`}>
-                {product.size} - {product.title}
+                {product.clotheSize || product.shoeSize} - {product.title}
               </Link>
               <p>{currencyFormat(product.price)}</p>
               <QuantitySelector quantity={product.quantity} onQuantityChange={(value) => { updateProductQuantity(product, value) }} />

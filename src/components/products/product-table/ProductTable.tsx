@@ -1,17 +1,11 @@
 import Link from 'next/link'
 import { DeleteButtonProduct, ProductImage } from '@/components'
-import { type Size, type ProductWithStock, type ValidGender } from '@/interfaces'
+import { type Stock } from '@/interfaces'
 import { currencyFormat } from '@/utils'
+import { isClothe, isShoe, isToy } from '@/utils/productTypeGuards'
 
 interface Props {
-  products: ProductWithStock[]
-}
-
-const genderSpanish: Record<ValidGender, string> = {
-  men: 'Hombre',
-  women: 'Mujer',
-  kid: 'Niño',
-  unisex: 'Unisex'
+  products: Stock[]
 }
 
 export const ProductTable = ({ products }: Props) => {
@@ -53,46 +47,149 @@ export const ProductTable = ({ products }: Props) => {
       <tbody>
         {
           products?.map(product => {
-            return (
-              <tr
-                key={`${product.id}-${product.stock.size}`}
-                className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+            if (isClothe(product.product)) {
+              if (!product.clotheSize) {
+                return <span key={product.id} >clothe size missing</span>
+              }
 
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  <Link href={`/product/${product.slug}`}
+              return (
+                <tr
+                  key={`${product.id}-${product.clotheSize}`}
+                  className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <Link href={`/product/${product.product.slug}`}
+                    >
+                      <ProductImage
+                        src={product.product.productImage[0].url}
+                        alt={product.product.title}
+                        width={80}
+                        height={80}
+                        className='w-20 h-20 object-cover rounded'
+                      />
+                    </Link>
+                  </td>
+                  <td
+                    className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap hover:underline">
+                    <Link href={`/admin/product/${product.product.slug}?size=${product.clotheSize}`}>
+                      {product.product.title}
+                    </Link>
+                  </td>
+                  <td
+                    className="text-sm text-gray-900 px-6 py-4 whitespace-nowrap font-bold"
                   >
-                    <ProductImage
-                      src={product.images[0].url}
-                      alt={product.title}
-                      width={80}
-                      height={80}
-                      className='w-20 h-20 object-cover rounded'
-                    />
-                  </Link>
-                </td>
-                <td
-                  className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap hover:underline">
-                  <Link href={`/admin/product/${product.slug}?size=${product.stock.size}`}>
-                    {product.title}
-                  </Link>
-                </td>
-                <td
-                  className="text-sm text-gray-900 px-6 py-4 whitespace-nowrap font-bold"
-                >
-                  {currencyFormat(Number(product.price))}
-                </td>
-                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                  {genderSpanish[product.gender]}
-                </td>
-                <td className="text-sm text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
-                  {product.stock.inStock}
-                </td>
-                <td className="text-sm text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
-                  {product.stock.size}
-                </td>
-                <td className="text-sm text-gray-900 font-bold px-3 py-4 whitespace-nowrap">
-                  <DeleteButtonProduct id={`${product.id}`} size={product.stock.size as Size} />
-                </td>
+                    {currencyFormat(Number(product.product.price))}
+                  </td>
+                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                    {product.inStock}
+                  </td>
+                  <td className="text-sm text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
+                    {product.product.category.name}
+                  </td>
+                  <td className="text-sm text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
+                    {product.clotheSize}
+                  </td>
+                  <td className="text-sm text-gray-900 font-bold px-3 py-4 whitespace-nowrap">
+                    <DeleteButtonProduct id={`${product.id}`} productName={product.product.title} />
+                  </td>
+                </tr>
+              )
+            }
+            if (isShoe(product.product)) {
+              if (!product.shoeSize) {
+                return <span key={product.id} >shoe size missing</span>
+              }
+
+              return (
+                <tr
+                  key={`${product.id}-${product.shoeSize}`}
+                  className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <Link href={`/product/${product.product.slug}`}
+                    >
+                      <ProductImage
+                        src={product.product.productImage[0].url}
+                        alt={product.product.title}
+                        width={80}
+                        height={80}
+                        className='w-20 h-20 object-cover rounded'
+                      />
+                    </Link>
+                  </td>
+                  <td
+                    className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap hover:underline">
+                    <Link href={`/admin/product/${product.product.slug}?size=${product.clotheSize}`}>
+                      {product.product.title}
+                    </Link>
+                  </td>
+                  <td
+                    className="text-sm text-gray-900 px-6 py-4 whitespace-nowrap font-bold"
+                  >
+                    {currencyFormat(Number(product.product.price))}
+                  </td>
+                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                    {product.inStock}
+                  </td>
+                  <td className="text-sm text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
+                    {product.product.category.name}
+                  </td>
+                  <td className="text-sm text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
+                    {product.clotheSize}
+                  </td>
+                  <td className="text-sm text-gray-900 font-bold px-3 py-4 whitespace-nowrap">
+                    <DeleteButtonProduct id={`${product.id}`} productName={product.product.title} />
+                  </td>
+                </tr>
+              )
+            }
+            if (isToy(product.product)) {
+              return (
+                <tr
+                  key={product.id}
+                  className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <Link href={`/product/${product.product.slug}`}
+                    >
+                      <ProductImage
+                        src={product.product.productImage[0].url}
+                        alt={product.product.title}
+                        width={80}
+                        height={80}
+                        className='w-20 h-20 object-cover rounded'
+                      />
+                    </Link>
+                  </td>
+                  <td
+                    className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap hover:underline">
+                    <Link href={`/admin/product/${product.product.slug}?size=${product.clotheSize}`}>
+                      {product.product.title}
+                    </Link>
+                  </td>
+                  <td
+                    className="text-sm text-gray-900 px-6 py-4 whitespace-nowrap font-bold"
+                  >
+                    {currencyFormat(Number(product.product.price))}
+                  </td>
+                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                    {product.inStock}
+                  </td>
+                  <td className="text-sm text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
+                    {product.product.category.name}
+                  </td>
+                  <td className="text-sm text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
+                    {product.clotheSize}
+                  </td>
+                  <td className="text-sm text-gray-900 font-bold px-3 py-4 whitespace-nowrap">
+                    {/* <DeleteButtonProduct id={`${product.id}`} size={product.clotheSize} /> */}
+                  </td>
+                </tr>
+              )
+            }
+            return (
+              <tr key={product.id} >
+                <td>shoe size missing</td>
               </tr>
             )
           })

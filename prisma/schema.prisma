@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Size {
+enum ClotheSize {
   XS
   S
   M
@@ -54,9 +54,15 @@ enum PaymentMethod {
   transfer
 }
 
+enum CategoryName {
+  clothe
+  shoe
+  toy
+}
+
 model Category {
-  id          String    @id @default(uuid())
-  name        String
+  id          String       @id @default(uuid())
+  name        CategoryName
   description String?
   products    Product[]
 
@@ -64,11 +70,12 @@ model Category {
 }
 
 model Product {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
   description String
-  price       Float  @default(0)
-  slug        String @unique
+  price       Float   @default(0)
+  slug        String  @unique
+  isActive    Boolean @default(true)
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
@@ -83,24 +90,26 @@ model Product {
 }
 
 model ClotheStock {
-  id      String @id @default(uuid())
-  size    Size
-  inStock Int
+  id         String     @id @default(uuid())
+  clotheSize ClotheSize
+  inStock    Int
 
   productId String
   product   Product @relation(fields: [productId], references: [id])
 
+  @@unique([clotheSize, productId])
   @@map("clothe_stocks")
 }
 
 model ShoeStock {
-  id      String @id @default(uuid())
-  size    Int
-  inStock Int
+  id       String @id @default(uuid())
+  shoeSize Int
+  inStock  Int
 
   productId String
   product   Product @relation(fields: [productId], references: [id])
 
+  @@unique([shoeSize, productId])
   @@map("shoe_stocks")
 }
 
@@ -112,6 +121,7 @@ model ToyStock {
   productId String
   product   Product @relation(fields: [productId], references: [id])
 
+  @@unique([ageRange, productId])
   @@map("toy_stocks")
 }
 
@@ -198,10 +208,12 @@ model Order {
 }
 
 model OrderItem {
-  id       String @id @default(uuid())
-  quantity Int
-  price    Float
-  size     Size
+  id          String      @id @default(uuid())
+  quantity    Int
+  price       Float
+  clotheSize  ClotheSize?
+  shoeSize    Int?
+  toyAgeRange String?
 
   order   Order  @relation(fields: [orderId], references: [id])
   orderId String

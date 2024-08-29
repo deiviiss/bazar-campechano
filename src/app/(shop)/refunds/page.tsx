@@ -1,13 +1,18 @@
-import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { getEmailAdmin } from '@/actions'
-import { ButtonBackPage, Title } from '@/components'
+import { NavigationAndContactButtons, Title } from '@/components'
 
 export default async function RefundsPage() {
   const { emailAdmin } = await getEmailAdmin()
+
+  if (!emailAdmin) {
+    notFound()
+  }
+
   return (
-    <>
+    <div className='px-1 sm:px-3'>
       <Title title="Política de Reembolsos y Devoluciones" subtitle='' />
-      <div className='max-w-[920px] mx-auto'>
+      <div className='max-w-[920px]'>
         <div className='px-3 py-4'>
           <p>
             En Bazar Campechano, nos esforzamos por garantizar la satisfacción de nuestros clientes. Sin embargo, debido a la naturaleza de nuestros productos de segunda mano, no ofrecemos devoluciones ni reembolsos una vez que la mercancía ha sido entregada.
@@ -41,14 +46,8 @@ export default async function RefundsPage() {
           </p>
         </div>
 
-        <div className='flex justify-center w-full gap-4  m-8 text-center mx-auto'>
-          <Link className='btn-primary' target='_blank' href={`mailto:${emailAdmin?.email}?subject=Consulta%20sobre%20Política%20de%20Reembolsos%20y%20Devoluciones`}>
-            Contáctanos
-          </Link>
-
-          <ButtonBackPage />
-        </div>
+        <NavigationAndContactButtons email={emailAdmin.email} />
       </div>
-    </>
+    </div>
   )
 }

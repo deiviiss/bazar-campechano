@@ -1,23 +1,22 @@
 'use client'
 
 import { useState } from 'react'
-import { IoReloadCircleOutline } from 'react-icons/io5'
+import { IoReloadCircleOutline, IoTrashOutline } from 'react-icons/io5'
 import { toast } from 'sonner'
-import { deleteProductByIdAndSize } from '@/actions'
+import { deleteProductById } from '@/actions'
 import { Button } from '@/components/ui/button'
-import { type Size } from '@/interfaces'
 
 interface IProps {
   id: string
-  size: Size
+  productName: string
 }
 
-export const DeleteButtonProduct = ({ id, size }: IProps) => {
+export const DeleteButtonProduct = ({ id, productName }: IProps) => {
   const [deleting, setDeleting] = useState(false)
 
   const openConfirmationDelete = () => {
     toast('Eliminar producto', {
-      description: `¿Estás seguro? Se eliminara el stock de la talla '${size}' del  producto #${id.split('-').at(-1)} `,
+      description: `¿Estás seguro? Se desactivara el  producto ${productName} y no será visible en la tienda`,
       position: 'top-right',
       duration: Infinity,
       className: 'grid grid-cols-[1fr,110px] items-start justify-center text-sm p-2 col-span-2 pb-4',
@@ -52,7 +51,7 @@ export const DeleteButtonProduct = ({ id, size }: IProps) => {
 
   const handleDeleteProduct = async (productId: string) => {
     setDeleting(true)
-    const { ok, message } = await deleteProductByIdAndSize(productId, size)
+    const { ok, message } = await deleteProductById({ id: productId })
 
     if (!ok) {
       toast.error(message, {
@@ -75,18 +74,22 @@ export const DeleteButtonProduct = ({ id, size }: IProps) => {
         !deleting
           ? (
             <Button
+              variant='destructive'
+              size='icon'
+              className='w-10 h-10 md:w-7 md:h-7'
               onClick={() => { openConfirmationDelete() }}
               disabled={deleting}
-              className="btn-danger w-32">
-              Eliminar
+            >
+              <IoTrashOutline />
             </Button>)
           : (
             <Button
+              variant='destructive'
+              size='icon'
               disabled
-              className='w-full md:w-full max-w-32 overflow-hidden'
+              className='w-10 h-10 md:w-7 md:h-7'
             >
-              <IoReloadCircleOutline className="mr-1 h-4 animate-spin" />
-              Eliminando
+              <IoReloadCircleOutline className="h-4 animate-spin" />
             </Button>)
       }
     </>

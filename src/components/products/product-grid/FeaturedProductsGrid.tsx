@@ -1,46 +1,17 @@
-import { FeaturedProductItemClothe } from './FeaturedProductItemClothe'
-import { FeaturedProductItemShoe } from './FeaturedProductItemShoe'
-import { FeaturedProductItemToy } from './FeaturedProductItemToy'
-import { getSizesProductClotheStock, getSizesProductShoeStock } from '@/actions'
-import { type ProductClothe, type ProductShoe, type Product } from '@/interfaces'
+import { ProductItem } from '@/components'
+import { type ProductType } from '@/interfaces'
 
-interface ProductGridProps {
-  products: Product[]
+interface Props {
+  products: ProductType[]
 }
 
-export const FeaturedProductsGrid = ({ products }: ProductGridProps) => {
+export const FeaturedProductsGrid = ({ products }: Props) => {
   return (
-    <div className="grid grid-cols-2 min-[760px]:grid-cols-3 lg:grid-cols-4 w-full overflow-x-scroll" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div className="grid grid-cols-2 min-[760px]:grid-cols-3 lg:grid-cols-4 w-full overflow-x-scroll justify-items-center gap-y-4 " style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       {
         products.map(async (product) => {
-          if (product.category.name === 'clothes') {
-            const sizesProduct = await getSizesProductClotheStock(product.id)
-
-            const productProcessed: ProductClothe = {
-              ...product,
-              sizes: sizesProduct
-            }
-
-            return (
-              <FeaturedProductItemClothe key={product.id} product={productProcessed} />
-            )
-          }
-
-          if (product.category.name === 'shoes') {
-            const sizesProduct = await getSizesProductShoeStock(product.id)
-
-            const productProcessed: ProductShoe = {
-              ...product,
-              sizes: sizesProduct
-            }
-
-            return (
-              <FeaturedProductItemShoe key={product.id} product={productProcessed} />
-            )
-          }
-
           return (
-            <FeaturedProductItemToy key={product.slug} product={product} />
+          <ProductItem key={product.slug} product={product} />
           )
         })
       }

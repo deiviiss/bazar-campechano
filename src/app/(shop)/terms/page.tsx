@@ -1,13 +1,19 @@
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { getEmailAdmin } from '@/actions'
-import { Title, ButtonBackPage } from '@/components'
+import { Title, NavigationAndContactButtons } from '@/components'
 
 export default async function TermsPage() {
   const { emailAdmin } = await getEmailAdmin()
+
+  if (!emailAdmin) {
+    notFound()
+  }
+
   return (
-    <>
+    <div className='px-1 sm:px-3'>
       <Title title="Términos y condiciones" subtitle='' />
-      <div className='max-w-[920px] mx-auto'>
+      <div className='max-w-[920px]'>
         <div className='px-3 py-4'>
           <p className='text-base antialiased'>
             Bienvenido a nuestro sitio web. Al utilizar nuestros servicios, acepta los siguientes términos y condiciones de uso. Si no está de acuerdo con estos términos, le recomendamos no utilizar nuestros servicios.
@@ -44,14 +50,8 @@ export default async function TermsPage() {
           </p>
         </div>
 
-        <div className='flex justify-center w-full gap-4  m-8 text-center mx-auto'>
-          <Link className='btn-primary' target='_blank' href={`mailto:${emailAdmin?.email}?subject=Consulta%20sobre%20Términos%20y%20Condiciones`}>
-            Contáctanos
-          </Link>
-
-          <ButtonBackPage />
-        </div>
+        <NavigationAndContactButtons email={emailAdmin.email} />
       </div>
-    </>
+    </div>
   )
 }
