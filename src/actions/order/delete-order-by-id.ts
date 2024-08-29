@@ -1,8 +1,10 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { getProductByIdSize, getUserSessionServer } from '@/actions'
+import { getProductStockByIdAndSize, getUserSessionServer } from '@/actions'
+import { type AgeRange } from '@/interfaces'
 import prisma from '@/lib/prisma'
+import { isClothe, isShoe, isToy } from '@/utils/productTypeGuards'
 
 export const deleteOrderById = async (id: string) => {
   const user = await getUserSessionServer()
@@ -26,21 +28,16 @@ export const deleteOrderById = async (id: string) => {
             id: true,
             price: true,
             quantity: true,
-            size: true,
+            clotheSize: true,
+            shoeSize: true,
+            toyAgeRange: true,
             productId: true,
-
             product: {
-              select: {
-                id: true,
-                title: true,
-                slug: true,
-
+              include: {
                 productImage: {
-                  select: {
-                    url: true
-                  },
                   take: 1
-                }
+                },
+                category: true
               }
             }
           }
@@ -58,25 +55,73 @@ export const deleteOrderById = async (id: string) => {
     }
 
     await prisma.$transaction(async () => {
+      // update stock for each stock product
       for (const item of order.orderItem) {
-        const productStock = await getProductByIdSize({ productId: item.productId, size: item.size })
-
-        if (!productStock) {
-          return {
-            ok: false,
-            message: 'Product not found'
+        if (isClothe(item.product)) {
+          if (!item.clotheSize) {
+            throw new Error('Clothe size not found')
           }
+
+          const productStock = await getProductStockByIdAndSize({ productId: item.productId, clotheSize: item.clotheSize })
+
+          if (!productStock) {
+            throw new Error('Product not found in stock')
+          }
+
+          // update stock for item
+          await prisma.clotheStock.update({
+            where: {
+              id: productStock.id
+            },
+            data: {
+              inStock: productStock.inStock + item.quantity
+            }
+          })
         }
 
-        // update stock for item
-        await prisma.productStock.update({
-          where: {
-            id: productStock.stock.id
-          },
-          data: {
-            inStock: productStock.stock.inStock + item.quantity
+        if (isShoe(item.product)) {
+          if (!item.shoeSize) {
+            throw new Error('Shoe size not found')
           }
-        })
+
+          const productStock = await getProductStockByIdAndSize({ productId: item.productId, shoeSize: item.shoeSize })
+
+          if (!productStock) {
+            throw new Error('Product not found in stock')
+          }
+
+          // update stock for item
+          await prisma.shoeStock.update({
+            where: {
+              id: productStock.id
+            },
+            data: {
+              inStock: productStock.inStock + item.quantity
+            }
+          })
+        }
+
+        if (isToy(item.product)) {
+          if (!item.toyAgeRange) {
+            throw new Error('Toy age range not found')
+          }
+
+          const productStock = await getProductStockByIdAndSize({ productId: item.productId, ageRange: item.toyAgeRange as AgeRange })
+
+          if (!productStock) {
+            throw new Error('Product not found in stock')
+          }
+
+          // update stock for item
+          await prisma.toyStock.update({
+            where: {
+              id: productStock.id
+            },
+            data: {
+              inStock: productStock.inStock + item.quantity
+            }
+          })
+        }
 
         //  delete item from order
         await prisma.orderItem.delete({

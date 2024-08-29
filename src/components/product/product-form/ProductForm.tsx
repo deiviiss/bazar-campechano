@@ -1,38 +1,57 @@
 'use client'
 
-import clsx from 'clsx'
-import Link from 'next/link'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { IoCloseCircleOutline } from 'react-icons/io5'
 import { toast } from 'sonner'
+import { z } from 'zod'
+import { StockDetails } from './ProductFormStockDetails'
 import { createUpdateProduct, deleteProductImage } from '@/actions'
 import { ProductImage } from '@/components'
-import { type ProductImage as ProductWithImage, type Category, type Size, type ProductWithStock } from '@/interfaces'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { type CategoryName, type Category, type ProductType, type ClotheStockDetail, type ShoeStockDetail, type ToyStockDetail } from '@/interfaces'
 
-interface Props {
-  product: Partial<ProductWithStock> & { ProductImage?: ProductWithImage[] }
-  categories: Category[]
-  params: {
-    slug: string
-  }
+const initialToyStockDetails: ToyStockDetail[] = [
+  { ageRange: '3 - 5', inStock: 0 },
+  { ageRange: '6 - 8', inStock: 0 },
+  { ageRange: '9 - 12', inStock: 0 }
+]
+const initialClotheStockDetails: ClotheStockDetail[] = [
+  { clotheSize: 'XS', inStock: 0 },
+  { clotheSize: 'S', inStock: 0 },
+  { clotheSize: 'M', inStock: 0 },
+  { clotheSize: 'L', inStock: 0 },
+  { clotheSize: 'XL', inStock: 0 },
+  { clotheSize: 'XXL', inStock: 0 }
+]
+
+const initialShoeStockDetails: ShoeStockDetail[] = [
+  { shoeSize: 23, inStock: 0 },
+  { shoeSize: 24, inStock: 0 },
+  { shoeSize: 25, inStock: 0 },
+  { shoeSize: 26, inStock: 0 },
+  { shoeSize: 27, inStock: 0 }
+]
+
+const stockDetailsByCategoryName = {
+  clothe: initialClotheStockDetails,
+  shoe: initialShoeStockDetails,
+  toy: initialToyStockDetails
 }
-
-interface FormInputs {
-  id?: string
-  title: string
-  slug: string
-  description: string
-  price: number
-  inStock: number
-  size: Size
-  sizes: Size[]
-  categoryId: string
-  gender: 'men' | 'women' | 'kid' | 'unisex'
-  images?: FileList
-}
-
-const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 
 const noticeFailSaved = () => {
   toast.error('No se pudo guardar el producto, intente nuevamente', {
@@ -62,74 +81,136 @@ const noticeFailSavedDeleteImage = (message: string) => {
   })
 }
 
-export const ProductForm = ({ product, categories, params }: Props) => {
+// schema zod for product
+const productSchema = z.object({
+  id: z.string().uuid().optional().nullable(),
+  title: z
+    .string({
+      required_error: 'El título es requerido.',
+      message: 'El título debe tener entre 20 y 50 caracteres.'
+    }).min(20, {
+      message: 'El título debe tener al menos 20 caracteres.'
+    }
+    ).max(50, {
+      message: 'El título debe tener máximo 50 caracteres.'
+    }),
+  description: z
+    .string({
+      required_error: 'La descripción es requerida.',
+      message: 'La descripción debe tener entre 30 y 250 caracteres.'
+    })
+    .min(10, {
+      message: 'La descripción debe tener al menos 10 caracteres.'
+    })
+    .max(250, {
+      message: 'La descripción debe tener máximo 250 caracteres.'
+    }),
+  slug: z
+    .string({
+      required_error: 'El slug es requerido.',
+      message: 'El slug debe tener entre 10 y 50 caracteres.'
+    })
+    .min(10, {
+      message: 'El slug debe tener al menos 10 caracteres.'
+    })
+    .max(50, {
+      message: 'El slug debe tener máximo 50 caracteres.'
+    }),
+  price: z
+    .number({
+      message: 'El precio es requerido.'
+    })
+    .positive({
+      message: 'El precio debe ser mayor a 0.'
+    })
+    .min(0, {
+      message: 'El precio debe ser mayor a 0.'
+    })
+    .transform(val => Number(val.toFixed(2))),
+  categoryId: z.string().uuid(),
+  productImage: z.array(z.instanceof(File)).refine(images => images.length <= 5 * 1024 * 1024, 'Las imágenes no deben superar los 5MB').optional()
+})
+
+const labels: Record<CategoryName, string> = {
+  toy: 'Juguetes',
+  clothe: 'Ropa',
+  shoe: 'Zapatos'
+}
+
+interface Props {
+  product: ProductType | null
+  categories: Category[]
+}
+
+export const ProductForm = ({ product, categories }: Props) => {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [currentSize, setCurrentSize] = useState<Size>(product.stock?.size || 'XS')
+
+  const categoryIdDefault = product?.categoryId || categories[0].id
+  const [categoryId, setCategoryId] = useState<string>(categoryIdDefault)
+  const categoryName = categories.find(category => category.id === categoryId)?.name
+
+  if (categoryName === undefined) throw new Error('No se encontró la categoría del producto')
+
+  const [stockDetails, setStockDetails] = useState(product?.stockDetails || stockDetailsByCategoryName[categoryName])
 
   const defaultValuesForm = {
-    id: product.id,
-    title: product.title,
-    slug: product.slug,
-    description: product.description || undefined,
-    price: product.price,
-    gender: product.gender,
-    size: currentSize,
-    sizes: ['XS'] as Size[],
-    categoryId: product.categoryId,
-    inStock: product.stock?.inStock,
-    images: undefined
+    id: product?.id,
+    title: product?.title,
+    slug: product?.slug,
+    description: product?.description || '',
+    price: product?.price || 0,
+    categoryId,
+    productImage: undefined
   }
 
-  const {
-    handleSubmit,
-    register,
-    formState: { isValid },
-    getValues,
-    setValue,
-    watch
-  } = useForm<FormInputs>({
-    defaultValues: defaultValuesForm
+  const form = useForm<z.infer<typeof productSchema>>({
+    resolver: zodResolver(productSchema),
+    defaultValues: { ...defaultValuesForm }
   })
 
-  const oneSizeSelector = (size: Size) => {
-    setCurrentSize(size)
-  }
+  useEffect(() => {
+    const categoryDetails = product?.stockDetails || stockDetailsByCategoryName[categoryName]
 
-  const multipleSizeSelector = (size: string) => {
-    const sizes = new Set(getValues('sizes'))
-    sizes.has(size as Size) ? sizes.delete(size as Size) : sizes.add(size as Size)
+    form.reset({
+      ...defaultValuesForm,
+      categoryId
+    })
 
-    if (sizes.size === 0) {
-      sizes.add(size as Size)
+    //! when changing between product categories, the stockDetails is not being reset
+    setStockDetails(categoryDetails)
+  }, [categoryId, form.reset, categoryName])
+
+  async function onSubmit(values: z.infer<typeof productSchema>) {
+    setIsSubmitting(true)
+
+    const totalStock = stockDetails.reduce((acc, stock) => acc + stock.inStock, 0)
+
+    if (totalStock <= 0) {
+      toast.error('Debes ingresar al menos un stock', {
+        position: 'top-right',
+        duration: 5000
+      })
+      setIsSubmitting(false)
+      return
     }
 
-    setValue('sizes', Array.from(sizes))
-  }
-
-  watch('sizes')
-
-  const onSubmit = async (data: FormInputs) => {
-    setIsSubmitting(true)
     const formData = new FormData()
 
-    const { images, ...productToSave } = data
+    const { productImage, ...productToSave } = values
 
     if (productToSave.id) formData.append('id', productToSave.id)
-
     formData.append('title', productToSave.title)
-    formData.append('description', productToSave.description)
+    formData.append('description', productToSave.description || '')
     formData.append('slug', productToSave.slug)
     formData.append('price', productToSave.price.toString())
-    formData.append('inStock', productToSave.inStock.toString())
-    formData.append('size', currentSize.toString())
-    formData.append('sizes', productToSave.sizes.toString())
-    formData.append('gender', productToSave.gender)
     formData.append('categoryId', productToSave.categoryId)
+    formData.append('stockDetails', JSON.stringify(stockDetails))
+    formData.append('categoryName', categoryName as string)
 
-    if (images) {
-      for (let i = 0; i < images.length; i++) {
-        formData.append('images', images[i])
+    if (productImage) {
+      for (let i = 0; i < productImage.length; i++) {
+        formData.append('images', productImage[i])
       }
     }
 
@@ -146,6 +227,40 @@ export const ProductForm = ({ product, categories, params }: Props) => {
     router.replace(`/admin/product/${product?.slug}`)
   }
 
+  const openConfirmDeleteImage = (id: string, url: string) => {
+    toast('¿Estás seguro de eliminar la imagen?', {
+      position: 'top-right',
+      duration: Infinity,
+      className: 'grid grid-cols-[1fr,110px] items-start justify-center text-sm p-2 col-span-2 pb-4',
+      classNames: {
+        content: 'flex items-start justify-center text-sm col-span-4 p-2'
+      },
+      actionButtonStyle: {
+        color: 'white',
+        backgroundColor: '#1E40AF',
+        font: 'message-box',
+        padding: '0.5rem 1rem',
+        height: '2rem'
+      },
+      action: {
+        label: 'Confirmar',
+        onClick: async () => { await handleDeleteImageClick(id, url) }
+      },
+      cancel:
+      {
+        label: 'Cancelar',
+        onClick: () => { toast.dismiss() }
+      },
+      cancelButtonStyle: {
+        color: 'white',
+        backgroundColor: 'red',
+        font: 'message-box',
+        padding: '0.5rem 1rem',
+        height: '2rem'
+      }
+    })
+  }
+
   const handleDeleteImageClick = async (id: string, url: string) => {
     setIsSubmitting(true)
     const rta = await deleteProductImage(id, url)
@@ -159,220 +274,216 @@ export const ProductForm = ({ product, categories, params }: Props) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3">
-      {/* texts */}
-      <div className="w-full">
-        <div className="flex flex-col mb-2">
-          <span>Título</span>
-          <input
-            type="text"
-            className="p-2 border rounded-md bg-gray-200"
-            {...register('title', { required: true })}
-          />
-        </div>
+    <Form {...form} >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 px-0 mb-16 gap-3 min-[480px]:px-3 sm:grid-cols-2 md:gap-7">
 
-        <div className="flex flex-col mb-2">
-          <span>Slug</span>
-          <input
-            type="text"
-            className="p-2 border rounded-md bg-gray-200"
-            {...register('slug', { required: true })}
-          />
-        </div>
+        {/* data general */}
+        <Card>
+          <CardHeader>
+            <h3 className="text-lg font-semibold p-5 bg-slate-400 text-black">Datos generales</h3>
+          </CardHeader>
 
-        <div className="flex flex-col mb-2">
-          <span>Descripción</span>
-          <textarea
-            rows={5}
-            className="p-2 border rounded-md bg-gray-200"
-            {...register('description', { required: true })}
-          ></textarea>
-        </div>
+          {/* category */}
+          <CardContent>
+            <FormField
+              control={form.control}
+              name='categoryId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Categoría</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => {
+                        setCategoryId(value)
+                        field.onChange(value)
+                      }} defaultValue={`${field.value}`}
+                      disabled={isSubmitting || !!product?.id}
+                    >
+                      <SelectTrigger>
+                        <SelectValue>
+                          {labels[field.value as CategoryName]}{/* {labels[category as CategoryName]} */}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {
+                            categories.map(category => (
+                              <SelectItem
+                                className='capitalize'
+                                key={category.id}
+                                value={category.id}>
+                                {labels[category.name as CategoryName]}
+                              </SelectItem>
+                            ))
+                          }
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
 
-        <div className="flex flex-col mb-2">
-          <span>Precio</span>
-          <input
-            type="number"
-            className="p-2 border rounded-md bg-gray-200"
-            {...register('price', { required: true, min: 0 })}
-          />
-        </div>
+          {/* title */}
+          <CardContent>
+            <FormField
+              control={form.control}
+              name='title'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nombre</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Nombre del producto' {...field} value={field.value ?? ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
 
-        <div className="flex flex-col mb-2">
-          <span>Género</span>
-          <select
-            className="p-2 border rounded-md bg-gray-200"
-            {...register('gender', { required: true })}
-          >
-            <option value="">[Seleccione]</option>
-            <option value="men">Hombre</option>
-            <option value="women">Mujer</option>
-            <option value="kid">Niño</option>
-            <option value="unisex">Unisex</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col mb-2">
-          <span>Categoria</span>
-          <select
-            className="p-2 border rounded-md bg-gray-200 capitalize"
-            {...register('categoryId', { required: true })}
-          >
-            <option value="">[Seleccione]</option>
-            {
-              categories.map(category => (
-                <option className='capitalize' key={category.id} value={category.id}>{category.name}</option>
-              ))
-            }
-          </select>
-        </div>
-      </div>
-
-      {/* size and photo selector */}
-      <div className="w-full">
-
-        <div className="flex flex-col mb-2">
-          <span>Inventario</span>
-          <input
-            type="number"
-            className="p-2 border rounded-md bg-gray-200"
-            {...register('inStock', { required: true, min: 0 })}
-          />
-        </div>
-
-        <div className="flex flex-col">
-          {
-            product.stock?.size
-              ? (
-                <>
-                  <span>Talla:</span>
-                  <div className="flex flex-wrap mb-2">
-                    {
-                      sizes.map(size => (
-                        <div
-                          key={size}
-                          onClick={() => { oneSizeSelector(size as Size) }}
-                          className={
-                            clsx(
-                              'p-2 border rounded-md mr-2 mb-2 cursor-pointer w-14 transition-all text-center',
-                              {
-                                'bg-blue-500 text-white': currentSize === size,
-                                'bg-gray-200': currentSize !== size
-                              }
-                            )
-                          }>
-                          <span>{size}</span>
-                        </div>
-                      ))
-                    }
-
-                  </div>
-                </>)
-              : (
-                <>
-                  <span>Talla:</span>
-                  <div className="flex flex-wrap mb-2">
-                    {
-                      sizes.map(size => (
-                        <div
-                          key={size}
-                          onClick={() => { multipleSizeSelector(size) }}
-                          className={
-                            clsx(
-                              'p-2 border rounded-md mr-2 mb-2 cursor-pointer w-14 transition-all text-center',
-                              {
-                                'bg-blue-500 text-white': getValues('sizes')?.includes(size as Size),
-                                'bg-gray-200': !getValues('sizes')?.includes(size as Size)
-                              }
-                            )
-                          }>
-                          <span>{size}</span>
-                        </div>
-                      ))
-                    }
-                  </div>
-                </>)
-          }
-
-          {/* images */}
-          <div className="flex flex-col mb-2">
-
-            <span>Fotos</span>
-            <input
-              type="file"
-              multiple
-              className="p-2 border rounded-md bg-gray-200"
-              accept="image/png, image/jpeg, image/avif"
-              {...register('images')}
+          {/* slug */}
+          <CardContent>
+            <FormField
+              control={form.control}
+              name='slug'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Slug (SEO)</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Slug del producto' {...field} value={field.value ?? ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
 
-          </div>
+          </CardContent>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 overflow-auto h-96">
-            {
-              product.images &&
-              product.images?.map(image => (
-                <div
-                  className='flex flex-col items-center justify-center'
-                  key={image.url}>
-                  <ProductImage
-                    src={image.url}
-                    alt={product.title ? product.title : 'Producto'}
-                    width={200}
-                    height={200}
-                    className="rounded-t shadow-md" />
+          {/* description */}
+          <CardContent>
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Descripción</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder='Descripción del producto' {...field} value={field.value ?? ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
 
-                  <button
-                    disabled={isSubmitting}
-                    onClick={() => { handleDeleteImageClick(image.id, image.url) }}
-                    type='button'
-                    className={
-                      clsx(
-                        'w-full p-2 mt-2 rounded-b border border-t-0',
-                        {
-                          'btn-disabled': isSubmitting,
-                          'btn-danger': !isSubmitting
-                        }
-                      )
-                    }>
-                    Eliminar
-                  </button>
-                </div>
-              ))
-            }
-          </div>
+          {/* price */}
+          <CardContent>
+            <FormField
+              control={form.control}
+              name='price'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Precio</FormLabel>
+                  <FormControl>
+                    <Input type='number' placeholder='Precio del producto' {...field}
+                      onChange={(e) => { field.onChange(e.target.value === '' ? 0 : parseFloat(e.target.value)) }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
 
+        {/* stockDetails & images  */}
+        <div className='flex flex-col gap-7 h-fit'>
+          {/* stockDetails */}
+          {
+            StockDetails({ stockDetails, setStockDetails })
+          }
+
+          {/* productImage */}
+          <Card>
+            <CardHeader>
+              <h3 className="text-lg font-semibold p-5 bg-slate-400 text-black">Imágenes</h3>
+            </CardHeader>
+
+            {/* productImage */}
+            <CardContent>
+              <FormField
+                control={form.control}
+                name='productImage'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Imagen</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='file'
+                        multiple
+                        onChange={(e) => {
+                          // convert FileList to File Array
+                          field.onChange(Array.from(e.target.files || []))
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 overflow-auto py-5">
+                {
+                  product?.productImage &&
+                  product.productImage?.map((image, index) => (
+                    <div
+                      className='flex flex-col items-center justify-center gap-1 relative'
+                      key={`${image.url} ${index}`}>
+                      <ProductImage
+                        src={image.url}
+                        alt={product.title ? product.title : 'Producto'}
+                        width={200}
+                        height={200}
+                        className="rounded-t shadow-md" />
+                      <Button
+                        disabled={isSubmitting}
+                        size='icon'
+                        variant='destructive'
+                        className='absolute w-5 h-5 rounded-lg top-0 right-0 p-0'
+                        onClick={() => { openConfirmDeleteImage(image.id, image.url) }}
+                        type='button'
+                      >
+                        <IoCloseCircleOutline className='w-6 h-6' />
+                      </Button>
+                    </div>
+                  ))
+                }
+              </div>
+
+            </CardContent>
+          </Card>
         </div>
-      </div>
 
-      <div className='flex gap-2 w-full text-center'>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={
-            clsx(
-              'w-full mt-4',
-              {
-                'btn-disabled': !isValid || isSubmitting,
-                'btn-primary': isValid && !isSubmitting
-              }
-            )
-          }>
-          Guardar
-        </button>
-        <Link href="/admin/products"
-          className={
-            clsx(
-              'w-full mt-4',
-              {
-                'btn-disabled': params.slug !== 'create' && (!isValid || isSubmitting),
-                'btn-danger': params.slug === 'create' || (isValid && !isSubmitting)
-              }
-            )
-          }>
-          Cancelar
-        </Link>
-      </div>
-    </form >
+        {/* buttons */}
+        <div className='flex justify-end gap-2 w-full'>
+          <Button
+            disabled={isSubmitting}
+            variant='primary'
+          >
+            Guardar
+          </Button>
+
+          <Button
+            type="button"
+            disabled={isSubmitting}
+            variant="destructive"
+            onClick={() => { router.push('/admin/products') }}
+          >
+            Cancelar
+          </Button>
+        </div>
+      </form >
+    </Form >
   )
 }

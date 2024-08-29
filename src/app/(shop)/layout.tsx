@@ -10,7 +10,7 @@ export default function ShopLayout({
     <main className="min-h-screen">
       <TopMenu />
       <Sidebar />
-      <div className='mt-14'>
+      <div className="mt-[84px]">
         {children}
       </div>
       <Toaster />

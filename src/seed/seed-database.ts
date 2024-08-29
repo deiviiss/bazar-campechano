@@ -1,5 +1,6 @@
 import { initialData } from './seed'
 import { countries } from './seed-countries'
+import { type ClotheSize } from '../interfaces'
 import prisma from '../lib/prisma'
 
 const main = async () => {
@@ -10,7 +11,9 @@ const main = async () => {
 
   await prisma.userAddress.deleteMany()
   await prisma.country.deleteMany()
-  await prisma.productStock.deleteMany()
+  await prisma.clotheStock.deleteMany()
+  await prisma.shoeStock.deleteMany()
+  await prisma.toyStock.deleteMany()
   await prisma.productImage.deleteMany()
   await prisma.product.deleteMany()
   await prisma.category.deleteMany()
@@ -60,55 +63,121 @@ const main = async () => {
       data: imagesData
     })
 
-    const productStockDataSizeXs = {
-      productId: dbProduct.id,
-      inStock: 1,
-      size: 'XS' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
+    if (type === 'clothe') {
+      const productStockDataSizeXs = {
+        productId: dbProduct.id,
+        inStock: 16,
+        clotheSize: 'XS' as ClotheSize
+      }
+
+      const productStockDataSizeS = {
+        productId: dbProduct.id,
+        inStock: 15,
+        clotheSize: 'S' as ClotheSize
+      }
+
+      const productStockDataSizeM = {
+        productId: dbProduct.id,
+        inStock: 18,
+        clotheSize: 'M' as ClotheSize
+      }
+
+      const productStockDataSizeL = {
+        productId: dbProduct.id,
+        inStock: 11,
+        clotheSize: 'L' as ClotheSize
+      }
+
+      const productStockDataSizeXL = {
+        productId: dbProduct.id,
+        inStock: 8,
+        clotheSize: 'XL' as ClotheSize
+      }
+
+      await prisma.clotheStock.create({
+        data: productStockDataSizeXL
+      })
+
+      await prisma.clotheStock.create({
+        data: productStockDataSizeL
+      })
+
+      await prisma.clotheStock.create({
+        data: productStockDataSizeM
+      })
+
+      await prisma.clotheStock.create({
+        data: productStockDataSizeS
+      })
+
+      await prisma.clotheStock.create({
+        data: productStockDataSizeXs
+      })
     }
 
-    const productStockDataSizeS = {
-      productId: dbProduct.id,
-      inStock: 1,
-      size: 'S' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
+    if (type === 'toy') {
+      const productStockData = {
+        productId: dbProduct.id,
+        inStock: 9,
+        ageRange: '3 - 5'
+      }
+
+      await prisma.toyStock.create({
+        data: productStockData
+      })
     }
 
-    const productStockDataSizeM = {
-      productId: dbProduct.id,
-      inStock: 1,
-      size: 'M' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
+    if (type === 'shoe') {
+      const productStockDataSize25 = {
+        productId: dbProduct.id,
+        inStock: 2,
+        shoeSize: 25
+      }
+
+      const productStockDataSize26 = {
+        productId: dbProduct.id,
+        inStock: 3,
+        shoeSize: 26
+      }
+
+      const productStockDataSize27 = {
+        productId: dbProduct.id,
+        inStock: 21,
+        shoeSize: 27
+      }
+
+      const productStockDataSize24 = {
+        productId: dbProduct.id,
+        inStock: 5,
+        shoeSize: 24
+      }
+
+      const productStockDataSize23 = {
+        productId: dbProduct.id,
+        inStock: 12,
+        shoeSize: 23
+      }
+
+      await prisma.shoeStock.create({
+        data: productStockDataSize23
+      })
+
+      await prisma.shoeStock.create({
+        data: productStockDataSize24
+      })
+
+      await prisma.shoeStock.create({
+        data: productStockDataSize25
+      })
+
+      await prisma.shoeStock.create({
+        data: productStockDataSize26
+      })
+
+      await prisma.shoeStock.create({
+        data: productStockDataSize27
+      })
     }
-
-    const productStockDataSizeL = {
-      productId: dbProduct.id,
-      inStock: 1,
-      size: 'L' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
-    }
-
-    const productStockDataSizeXL = {
-      productId: dbProduct.id,
-      inStock: 1,
-      size: 'XL' as 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'
-    }
-
-    await prisma.productStock.create({
-      data: productStockDataSizeXL
-    })
-
-    await prisma.productStock.create({
-      data: productStockDataSizeL
-    })
-
-    await prisma.productStock.create({
-      data: productStockDataSizeM
-    })
-
-    await prisma.productStock.create({
-      data: productStockDataSizeS
-    })
-
-    await prisma.productStock.create({
-      data: productStockDataSizeXs
-    })
   }
   )
 

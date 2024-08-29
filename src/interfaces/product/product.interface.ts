@@ -1,23 +1,59 @@
 export interface Product {
   id: string
   title: string
-  description?: string | null
+  description: string | null
   price: number
   slug: string
-  gender: ValidGender
-  sizes: Size[]
-  images: ProductImage[]
+  productImage: ProductImage[]
+  categoryId: string
+  category: Category
+  isActive: boolean
+}
+
+export interface ProductCreateUpdate {
+  id?: string
+  title: string
+  description: string | null
+  price: number
+  slug: string
   categoryId: string
 }
 
-export interface Stock {
-  id: string
-  size: Size
+export type ClotheSize = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL'
+export type ShoeSize = 23 | 24 | 25 | 26 | 27
+export type AgeRange = '3 - 5' | '6 - 8' | '9 - 12'
+
+export interface StockBase {
   inStock: number
 }
 
-export interface ProductWithStock extends Product {
-  stock: Stock
+export interface ClotheStockDetail extends StockBase {
+  clotheSize: ClotheSize
+}
+
+export interface ShoeStockDetail extends StockBase {
+  shoeSize: ShoeSize
+}
+
+export interface ToyStockDetail extends StockBase {
+  ageRange: AgeRange
+}
+
+export interface ProductClothe extends Product {
+  clotheSize?: ClotheSize
+  availableSizes: ClotheSize[]
+  stockDetails: ClotheStockDetail[]
+}
+
+export interface ProductShoe extends Product {
+  shoeSize?: ShoeSize
+  availableSizes: ShoeSize[]
+  stockDetails: ShoeStockDetail[]
+}
+
+export interface ProductToy extends Product {
+  availablePieces: number
+  stockDetails: ToyStockDetail[]
 }
 
 export interface CartProduct {
@@ -25,16 +61,14 @@ export interface CartProduct {
   slug: string
   title: string
   price: number
-  size: Size
+  clotheSize?: ClotheSize
+  shoeSize?: ShoeSize
+  ageRange: AgeRange | null
   quantity: number
   image: string
 }
 
-export type ValidGender = 'men' | 'women' | 'kid' | 'unisex'
-
-export type Size = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL'
-
-export type ValidType = 'shirts' | 'pants' | 'hoodies' | 'hats'
+export type CategoryName = 'shoe' | 'toy' | 'clothe'
 
 export interface ProductImage {
   id: string
@@ -44,5 +78,23 @@ export interface ProductImage {
 export interface Category {
   id: string
   description: string | null
-  name: string
+  name: CategoryName
 }
+
+export interface Stock {
+  id: string
+  inStock: number
+  clotheSize?: ClotheSize
+  shoeSize?: ShoeSize | number
+  ageRange?: AgeRange
+  product: Product | ProductClothe | ProductShoe | ProductToy
+}
+
+export interface ProductWithStock extends Product {
+  stock: Stock
+}
+
+// Define a type that includes all possible product types
+export type ProductType = ProductClothe | ProductShoe | ProductToy
+
+export type StockDetailType = ClotheStockDetail | ShoeStockDetail | ToyStockDetail

@@ -1,11 +1,10 @@
 import clsx from 'clsx'
-import { type Size } from '@/interfaces'
-
+import { type ClotheSize } from '@/interfaces'
 interface SizeSelectorProps {
-  selectedSize?: Size
-  availableSizes: Size[]
+  selectedSize?: ClotheSize
+  availableSizes: ClotheSize[]
 
-  onSizeChange: (size: Size) => void
+  onSizeChange: (size: ClotheSize) => void
 }
 
 export const SizeSelector = ({ selectedSize, availableSizes, onSizeChange }: SizeSelectorProps) => {

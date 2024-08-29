@@ -3,13 +3,16 @@
 import { type PaymentMethod, type ShippingMethod } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { getUserSessionServer, sendNotificationsPaymentMethod } from '@/actions'
-import { type UserAddress, type Size } from '@/interfaces'
+import { type UserAddress, type ClotheSize, type ShoeSize, type AgeRange, type Stock } from '@/interfaces'
 import prisma from '@/lib/prisma'
+import { isClothe, isShoe, isToy } from '@/utils/productTypeGuards'
 
 interface ProductToOrder {
   productId: string
   quantity: number
-  size: Size
+  shoeSize?: ShoeSize
+  clotheSize?: ClotheSize
+  ageRange?: AgeRange
 }
 
 interface OrderDetails {
@@ -58,11 +61,64 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
     }
   }
 
-  const products = await prisma.productStock.findMany({
+  const clotheSizes = productsId
+    .filter(product => typeof product.clotheSize === 'string')
+    .map(product => product.clotheSize)
+
+  const validClotheSizes = clotheSizes.filter((size): size is ClotheSize => size !== undefined)
+
+  const shoeSizes = productsId
+    .filter(product => typeof product.shoeSize === 'number')
+    .map(product => product.shoeSize)
+
+  const validateShoeSizes = shoeSizes.filter((size): size is ShoeSize => size !== undefined)
+
+  const productsIds = productsId.map(product => product.productId)
+
+  const clotheStock = await prisma.clotheStock.findMany({
     where: {
-      size: {
-        in: productsId.map(product => product.size)
+      clotheSize: {
+        in: validClotheSizes
       },
+      product: {
+        id: {
+          in: productsIds
+        }
+      }
+    },
+    include: {
+      product: {
+        include: {
+          productImage: true,
+          category: true
+        }
+      }
+    }
+  })
+
+  const shoeStock = await prisma.shoeStock.findMany({
+    where: {
+      shoeSize: {
+        in: validateShoeSizes
+      },
+      product: {
+        id: {
+          in: productsIds
+        }
+      }
+    },
+    include: {
+      product: {
+        include: {
+          productImage: true,
+          category: true
+        }
+      }
+    }
+  })
+
+  const toyStock = await prisma.toyStock.findMany({
+    where: {
       product: {
         id: {
           in: productsId.map(product => product.productId)
@@ -70,16 +126,30 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
       }
     },
     include: {
-      product: true
+      product: {
+        include: {
+          productImage: true,
+          category: true
+        }
+      }
     }
-  })
+  }) as Stock[]
+
+  const allProductsStock: Stock[] = [...clotheStock, ...shoeStock, ...toyStock]
 
   const totalItemsInOrder = productsId.reduce((count, product) => count + product
     .quantity, 0)
 
   const { subTotal, tax, total } = productsId.reduce((totals, items) => {
     const productQuantity = items.quantity
-    const product = products.find(product => product.product.id === items.productId && product.size === items.size)
+
+    const product = allProductsStock.find(stock => {
+      return stock.product.id === items.productId && (
+        ('clotheSize' in stock && stock.clotheSize === items.clotheSize) ||
+        ('shoeSize' in stock && stock.shoeSize === items.shoeSize) ||
+        ('ageRange' in stock && stock.ageRange === items.ageRange)
+      )
+    })
 
     if (!product) throw new Error('Product not found - 500')
 
@@ -92,12 +162,30 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
     return totals
   }, { subTotal: 0, tax: 0, total: 0 })
 
-  const orderItems = productsId.map(p => ({
-    quantity: p.quantity,
-    size: p.size,
-    productId: p.productId,
-    price: products.find(product => product.productId === p.productId)?.product.price || 0
-  }))
+  const orderItems = productsId.map(item => {
+    let price = 0
+
+    const productStock = allProductsStock.find(stock =>
+      stock.product.id === item.productId && (
+        ('clotheSize' in stock && stock.clotheSize === item.clotheSize) ||
+        ('shoeSize' in stock && stock.shoeSize === item.shoeSize) ||
+      ('ageRange' in stock && stock.ageRange === item.ageRange)
+      )
+    )
+
+    if (productStock) {
+      price = productStock.product.price
+    }
+
+    return {
+      quantity: item.quantity,
+      clotheSize: item.clotheSize || undefined,
+      shoeSize: item.shoeSize || undefined,
+      toyAgeRange: item.ageRange || undefined,
+      productId: item.productId,
+      price
+    }
+  })
 
   const { country, userId, ...restAddress } = address
 
@@ -105,47 +193,138 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
   try {
     const prismaTX = await prisma.$transaction(async (tx) => {
       // Update stock
-      const updatedProductsPromises = products.map(async (product) => {
-        const size = productsId.find(item => item.productId === product.productId && item.size === product.size)?.size
+      const updatedProductsPromises = allProductsStock.map(async (product) => {
+        if (isClothe(product.product)) {
+          const productDetails = productsId.find(item =>
+            item.productId === product.product.id && (
+              item.clotheSize === product.clotheSize
+            )
+          )
 
-        const quantity = productsId.find(item => item.productId === product.productId && item.size === product.size)?.quantity
+          const clotheSize: ClotheSize | undefined = productDetails?.clotheSize
+          const quantity = productDetails?.quantity
 
-        if (!quantity || quantity <= 0) {
-          throw new Error('La cantidad no puede ser 0')
-        }
+          if (!clotheSize) throw new Error('Talla no disponible')
+          if (!quantity || quantity <= 0) throw new Error('La cantidad no puede ser 0')
 
-        if (!size) {
-          throw new Error('Talla no encontrada')
-        }
-
-        const productStock = await tx.productStock.findFirst({
-          where: {
-            productId: product.productId,
-            size
-          },
-          select: {
-            id: true,
-            inStock: true
-          }
-        })
-
-        // check if all products are in stock
-        if (productStock === null || productStock.inStock === 0) {
-          throw new Error(`Producto ${product.product.title} con talla ${size} agotado`)
-        }
-
-        if (productStock.inStock < quantity) {
-          throw new Error(`Producto ${product.product.title} con talla ${size} no tiene suficiente stock`)
-        }
-
-        return await tx.productStock.update({
-          where: { id: productStock.id },
-          data: {
-            inStock: {
-              decrement: quantity
+          const productClotheStock = await tx.clotheStock.findFirst({
+            where: {
+              productId: product.product.id,
+              clotheSize
+            },
+            select: {
+              id: true,
+              inStock: true
             }
+          })
+
+          // check if all clothe products are in stock
+          if (productClotheStock === null || productClotheStock.inStock === 0) {
+            throw new Error(`Producto ${product.product.title} con talla ${clotheSize} agotado`)
           }
-        })
+
+          if (productClotheStock.inStock < quantity) {
+            throw new Error(`Producto ${product.product.title} con talla ${clotheSize} no tiene suficiente stock`)
+          }
+
+          const updatedClotheProduct = await tx.clotheStock.update({
+            where: { id: productClotheStock.id },
+            data: {
+              inStock: {
+                decrement: quantity
+              }
+            }
+          })
+
+          return updatedClotheProduct
+        }
+
+        if (isShoe(product.product)) {
+          const productDetails = productsId.find(item =>
+            item.productId === product.product.id && (
+              item.shoeSize === product.shoeSize
+            )
+          )
+
+          const shoeSize: ShoeSize | undefined = productDetails?.shoeSize
+          const quantity = productDetails?.quantity
+
+          if (!shoeSize) throw new Error('Talla no encontrada')
+          if (!quantity || quantity <= 0) throw new Error('La cantidad no puede ser 0')
+
+          const productShoeStock = await tx.shoeStock.findFirst({
+            where: {
+              productId: product.product.id,
+              shoeSize
+            },
+            select: {
+              id: true,
+              inStock: true
+            }
+          })
+
+          // check if all shoe products are in stock
+          if (productShoeStock === null || productShoeStock.inStock === 0) {
+            throw new Error(`Producto ${product.product.title} con talla ${shoeSize} agotado`)
+          }
+
+          if (productShoeStock.inStock < quantity) {
+            throw new Error(`Producto ${product.product.title} con talla ${shoeSize} no tiene suficiente stock`)
+          }
+
+          const updatedShoeProduct = await tx.shoeStock.update({
+            where: { id: productShoeStock.id },
+            data: {
+              inStock: {
+                decrement: quantity
+              }
+            }
+          })
+
+          return updatedShoeProduct
+        }
+
+        if (isToy(product.product)) {
+          const productDetails = productsId.find(item =>
+            item.productId === product.product.id && (
+              item.ageRange === product.ageRange
+            )
+          )
+
+          const quantity = productDetails?.quantity
+
+          if (!quantity || quantity <= 0) throw new Error('La cantidad no puede ser 0')
+
+          const productToyStock = await tx.toyStock.findFirst({
+            where: {
+              productId: product.product.id
+            },
+            select: {
+              id: true,
+              inStock: true
+            }
+          })
+
+          // check if all toy products are in stock
+          if (productToyStock === null || productToyStock.inStock === 0) {
+            throw new Error(`Producto ${product.product.title} agotado`)
+          }
+
+          if (productToyStock.inStock < quantity) {
+            throw new Error(`Producto ${product.product.title} no tiene suficiente stock`)
+          }
+
+          const updatedToyProduct = await tx.toyStock.update({
+            where: { id: productToyStock.id },
+            data: {
+              inStock: {
+                decrement: quantity
+              }
+            }
+          })
+
+          return updatedToyProduct
+        }
       })
 
       const updatedProducts = await Promise.all(updatedProductsPromises)

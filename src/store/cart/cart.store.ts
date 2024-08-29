@@ -54,7 +54,11 @@ export const useCartStore = create<State>()(
 
         // Check if the product is already in the cart with selected size
         const productInCart = cart.some(
-          (item) => item.id === product.id && item.size === product.size
+          (item) =>
+            item.id === product.id &&
+            item.clotheSize === product.clotheSize &&
+            item.shoeSize === product.shoeSize &&
+            item.ageRange === product.ageRange
         )
 
         // if the product is not in the cart, add it
@@ -65,9 +69,15 @@ export const useCartStore = create<State>()(
 
         // if the product is already in the cart with the selected size, update the quantity
         const updatedCartProducts = cart.map((item) => {
-          if (item.id === product.id && item.size === product.size) {
+          if (
+            item.id === product.id &&
+             item.clotheSize === product.clotheSize &&
+            item.shoeSize === product.shoeSize &&
+            item.ageRange === product.ageRange
+          ) {
             return { ...item, quantity: item.quantity + product.quantity }
           }
+
           return item
         })
 
@@ -78,7 +88,12 @@ export const useCartStore = create<State>()(
         const { cart } = get()
 
         const updatedCartProducts = cart.map((item) => {
-          if (item.id === product.id && item.size === product.size) {
+          if (
+            item.id === product.id &&
+            item.clotheSize === product.clotheSize &&
+            item.shoeSize === product.shoeSize &&
+            item.ageRange === product.ageRange
+          ) {
             return { ...item, quantity }
           }
           return item
@@ -91,7 +106,11 @@ export const useCartStore = create<State>()(
         const { cart } = get()
 
         const updatedCartProducts = cart.filter(
-          (item) => item.id !== product.id || item.size !== product.size
+          (item) =>
+            item.id !== product.id ||
+            item.clotheSize !== product.clotheSize ||
+            item.shoeSize !== product.shoeSize ||
+            item.ageRange !== product.ageRange
         )
 
         set({ cart: updatedCartProducts })

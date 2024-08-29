@@ -45,8 +45,8 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
         height: '2rem'
       },
       action: {
-        label: 'Ver pedido',
-        onClick: async () => { router.replace(`/orders/${id}`) }
+        label: 'Ok',
+        onClick: () => { toast.dismiss() }
       }
     })
   }
@@ -91,7 +91,9 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
     const productToOrder = cart.map(product => ({
       productId: product.id,
       quantity: product.quantity,
-      size: product.size
+      clotheSize: product.clotheSize || undefined,
+      shoeSize: product.shoeSize || undefined,
+      ageRange: product.ageRange || undefined
     }))
 
     const orderDetails = {
@@ -114,6 +116,7 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
     // order success
     clearCart()
     noticeConfirmOrder(rta.order?.id)
+    router.replace(`/orders/${rta.order?.id}`)
   }
 
   return (
@@ -143,7 +146,7 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
 
       <div className='grid grid-cols-2'>
         <span className='text-right'>No. Productos</span>
-        <span className='text-right'>{itemsInCart === 1 ? '1 artículo' : `${itemsInCart} artíulos`}</span>
+        <span className='text-right'>{itemsInCart === 1 ? '1 artículo' : `${itemsInCart} artículos`}</span>
 
         <span className='text-right'>Subtotal</span>
         <span className='text-right'>{currencyFormat(subtotal)}</span>

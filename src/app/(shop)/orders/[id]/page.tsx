@@ -15,7 +15,7 @@ export default async function OrdersByIdPage({ params }: Props) {
   const { ok, order } = await getOrderById(id)
 
   if (!ok || !order) {
-    redirect('/')
+    redirect('/orders')
   }
 
   const orderItem = order.orderItem
@@ -58,8 +58,8 @@ export default async function OrdersByIdPage({ params }: Props) {
                     />
 
                     <div>
-                      <span>{item.size} - {item.product.title}</span>
-                      <p>{currencyFormat(item.price)} x {item.quantity}</p>
+                      <span>{item.clotheSize || item.shoeSize} - {item.product.title}</span>
+                      <p>{currencyFormat(Number(item.price))} x {item.quantity}</p>
                       <p className='font-bold'>Subtotal: {currencyFormat(item.price * item.quantity)}</p>
                     </div>
                   </div>

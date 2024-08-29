@@ -1,6 +1,7 @@
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getPaginationFeaturedProductsWithImages, getPaginationProductsWithImages } from '@/actions'
-import { ProductGridDark, ProductGridLight, Title } from '@/components'
+import { getPaginationFeaturedProducts, getPaginationProducts } from '@/actions'
+import { NewProductsGrid, FeaturedProductsGrid, CurrentProductsGrid, TitleHome } from '@/components'
 import { Button } from '@/components/ui/button'
 
 interface Props {
@@ -15,65 +16,91 @@ export default async function ShopPage({ searchParams }: Props) {
   const query = searchParams.query || ''
   const page = searchParams.page ? Number(searchParams.page) : 1
 
-  const result = await getPaginationProductsWithImages({ page, query })
-  const { products: featuredProducts } = await getPaginationFeaturedProductsWithImages({ page, query })
+  const { products } = await getPaginationProducts({ page, query })
 
-  if (!result || !featuredProducts) {
+  const { products: toyProducts } = await getPaginationProducts({ page, category: 'toy' })
+
+  const { products: featuredProducts } = await getPaginationFeaturedProducts({ page, query })
+
+  const { products: shoeProducts } = await getPaginationProducts({ page, category: 'shoe' })
+
+  const { products: clotheProducts } = await getPaginationProducts({ page, category: 'clothe' })
+
+  if (!products || !featuredProducts) {
     return notFound()
   }
 
-  const { products } = result
-
-  const processedFeaturedProducts = featuredProducts.map(product => ({
-    ...product,
-    description: product.description || 'Sin descripción'
-  }))
-
-  const processedProducts = products.map(product => ({
-    ...product,
-    description: product.description || 'Sin descripción'
-  }))
-
   return (
     <>
-      <div className='bg-black pb-10 mb-10'>
-        <Title
+      {/* new products */}
+      <div className='pb-10 mb-10'>
+        <TitleHome
           title="Lo más nuevo"
           subtitle="Rebajas"
-          className='text-center uppercase text-white pt-10'
+          className='text-center uppercase pt-10'
         />
-
-        {
-          products.length > 0
-            ? (
-              <>
-                <ProductGridDark products={processedProducts} />
-                <Button variant='outline' className='flex justify-center mx-auto w-3/4 max-w-40 capitalize bg-transparent text-white mt-[52px]'>ver todo</Button>
-              </>)
-            : (
-              <div className='flex w-full items-center justify-center h-36'>
-                <p>No hay productos con ese nombre</p>
-              </div>)
-        }
+        <CurrentProductsGrid products={products} />
+        <Button asChild variant='outline' className='flex justify-center mx-auto w-3/4 max-w-32 uppercase bg-transparent mt-[52px]'>
+          <Link href='/products'>
+            ver todo
+          </Link>
+        </Button>
       </div>
-
-      <div className='pb-10 mb-10'>
-        <Title
+      {/* featured products */}
+      <div className='pb-10 mb-10 border-t border-black'>
+        <TitleHome
           title="Las últimas"
           subtitle="ofertas"
           className='text-center uppercase pt-10'
         />
-
-        {
-          featuredProducts.length > 0
-            ? (
-              <ProductGridLight products={processedFeaturedProducts} />)
-            : (
-              <div className='flex w-full items-center justify-center h-36'>
-                <p>No hay productos con ese nombre</p>
-              </div>)
-        }
-
+        <FeaturedProductsGrid products={featuredProducts} />
+        <Button asChild variant='outline' className='flex justify-center mx-auto w-3/4 max-w-32 uppercase bg-transparent mt-[52px]'>
+          <Link href='/products/featured-products'>
+            ver todo
+          </Link>
+        </Button>
+      </div>
+      {/* shoe products */}
+      <div className='bg-slate-950 pb-28 border-b border-white'>
+        <TitleHome
+          title="El mejor calzado"
+          subtitle="Zapatos"
+          className='text-center uppercase text-white pt-10'
+        />
+        <NewProductsGrid products={shoeProducts} />
+        <Button asChild variant='outline' className='flex justify-center mx-auto w-3/4 max-w-32 uppercase bg-transparent text-white mt-[52px]'>
+          <Link href='/category/shoe'>
+            ver todo
+          </Link>
+        </Button>
+      </div>
+      {/* toys products */}
+      <div className='bg-slate-950 pb-10 mb-10'>
+        <TitleHome
+          title="Los más divertido"
+          subtitle="Juguetes"
+          className='text-center uppercase text-white pt-10'
+        />
+        <NewProductsGrid products={toyProducts} />
+        <Button asChild variant='outline' className='flex justify-center mx-auto w-3/4 max-w-32 uppercase bg-transparent mt-[52px] text-white'>
+          <Link href='/category/toy'>
+            ver todo
+          </Link>
+        </Button>
+      </div>
+      {/* clothe products */}
+      <div className='pb-10 mb-10'>
+        <TitleHome
+          title="La última moda"
+          subtitle="Ropa"
+          className='text-center uppercase pt-10'
+        />
+        <FeaturedProductsGrid products={clotheProducts} />
+        <Button asChild variant='outline' className='flex justify-center mx-auto w-3/4 max-w-32 uppercase bg-transparent mt-[52px]'>
+          <Link href='/category/clothe'>
+            ver todo
+          </Link>
+        </Button>
       </div>
     </>
   )

@@ -1,17 +1,17 @@
 'use server'
 
-import { getSizesProductStock } from './get-sizes-product-stock'
-import { type Size } from '@/interfaces'
+import { getSizesProductClotheStock } from './bazar/get-sizes-product-clothe-stock'
+import { type ClotheSize } from '@/interfaces'
 import prisma from '@/lib/prisma'
 
 interface IParams {
   productId: string
-  size: Size
+  size: ClotheSize
 }
 
 export const getProductByIdSize = async ({ productId, size }: IParams) => {
   try {
-    const productStockDB = await prisma.productStock.findFirst({
+    const productStockDB = await prisma.clotheStock.findFirst({
       include: {
         product: {
           include: {
@@ -23,7 +23,7 @@ export const getProductByIdSize = async ({ productId, size }: IParams) => {
         product: {
           id: productId
         },
-        size
+        clotheSize: size
       }
     })
 
@@ -31,7 +31,7 @@ export const getProductByIdSize = async ({ productId, size }: IParams) => {
       return null
     }
 
-    const sizesProduct = await getSizesProductStock(productStockDB.product.id)
+    const sizesProduct = await getSizesProductClotheStock({ id: productStockDB.product.id })
     const { productImage, ...restProduct } = productStockDB.product
 
     const productStock = {
@@ -40,7 +40,7 @@ export const getProductByIdSize = async ({ productId, size }: IParams) => {
       sizes: sizesProduct,
       stock: {
         id: productStockDB.id,
-        size: productStockDB.size,
+        size: productStockDB.clotheSize,
         inStock: productStockDB.inStock
       }
     }

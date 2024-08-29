@@ -1,11 +1,13 @@
 'use client'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { type Product, type CartProduct } from '@/interfaces'
+import { type Product, type CartProduct, type ProductToy, type ProductShoe, type ProductClothe, type ClotheSize, type ShoeSize, type AgeRange } from '@/interfaces'
 import { useCartStore } from '@/store'
 
 interface Props {
-  product: Product
+  product: Product | ProductClothe | ProductShoe | ProductToy
+  setSelectedClotheSize?: (size: ClotheSize | undefined) => void
+  setSelectedShoeSize?: (size: ShoeSize | undefined) => void
 }
 
 const noticeAddToCart = () => {
@@ -15,28 +17,54 @@ const noticeAddToCart = () => {
   })
 }
 
-export const AddToCartProduct = ({ product }: Props) => {
+export const AddToCartProduct = ({ product, setSelectedClotheSize, setSelectedShoeSize }: Props) => {
   const addProductToCart = useCartStore(state => state.addProductToCart)
 
   const AddToCart = async () => {
+    let clotheSize: ClotheSize | undefined
+    let shoeSize: ShoeSize | undefined
+    let ageRange: AgeRange | null = null
+
+    if ('clotheSize' in product) {
+      clotheSize = product.clotheSize
+    }
+
+    if ('shoeSize' in product) {
+      shoeSize = product.shoeSize
+    }
+
+    if ('ageRange' in product) {
+      ageRange = product.ageRange as AgeRange
+    }
+
     const cartProduct: CartProduct = {
       id: product.id,
       slug: product.slug,
       title: product.title,
       price: product.price,
-      image: product.images[0].url,
-      size: product.sizes[0],
+      image: product.productImage[0].url,
+      clotheSize,
+      shoeSize,
+      ageRange,
       quantity: 1
     }
 
     addProductToCart(cartProduct)
 
+    if (setSelectedClotheSize) {
+      setSelectedClotheSize(undefined)
+    }
+
+    if (setSelectedShoeSize) {
+      setSelectedShoeSize(undefined)
+    }
+
     noticeAddToCart()
   }
 
   return (
-    <Button onClick={AddToCart} className='w-full bg-black text-white'>
-      Agregar al carrito
+    <Button variant='secondary' onClick={AddToCart} className='w-full font-semibold uppercase'>
+      agregar
     </Button>
   )
 }
