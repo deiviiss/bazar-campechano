@@ -55,7 +55,7 @@ export default async function CategoryByPage({ params, searchParams }: Props) {
   const { products, totalPages } = result
 
   return (
-    <div className='mt-16 pt-10'>
+    <div className='mt-[60.67px] pt-10'>
       <div className='flex justify-between mb-6 gap-2'>
         <ButtonBack className=' text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 min-[960px]:hidden rounded-none border-black border bg-white' icon={<IoArrowBackOutline />} />
         <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl hidden min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />

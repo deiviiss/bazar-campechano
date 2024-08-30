@@ -34,7 +34,7 @@ export default async function OrdersByIdPage({ params }: Props) {
   return (
     <>
       <Title className='' title={`Pedido #${id.split('-').at(-1)}`} subtitle="Estos son los datos de tu pedido" />
-      <div className="flex justify-center items-center mb-72 px-1 sm:px-0">
+      <div className="flex justify-center items-center mb-20 px-1 sm:px-0">
 
         <div className="flex flex-col w-[1000px]">
 

@@ -11,7 +11,7 @@ export default async function TermsPage() {
   }
 
   return (
-    <div className='px-1 sm:px-3 mt-16 pt-10'>
+    <div className='px-1 sm:px-3 mt-[60.67px] pt-10'>
       <Title title="Términos y condiciones" subtitle='' />
       <div className='max-w-[920px]'>
         <div className='px-3 py-4'>
