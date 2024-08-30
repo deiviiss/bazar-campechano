@@ -99,38 +99,27 @@
   animation-name: fadeIn;
 }
 
-.slide-track {
-  animation: scroll 20s linear infinite;
-  -webkit-animation: scroll 20s linear infinite;
-}
-
-.slide-track2 {
-  animation: scroll2 40s linear infinite;
-  -webkit-animation: scroll2 40s linear infinite;
-}
-
-@keyframes scroll {
+/* Keyframe animation for infinite sliding effect */
+@keyframes slide {
   0% {
+    /* Start at the initial position */
     transform: translateX(0);
-    -webkit-transform: translateX(0);
   }
 
   100% {
+    /* Move left to cover the entire content width */
     transform: translateX(-100%);
-    -webkit-transform: translateX(-100%);
   }
 }
 
-@keyframes scroll2 {
-  0% {
-    transform: translateX(100);
-    -webkit-transform: translateX(100);
-  }
-
-  100% {
-    transform: translateX(-200%);
-    -webkit-transform: translateX(-200%);
-  }
+/* Styling for the slider container */
+.slide-track {
+  /* Flexbox to align items in a row */
+  display: flex;
+  /* Double the width to create a continuous sliding effect */
+  width: calc(200%);
+  /* 20-second linear animation with infinite repetition */
+  animation: slide 20s linear infinite;
 }
 
 .btn-primary {
