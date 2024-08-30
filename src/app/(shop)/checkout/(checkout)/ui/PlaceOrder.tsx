@@ -163,7 +163,7 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
 
         <p className="mb-5">
           <span>
-            Al hacer clic en &quot;Confirmar compra&quot;, aceptas nuestros <Link href="/terms" className="underline">términos y condiciones</Link> y <Link href={'/privacy'} className='underline'>política de privacidad</Link>
+            Al hacer clic en &quot;Confirmar compra&quot;, aceptas nuestros <Link href="/info/terms" className="underline">términos y condiciones</Link> y <Link href={'/info/privacy'} className='underline'>política de privacidad</Link>
           </span>
         </p>
 
