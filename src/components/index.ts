@@ -55,6 +55,7 @@ export * from './ui/not-found/PageNotFound'
 export * from './ui/pagination/Pagination'
 export * from './ui/button-back-page/ButtonBackPage'
 export { ButtonBack } from './ui/button-back/ButtonBack'
+export { ButtonScrollTop } from './ui/button-scroll-top/ButtonScrollTop'
 export { NavigationAndContactButtons } from './navigation-contact-buttons/NavigationAndContactButtons'
 
 // users

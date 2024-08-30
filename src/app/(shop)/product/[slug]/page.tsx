@@ -1,7 +1,7 @@
 import { type Metadata, type ResolvingMetadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { IoArrowBackOutline, IoShareOutline } from 'react-icons/io5'
+import { IoArrowBackOutline, IoShareSocialOutline } from 'react-icons/io5'
 import { getPaginationProducts, getProductBySlug } from '@/actions'
 import { AccordionDescription, ButtonBack, ButtonShare, CurrentProductsGrid, ProductCarrousel, ProductImage, ProductPurchaseOptions, TitleCategory } from '@/components'
 import { Button } from '@/components/ui/button'
@@ -43,7 +43,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <div className='mb-20 min-[960px]:pt-6 min-[960px]:mx-6 grid min-[960px]:grid-cols-3 gap-3'>
+      <div className='mb-20 mt-[60.67px] min-[960px]:pt-6 min-[960px]:mx-6 grid min-[960px]:grid-cols-3 gap-3'>
 
         {/* mobile */}
         <div className='min-[960px]:hidden relative'>
@@ -72,7 +72,7 @@ export default async function ProductPage({ params }: Props) {
 
           <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
 
-          <ButtonShare className='fixed bottom-5 right-5 rounded-full h-14 w-14 p-0 hover:bg-black hover:text-white' icon={<IoShareOutline size={25} />} />
+          <ButtonShare className='fixed bottom-10 right-16 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 rounded-none border-black border bg-white h-12 w-12' icon={<IoShareSocialOutline size={25} />} />
 
           <div className='flex gap-2 justify-between'>
             <h2 className={`${titleFont.className} antialiased font-bold text-2xl uppercase`}>
