@@ -1,11 +1,11 @@
 'use client'
 
-import clsx from 'clsx'
 import { redirect, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { deleteUserAddress, setUserAddress } from '@/actions'
+import { Button } from '@/components/ui/button'
 import { type UserAddress, type Country } from '@/interfaces'
 import { useAddressStore, useCartStore } from '@/store'
 
@@ -84,7 +84,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         <span>Nombres</span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
+          className="p-2 border rounded-none bg-gray-200"
           {...register('firstName', { required: true })}
         />
       </div>
@@ -93,7 +93,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         <span>Apellidos</span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
+          className="p-2 border rounded-none bg-gray-200"
           {...register('lastName', { required: true })}
         />
       </div>
@@ -102,7 +102,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         <span>Dirección</span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
+          className="p-2 border rounded-none bg-gray-200"
           {...register('address', { required: true })}
         />
       </div>
@@ -111,7 +111,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         <span>Dirección 2 (opcional)</span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
+          className="p-2 border rounded-none bg-gray-200"
           {...register('address2')}
         />
       </div>
@@ -120,7 +120,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         <span>Código postal</span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
+          className="p-2 border rounded-none bg-gray-200"
           {...register('postalCode', { required: true })}
         />
       </div>
@@ -129,7 +129,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         <span>Ciudad</span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
+          className="p-2 border rounded-none bg-gray-200"
           {...register('city', { required: true })}
         />
       </div>
@@ -137,7 +137,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
       <div className="flex flex-col mb-2">
         <span>País</span>
         <select
-          className="p-2 border rounded-md bg-gray-200"
+          className="p-2 border rounded-none bg-gray-200"
           {...register('country', { required: true })}
         >
           <option value="">[ Seleccione ]</option>
@@ -153,7 +153,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         <span>Teléfono</span>
         <input
           type="text"
-          className="p-2 border rounded-md bg-gray-200"
+          className="p-2 border rounded-none bg-gray-200"
           {...register('phone', { required: true })}
         />
       </div>
@@ -166,7 +166,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
           >
             <input
               type="checkbox"
-              className="vorder-gray-500 before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+              className="border-gray-500 before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-none border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-none before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-black/80 checked:bg-black/80 checked:before:bg-black/80 hover:before:opacity-10"
               id="checkbox"
               {...register('rememberAddress')}
             />
@@ -191,18 +191,11 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
           <span>¿Recordar dirección?</span>
         </div>
 
-        <button
+        <Button
           disabled={!isValid}
-          type="submit"
-          className={clsx(
-            {
-              'btn-primary': isValid,
-              'btn-disabled': !isValid
-            }
-          )}
         >
           Siguiente
-        </button>
+        </Button>
       </div>
 
     </form>

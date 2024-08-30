@@ -36,7 +36,7 @@ export default function CheckoutPage({ searchParams }: Props) {
   return (
     <>
       <Title title='Verificar Compra' subtitle="Estamos confirmando tu pedido." />
-      <div className="flex justify-center items-center mb-72 px-1 sm:px-0">
+      <div className="flex justify-center items-center mb-20 px-1 sm:px-0">
 
         <div className="flex flex-col w-[1000px]">
 

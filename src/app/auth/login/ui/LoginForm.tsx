@@ -1,6 +1,5 @@
 'use client'
 
-import clsx from 'clsx'
 import Link from 'next/link'
 
 import { useSearchParams } from 'next/navigation'
@@ -8,6 +7,7 @@ import { useEffect } from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
 import { IoInformationOutline } from 'react-icons/io5'
 import { authenticate } from '@/actions'
+import { Button } from '@/components/ui/button'
 
 export const LoginForm = () => {
   const searchParams = useSearchParams()
@@ -74,18 +74,11 @@ function LoginButton() {
   const { pending } = useFormStatus()
 
   return (
-    <button
+    <Button
       type='submit'
-      className={
-        clsx({
-          'btn-disabled': pending,
-          'btn-primary': !pending
-        }
-        )
-      }
       disabled={pending}
     >
       {pending ? 'Ingresando...' : 'Ingresar'}
-    </button>
+    </Button>
   )
 }

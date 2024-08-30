@@ -55,7 +55,7 @@ const ProfilePage = async () => {
         <p><span className='font-semibold'>Correo:</span> {userMail}</p>
         <p><span className='font-semibold'>Teléfono:</span> {userPhoneNumber}</p>
 
-        <Button asChild variant='primary' size='sm' className='flex mx-auto w-3/4 mt-10'>
+        <Button asChild className='flex mx-auto w-3/4 mt-10'>
           <Link href='/orders'>
             <span>Mis pedidos</span>
           </Link>

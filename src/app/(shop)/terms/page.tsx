@@ -11,7 +11,7 @@ export default async function TermsPage() {
   }
 
   return (
-    <div className='px-1 sm:px-3'>
+    <div className='px-1 sm:px-3 mt-[60.67px] pt-10'>
       <Title title="Términos y condiciones" subtitle='' />
       <div className='max-w-[920px]'>
         <div className='px-3 py-4'>
@@ -36,8 +36,8 @@ export default async function TermsPage() {
             Para ofrecer nuestros servicios de manera efectiva, recopilamos y almacenamos información personal como la dirección de entrega, correo electrónico y número de teléfono. Puede obtener más información sobre cómo manejamos sus datos en nuestra <Link className='hover:underline hover:text-warning font-semibold' href={'/privacy'}>Política de Privacidad</Link>.
           </p>
 
-          <Title title='4. Pagos y rembolsos' subtitle='' />
-          <p className='pb-4'>Todos los pagos realizados a través de nuestra pasarela de pagos (Paypal, tarjeta de crédito/débito, etc.) son procesados de manera segura. En caso de devoluciones o reembolsos, estos se manejarán conforme a nuestra <Link className='hover:underline hover:text-warning font-semibold' href={'/refunds'} >Política de Devoluciones</Link>, disponible en el sitio web. Tenga en cuenta que no aceptamos devoluciones basadas únicamente en el estado de uso de los productos, ya que son artículos de segunda mano.</p>
+          <Title title='4. Pagos y rembolso' subtitle='' />
+          <p className='pb-4'>Todos los pagos realizados a través de nuestra pasarela de pagos (Paypal, tarjeta de crédito/débito, etc.) son procesados de manera segura. En caso de devoluciones o reembolso, estos se manejarán conforme a nuestra <Link className='hover:underline hover:text-warning font-semibold' href={'/refunds'} >Política de Devoluciones</Link>, disponible en el sitio web. Tenga en cuenta que no aceptamos devoluciones basadas únicamente en el estado de uso de los productos, ya que son artículos de segunda mano.</p>
 
           <Title title='5. Modificaciones' subtitle='' />
           <p className='pb-4'>

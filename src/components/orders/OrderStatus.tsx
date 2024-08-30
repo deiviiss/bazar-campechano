@@ -10,7 +10,7 @@ export const OrderStatus = ({ isPaid }: Props) => {
     <div
       className={
         clsx(
-          'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
+          'flex items-center rounded-none py-2 px-3.5 text-xs font-bold text-white mb-5',
           {
             'bg-green-700': isPaid,
             'bg-red-500': !isPaid

@@ -1,5 +1,5 @@
-import { Footer, Sidebar, TopMenu } from '@/components'
-import { HeaderHero } from '@/components/ui/header/HeaderHero'
+import { IoArrowUpOutline } from 'react-icons/io5'
+import { ButtonScrollTop, Footer, Sidebar, TopMenu } from '@/components'
 import { Toaster } from '@/components/ui/sonner'
 
 export default function ShopLayout({
@@ -10,10 +10,18 @@ export default function ShopLayout({
   return (
     <main className="min-h-screen">
       <TopMenu />
-      <HeaderHero />
+
       <Sidebar />
-      <div className="px-1 md:px-12 xl:px-24 mt-[84px]">{children}</div>
+
+      {children}
+
+      <ButtonScrollTop
+        className='fixed bottom-10 right-2 z-10 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 rounded-none border-black border bg-white h-12 w-12'
+        icon={<IoArrowUpOutline />}
+      />
+
       <Toaster />
+
       <Footer />
     </main>
   )

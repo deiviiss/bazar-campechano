@@ -161,7 +161,6 @@ export const EditForm = (user: User) => {
           <div className='flex gap-2 w-full text-center justify-end mb-10'>
             <Button
               size='sm'
-              variant='primary'
               type="submit"
               disabled={isSubmitting}
             >

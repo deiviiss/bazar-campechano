@@ -26,19 +26,6 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
     )
   }
 
-  // const noticeConfirmPaid = async () => {
-  //   await Swal.fire({
-  //     text: 'Pago completado, estamos preparando tu pedido',
-  //     background: '#ffffff',
-  //     confirmButtonColor: '#3085d6',
-  //     confirmButtonText: 'Ver pedidos',
-  //     color: '#000000',
-  //     preConfirm: () => {
-  //       router.replace('/orders')
-  //     }
-  //   })
-  // }
-
   const noticeConfirmPaid = async () => {
     toast('Pago completado', {
       description: 'Estamos preparando tu pedido',
@@ -50,7 +37,8 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
       },
       actionButtonStyle: {
         color: 'white',
-        backgroundColor: '#1E40AF',
+        backgroundColor: '#000000',
+        borderRadius: '0px',
         font: 'message-box',
         padding: '0.5rem 1rem',
         height: '2rem'

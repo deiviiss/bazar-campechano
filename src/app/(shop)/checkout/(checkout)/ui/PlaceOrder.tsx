@@ -1,7 +1,6 @@
 'use client'
 
 import { type ShippingMethod, type PaymentMethod } from '@prisma/client'
-import clsx from 'clsx'
 import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
@@ -9,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { placeOrder } from '@/actions'
 import { PaymentMethodNameWithIcon } from '@/components'
+import { Button } from '@/components/ui/button'
 import { useAddressStore, useCartStore } from '@/store'
 import { currencyFormat } from '@/utils'
 
@@ -39,7 +39,8 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
       },
       actionButtonStyle: {
         color: 'white',
-        backgroundColor: '#1E40AF',
+        backgroundColor: '#000000',
+        borderRadius: '0px',
         font: 'message-box',
         padding: '0.5rem 1rem',
         height: '2rem'
@@ -168,18 +169,12 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
 
         <p className='pb-4 text-red-500'>{errorMessage}</p>
 
-        <button
+        <Button
           disabled={isPlacingOrder}
-          className={
-            clsx({
-              'btn-primary': !isPlacingOrder,
-              'btn-disabled': isPlacingOrder
-            })
-          }
           onClick={async () => { await onPlaceOrder() }}
         >
           Confirmar compra
-        </button>
+        </Button>
       </div>
     </div >
   )

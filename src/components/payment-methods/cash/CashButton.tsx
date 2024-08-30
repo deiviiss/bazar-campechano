@@ -49,7 +49,7 @@ export const CashButton = ({ amount }: Props) => {
       </div>
 
       <CardFooter>
-        <Button asChild variant='primary' className='mx-auto'>
+        <Button asChild className='mx-auto'>
           <Link href='/orders'>
             Ver mis pedidos
           </Link>

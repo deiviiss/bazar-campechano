@@ -34,7 +34,7 @@ export default async function OrdersByIdPage({ params }: Props) {
   return (
     <>
       <Title className='' title={`Pedido #${id.split('-').at(-1)}`} subtitle="Estos son los datos de tu pedido" />
-      <div className="flex justify-center items-center mb-72 px-1 sm:px-0">
+      <div className="flex justify-center items-center mb-20 px-1 sm:px-0">
 
         <div className="flex flex-col w-[1000px]">
 
@@ -87,7 +87,7 @@ export default async function OrdersByIdPage({ params }: Props) {
 
               <div className='grid grid-cols-2'>
                 <span className='text-right'>No. Productos</span>
-                <span className='text-right'>{order.itemsInOrder === 1 ? '1 artículo' : `${order.itemsInOrder} artíulos`}</span>
+                <span className='text-right'>{order.itemsInOrder === 1 ? '1 artículo' : `${order.itemsInOrder} artículos`}</span>
 
                 <span className='text-right'>Subtotal</span>
                 <span className='text-right'>{currencyFormat(order.subtotal)}</span>

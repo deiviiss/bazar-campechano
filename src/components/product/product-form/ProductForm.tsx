@@ -237,7 +237,8 @@ export const ProductForm = ({ product, categories }: Props) => {
       },
       actionButtonStyle: {
         color: 'white',
-        backgroundColor: '#1E40AF',
+        backgroundColor: '#000000',
+        borderRadius: '0px',
         font: 'message-box',
         padding: '0.5rem 1rem',
         height: '2rem'
@@ -254,6 +255,7 @@ export const ProductForm = ({ product, categories }: Props) => {
       cancelButtonStyle: {
         color: 'white',
         backgroundColor: 'red',
+        borderRadius: '0px',
         font: 'message-box',
         padding: '0.5rem 1rem',
         height: '2rem'
@@ -469,7 +471,6 @@ export const ProductForm = ({ product, categories }: Props) => {
         <div className='flex justify-end gap-2 w-full'>
           <Button
             disabled={isSubmitting}
-            variant='primary'
           >
             Guardar
           </Button>

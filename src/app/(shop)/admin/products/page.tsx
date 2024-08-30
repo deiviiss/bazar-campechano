@@ -38,8 +38,8 @@ export default async function ProductsPage({ searchParams }: Props) {
 
         <div className='flex justify-end'>
 
-          <Button asChild
-            variant='primary'
+          <Button
+            asChild
             className='flex gap-1 items-center'
           >
             <Link
