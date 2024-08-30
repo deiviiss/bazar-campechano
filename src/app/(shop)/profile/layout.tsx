@@ -4,7 +4,7 @@ export default async function ProfileLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className='mt-16 pt-10'>
+    <div className='mt-[60.67px] pt-10'>
       {children}
     </div>
   )
