@@ -49,7 +49,7 @@ export const TopMenu = () => {
           Juguetes
         </Link>
         <Link
-          href={'/'}
+          href={'/products?autofocus=true'}
           className={`${titleFont.className} m-2 p-2 text-lg transition-all flex items-center gap-2 hover:bg-black hover:text-white`}
         >
           <IoSearchOutline className="w-5 h-5" />
@@ -57,7 +57,7 @@ export const TopMenu = () => {
         </Link>
       </div>
 
-      {/* search cart menu */}
+      {/* cart menu */}
       <div className="flex items-center w-auto">
         <Link
           href={totalItems === 0 && loaded ? '/empty' : '/cart'}
