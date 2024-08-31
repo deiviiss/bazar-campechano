@@ -8,25 +8,27 @@ interface Props {
     query?: string
     page?: string
     take?: string
+    autofocus?: boolean
   }
 }
 
 export default async function ProductsPage({ searchParams }: Props) {
   const query = searchParams.query || ''
   const page = searchParams.page ? Number(searchParams.page) : 1
+  const autofocus = searchParams.autofocus
 
   const { products, totalPages } = await getPaginationProducts({ page, query })
   if (!products) {
     notFound()
   }
-
+  console.log('autofocus', autofocus)
   return (
     <>
       <div className='flex justify-between mb-6 gap-2'>
+        <ProductSearch placeholder='Buscar producto...' autoFocus={autofocus} />
+
         <ButtonBack className=' text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 min-[960px]:hidden rounded-none border-black border bg-white' icon={<IoArrowBackOutline />} />
         <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl hidden min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
-
-        <ProductSearch placeholder='Buscar producto...' />
       </div>
       <TitleCategory
         title='Lo más nuevo'

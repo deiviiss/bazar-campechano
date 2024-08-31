@@ -1,10 +1,10 @@
 import { type Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { IoPencil } from 'react-icons/io5'
 import { getUserById, getUserSessionServer } from '@/actions'
 import { Title } from '@/components'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
@@ -27,7 +27,7 @@ const ProfilePage = async () => {
   }
 
   const userName = user.name || 'Nombre de usuario'
-  const userImage = user.image || 'https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png'
+  const userImage = user.image || '/imgs/avatar.png'
   const userMail = user.email || 'Correo electrónico'
   const userPhoneNumber = user.phoneNumber || 'Número de teléfono'
 
@@ -38,7 +38,10 @@ const ProfilePage = async () => {
       </CardHeader>
 
       <CardContent className='flex justify-center'>
-        <Image src={userImage} alt={userName} width={100} height={100} className='rounded-full' />
+        <Avatar className="bg-gray-200 text-gray-600 h-28 w-28 rounded-full">
+          <AvatarImage src={userImage} />
+          <AvatarFallback>BC</AvatarFallback>
+        </Avatar>
       </CardContent>
 
       <CardContent >

@@ -23,10 +23,10 @@ export default async function FeaturedProductsPage({ searchParams }: Props) {
   return (
     <>
       <div className='flex justify-between mb-6 gap-2'>
+        <ProductSearch placeholder='Buscar producto...' />
+
         <ButtonBack className=' text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 min-[960px]:hidden rounded-none border-black border bg-white' icon={<IoArrowBackOutline />} />
         <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl hidden min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
-
-        <ProductSearch placeholder='Buscar producto...' />
       </div>
 
       <TitleCategory

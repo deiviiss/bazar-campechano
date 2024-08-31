@@ -4,9 +4,11 @@ import { CiSearch } from 'react-icons/ci'
 import { useDebouncedCallback } from 'use-debounce'
 
 export function ProductSearch({
-  placeholder
+  placeholder,
+  autoFocus
 }: {
   placeholder: string
+  autoFocus?: boolean
 }): JSX.Element {
   const searchParams = useSearchParams()
   const pathname = usePathname()
@@ -30,6 +32,7 @@ export function ProductSearch({
       <input
         className='peer block w-full rounded-none border border-black py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out'
         placeholder={placeholder}
+        autoFocus={autoFocus}
         onChange={(e) => {
           handleSearch(e.target.value)
         }}
