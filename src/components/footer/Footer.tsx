@@ -54,7 +54,7 @@ export const Footer = () => {
           </Link>
         </CardTitle>
 
-        <CardContent className='w-full justify-end items-center flex gap-3'>
+        <CardContent className='w-full justify-start items-center flex gap-3 md:justify-end'>
           <CiFacebook size={35} />
           <CiTwitter size={35} />
           <CiInstagram size={35} />
