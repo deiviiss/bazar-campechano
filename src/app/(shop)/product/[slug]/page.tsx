@@ -87,7 +87,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           {/* description */}
-          <AccordionDescription description={product.description ? product.description : ''} />
+          <AccordionDescription description={product.description ? product.description : ''} history={product.history ? product.history : ''} />
         </div>
       </div>
 
