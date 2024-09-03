@@ -7,7 +7,7 @@ import { FaStore } from 'react-icons/fa'
 import { IoReloadCircleOutline } from 'react-icons/io5'
 import { deleteUserAddress } from '@/actions'
 import { Button } from '@/components/ui/button'
-import { useAddressStore } from '@/store'
+import { useAddressStore, useCartStore } from '@/store'
 
 export const ButtonPickupPoint = () => {
   const router = useRouter()
@@ -16,6 +16,7 @@ export const ButtonPickupPoint = () => {
   const [loaded, setLoaded] = useState(false)
 
   const clearAddress = useAddressStore((state) => state.clearAddress)
+  const setPickupInStore = useCartStore((state) => state.setPickupInStore)
 
   useEffect(() => {
     setLoaded(true)
@@ -23,7 +24,10 @@ export const ButtonPickupPoint = () => {
 
   if (!loaded) {
     return (
-      <Button disabled variant='primary' className="w-full">
+      <Button
+        disabled
+        className="w-3/4"
+      >
         <IoReloadCircleOutline className="mr-1 h-3.5 animate-spin" />
         Cargando...
       </Button>
@@ -39,9 +43,12 @@ export const ButtonPickupPoint = () => {
 
   return (
     <Button
-      onClick={() => { ButtonResetAddress() }}
-      variant='primary'
-      className="w-3/4" >
+      onClick={() => {
+        ButtonResetAddress()
+        setPickupInStore(true)
+      }}
+      className="w-3/4"
+    >
       <FaStore className='mx-1 w-3.5 h-3.5' />
       Forma de pago
     </Button>
