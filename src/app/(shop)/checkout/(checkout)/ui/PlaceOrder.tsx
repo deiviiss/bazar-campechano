@@ -152,8 +152,8 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
         <span className='text-right'>Subtotal</span>
         <span className='text-right'>{currencyFormat(subtotal)}</span>
 
-        <span className='text-right'>IVA (16%)</span>
-        <span className='text-right'>{currencyFormat(tax)}</span>
+        <span className='text-right'>Envió</span>
+        <span className='text-right'>{subtotal > 199 ? 'Gratis' : currencyFormat(tax)}</span>
 
         <span className='mt-5 text-2xl text-right'>Total</span>
         <span className='mt-5 text-2xl text-right'>{currencyFormat(total)}</span>

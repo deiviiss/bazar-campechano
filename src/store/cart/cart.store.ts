@@ -4,6 +4,7 @@ import type { CartProduct } from '@/interfaces'
 
 interface State {
   cart: CartProduct[]
+  pickupInStore: boolean
 
   getTotalItems: () => number
   getSummaryInformation: () => {
@@ -17,6 +18,8 @@ interface State {
   updateProductQuantity: (product: CartProduct, quantity: number) => void
   removeProductFromCart: (product: CartProduct) => void
 
+  setPickupInStore: (pickup: boolean) => void
+
   clearCart: () => void
 }
 
@@ -24,6 +27,7 @@ export const useCartStore = create<State>()(
   persist(
     (set, get) => ({
       cart: [],
+      pickupInStore: false,
 
       getTotalItems: () => {
         const { cart } = get()
@@ -31,13 +35,14 @@ export const useCartStore = create<State>()(
       },
 
       getSummaryInformation: () => {
-        const { cart, getTotalItems } = get()
+        const { cart, getTotalItems, pickupInStore } = get()
 
         const subtotal = cart.reduce(
           (subtotal, product) => (product.quantity * product.price) + subtotal, 0
         )
 
-        const tax = subtotal * 0.16
+        // if subtotal is greater than 199, shipping is free
+        const tax = pickupInStore ? 0 : (subtotal > 199 ? 0 : 45)
         const total = subtotal + tax
         const itemsInCart = getTotalItems()
 
@@ -118,7 +123,12 @@ export const useCartStore = create<State>()(
 
       clearCart: () => {
         set({ cart: [] })
+      },
+
+      setPickupInStore: (pickup: boolean) => {
+        set({ pickupInStore: pickup })
       }
+
     }),
     {
       name: 'shopping-cart'
