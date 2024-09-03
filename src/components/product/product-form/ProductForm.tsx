@@ -97,14 +97,15 @@ const productSchema = z.object({
   description: z
     .string({
       required_error: 'La descripción es requerida.',
-      message: 'La descripción debe tener entre 30 y 250 caracteres.'
+      message: 'La descripción debe tener entre 150 y 300 caracteres.'
     })
-    .min(10, {
-      message: 'La descripción debe tener al menos 10 caracteres.'
+    .min(150, {
+      message: 'La descripción debe tener al menos 150 caracteres.'
     })
-    .max(250, {
-      message: 'La descripción debe tener máximo 250 caracteres.'
+    .max(350, {
+      message: 'La descripción debe tener máximo 300 caracteres.'
     }),
+  history: z.string().optional(),
   slug: z
     .string({
       required_error: 'El slug es requerido.',
@@ -159,6 +160,7 @@ export const ProductForm = ({ product, categories }: Props) => {
     title: product?.title,
     slug: product?.slug,
     description: product?.description || '',
+    history: product?.history || '',
     price: product?.price || 0,
     categoryId,
     productImage: undefined
@@ -206,6 +208,7 @@ export const ProductForm = ({ product, categories }: Props) => {
     formData.append('price', productToSave.price.toString())
     formData.append('categoryId', productToSave.categoryId)
     formData.append('stockDetails', JSON.stringify(stockDetails))
+    formData.append('history', productToSave.history || '')
     formData.append('categoryName', categoryName as string)
 
     if (productImage) {
@@ -373,6 +376,23 @@ export const ProductForm = ({ product, categories }: Props) => {
                   <FormLabel>Descripción</FormLabel>
                   <FormControl>
                     <Textarea placeholder='Descripción del producto' {...field} value={field.value ?? ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+
+          {/* history */}
+          <CardContent>
+            <FormField
+              control={form.control}
+              name='history'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Historia</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder='Historia del producto' {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

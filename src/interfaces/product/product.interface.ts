@@ -2,6 +2,7 @@ export interface Product {
   id: string
   title: string
   description: string | null
+  history: string | null
   price: number
   slug: string
   productImage: ProductImage[]
@@ -14,6 +15,7 @@ export interface ProductCreateUpdate {
   id?: string
   title: string
   description: string | null
+  history: string | null
   price: number
   slug: string
   categoryId: string
