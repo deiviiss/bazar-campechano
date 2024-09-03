@@ -21,7 +21,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   if (!products) {
     notFound()
   }
-  console.log('autofocus', autofocus)
+
   return (
     <>
       <div className='flex justify-between mb-6 gap-2'>

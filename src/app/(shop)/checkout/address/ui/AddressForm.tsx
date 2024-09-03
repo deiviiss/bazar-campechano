@@ -34,6 +34,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
   const router = useRouter()
 
   const { itemsInCart } = useCartStore(state => state.getSummaryInformation())
+  const setPickupInStore = useCartStore((state) => state.setPickupInStore)
 
   const { handleSubmit, register, formState: { isValid }, reset } = useForm<FormInputs>({
     defaultValues: {
@@ -68,6 +69,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
       deleteUserAddress(userId)
     }
 
+    setPickupInStore(false)
     router.push('/checkout/way-to-pay?shipping-method=delivery')
   }
 
