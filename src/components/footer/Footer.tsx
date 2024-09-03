@@ -49,7 +49,7 @@ export const Footer = () => {
       <Card className='w-full h-full bg-gray-300 py-5 px-4'>
         <CardTitle className='mb-5'>
           <Link href="/" >
-            <span className={`${titleFont.className} antialiased font-bold`}>Bazar Campechano</span>
+            <span className={`${titleFont.className} antialiased font-bold tracking-wider`}>Bazar Campechano</span>
             <span>© {new Date().getFullYear()}</span>
           </Link>
         </CardTitle>

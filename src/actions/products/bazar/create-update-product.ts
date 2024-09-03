@@ -27,14 +27,15 @@ const productSchema = z.object({
   description: z
     .string({
       required_error: 'La descripción es requerida.',
-      message: 'La descripción debe tener entre 30 y 160 caracteres.'
+      message: 'La descripción debe tener entre 150 y 300 caracteres.'
     })
-    .min(10, {
+    .min(150, {
       message: 'La descripción debe tener al menos 10 caracteres.'
     })
-    .max(250, {
+    .max(350, {
       message: 'La descripción debe tener máximo 200 caracteres.'
     }),
+  history: z.string().optional(),
   slug: z
     .string({
       required_error: 'El slug es requerido.',
@@ -74,6 +75,7 @@ const productSchema = z.object({
 
 export const createUpdateProduct = async (formData: FormData) => {
   const data = Object.fromEntries(formData)
+
   const parsedStockDetails = JSON.parse(formData.get('stockDetails') as string)
 
   const dataToValidate = {

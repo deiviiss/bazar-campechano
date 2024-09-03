@@ -62,7 +62,7 @@ export default async function ProductsPage({ searchParams }: Props) {
         }
         {
           products.length === 0 && (
-            <div className='flex flex-col w-full items-center justify-center col-span-3 h-36'>
+            <div className='flex flex-col w-full items-center justify-center col-span-4 h-36'>
               <h1>No se han encontrado productos con ese nombre </h1>
               <Link href='/admin/product/create' className='hover:underline'>Crea un producto!</Link>
             </div>

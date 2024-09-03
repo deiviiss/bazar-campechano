@@ -8,10 +8,10 @@ import {
 
 interface Props {
   description: string
-  care?: string
+  history?: string
 }
 
-export function AccordionDescription({ description }: Props) {
+export function AccordionDescription({ description, history }: Props) {
   return (
     <Accordion type="single" collapsible defaultValue='item-1' className="w-full">
       <AccordionItem value="item-1">
@@ -20,12 +20,12 @@ export function AccordionDescription({ description }: Props) {
           {description}
         </AccordionContent>
       </AccordionItem>
-      {/* <AccordionItem value="item-2">
-        <AccordionTrigger className='uppercase font-semibold'>Cuidados</AccordionTrigger>
+      <AccordionItem value="item-2">
+        <AccordionTrigger className='uppercase font-semibold'>historia</AccordionTrigger>
         <AccordionContent>
-          {care}
+          {history}
         </AccordionContent>
-      </AccordionItem> */}
+      </AccordionItem>
     </Accordion>
   )
 }
