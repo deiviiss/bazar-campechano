@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { IoArrowBackOutline } from 'react-icons/io5'
-import { getPaginationProducts } from '@/actions'
+import { getPaginationFeaturedProducts } from '@/actions'
 import { Pagination, ProductsGrid, ProductSearch, ButtonBack, TitleCategory } from '@/components'
 
 interface Props {
@@ -15,7 +15,7 @@ export default async function FeaturedProductsPage({ searchParams }: Props) {
   const query = searchParams.query || ''
   const page = searchParams.page ? Number(searchParams.page) : 1
 
-  const { products, totalPages } = await getPaginationProducts({ page, query })
+  const { products, totalPages } = await getPaginationFeaturedProducts({ page, query })
   if (!products) {
     notFound()
   }
@@ -30,7 +30,7 @@ export default async function FeaturedProductsPage({ searchParams }: Props) {
       </div>
 
       <TitleCategory
-        title='Las últimas'
+        title='Lo último'
         subtitle='Ofertas'
         className="mb-2 w-full items-center justify-center text-center uppercase" />
 
