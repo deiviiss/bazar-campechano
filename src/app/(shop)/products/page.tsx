@@ -31,7 +31,7 @@ export default async function ProductsPage({ searchParams }: Props) {
         <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl hidden min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
       </div>
       <TitleCategory
-        title='Lo más nuevo'
+        title='De segunda mano'
         subtitle='Rebajas'
         className="mb-2 w-full items-center justify-center text-center uppercase" />
 

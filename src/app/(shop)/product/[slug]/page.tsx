@@ -19,6 +19,11 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
   const slug = params.slug
 
   const product = await getProductBySlug(slug)
+  const imgSrc = (product?.productImage[1].url)
+    ? product?.productImage[1].url.startsWith('http')
+      ? product?.productImage[1].url
+      : `/products/${product?.productImage[1].url}`
+    : '/imgs/placeholder.jpg'
 
   return {
     title: product?.title || 'Product page title',
@@ -26,9 +31,8 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
     openGraph: {
       title: product?.title || 'Product page title',
       description: product?.description || 'Product page description',
-      images: [`/products/${product?.productImage[1].url}`]
+      images: imgSrc
     }
-
   }
 }
 

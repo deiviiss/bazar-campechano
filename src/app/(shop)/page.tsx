@@ -37,7 +37,7 @@ export default async function ShopPage({ searchParams }: Props) {
       {/* new products */}
       <div className='pb-10 mb-10'>
         <TitleHome
-          title="Lo más nuevo"
+          title="De segunda mano"
           subtitle="Rebajas"
           className='text-center uppercase pt-10'
         />
@@ -51,7 +51,7 @@ export default async function ShopPage({ searchParams }: Props) {
       {/* featured products */}
       <div className='pb-10 mb-10 border-t border-black'>
         <TitleHome
-          title="Las últimas"
+          title="Lo último"
           subtitle="ofertas"
           className='text-center uppercase pt-10'
         />
@@ -65,8 +65,8 @@ export default async function ShopPage({ searchParams }: Props) {
       {/* shoe products */}
       <div className='bg-slate-950 pb-28 border-b border-white'>
         <TitleHome
-          title="El mejor calzado"
-          subtitle="Zapatos"
+          title="Calzado de bazar"
+          subtitle="precios justos"
           className='text-center uppercase text-white pt-10'
         />
         <NewProductsGrid products={shoeProducts} />
@@ -93,7 +93,7 @@ export default async function ShopPage({ searchParams }: Props) {
       {/* clothe products */}
       <div className='pb-10 mb-10'>
         <TitleHome
-          title="La última moda"
+          title="Hallazgos de moda"
           subtitle="Ropa"
           className='text-center uppercase pt-10'
         />
