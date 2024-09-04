@@ -49,7 +49,7 @@ export const getPaginationFeaturedProducts = async ({ page = 1, take = 8, query 
         }
       },
       orderBy: {
-        title: 'asc'
+        price: 'asc'
       }
     })
 

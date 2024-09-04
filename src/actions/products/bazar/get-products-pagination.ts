@@ -55,6 +55,9 @@ export const getPaginationProducts = async ({ page = 1, take = 12, query = '', c
             }
           }
         ]
+      },
+      orderBy: {
+        price: 'desc'
       }
     })
 
