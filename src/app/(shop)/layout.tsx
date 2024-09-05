@@ -1,5 +1,5 @@
 import { IoArrowUpOutline } from 'react-icons/io5'
-import { ButtonScrollTop, Footer, Sidebar, TopMenu } from '@/components'
+import { ButtonScrollTop, Footer, NextProgress, Sidebar, TopMenu } from '@/components'
 import { Toaster } from '@/components/ui/sonner'
 
 export default function ShopLayout({
@@ -9,6 +9,7 @@ export default function ShopLayout({
 }>) {
   return (
     <main className="min-h-screen">
+      <NextProgress />
       <TopMenu />
 
       <Sidebar />

@@ -3,7 +3,7 @@
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { IoCloseOutline, IoLogInOutline, IoLogOutOutline, IoPeopleOutline, IoPersonOutline, IoShirtOutline, IoTicketOutline } from 'react-icons/io5'
+import { IoAnalytics, IoCloseOutline, IoLogInOutline, IoLogOutOutline, IoPeopleOutline, IoPersonOutline, IoShirtOutline, IoTicketOutline } from 'react-icons/io5'
 import { logout } from '@/actions'
 import { useUiStore } from '@/store'
 
@@ -46,7 +46,7 @@ export const Sidebar = () => {
         />
 
         {/* menú */}
-        <div className='mt-28'>
+        <div className='mt-20'>
           {
             !isAuthenticated
               ? (
@@ -92,6 +92,12 @@ export const Sidebar = () => {
         {
           isAdmin && (
             <>
+              <Link href='/admin'
+                onClick={() => { closeMenu() }}
+                className='flex items-center mt-5 p-2 hover:bg-black hover:text-white rounded-none transition-all'>
+                <IoAnalytics size={30} />
+                <span className='ml-3 text-xl'>Dashboard</span>
+              </Link>
               <Link href='/admin/products'
                 onClick={() => { closeMenu() }}
                 className='flex items-center mt-5 p-2 hover:bg-black hover:text-white rounded-none transition-all'>
