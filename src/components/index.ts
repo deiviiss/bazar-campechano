@@ -46,6 +46,7 @@ export { ProductPurchaseOptions } from './product/product-purchased-options/Prod
 
 // UI
 export * from './ui/sidebar/Sidebar'
+export { NextProgress } from './ui/next-progress/NextProgress'
 export { HeaderHero } from './ui/header/HeaderHero'
 export { Title } from './ui/title/Title'
 export { TitleHome } from './ui/title-home/TitleHome'
