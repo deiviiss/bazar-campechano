@@ -1,4 +1,6 @@
+'use client'
 import Image from 'next/image'
+import { CldImage } from 'next-cloudinary'
 
 interface Props {
   src?: string
@@ -19,22 +21,38 @@ export const ProductImage = ({
   onMouseEnter,
   onMouseLeave
 }: Props) => {
-  // image should be in the public folder or in the cloud
+  const isFileSystem = src?.startsWith('file-system')
+
   const imageSrc = (src)
-    ? src.startsWith('http')
-      ? src
-      : `/products/${src}`
+    ? isFileSystem
+      ? `/products/${src}`
+      : src
     : '/imgs/placeholder.jpg'
 
-  return (
-    <Image
-      src={imageSrc}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    />
-  )
+  return !isFileSystem
+    ? (
+      <CldImage
+        src={imageSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        className={className}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        crop={{
+          type: 'thumb',
+          source: true
+        }}
+        sizes="100vw"
+      />)
+    : (
+      <Image
+        src={imageSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        className={className}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      />)
 }

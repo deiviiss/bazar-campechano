@@ -70,18 +70,23 @@ const productSchema = z.object({
       inStock: z.number().min(0, { message: 'El stock debe ser mayor o igual a 0.' })
     })
   ),
-  images: z.array(z.instanceof(File)).optional()
+  images: z.array(
+    z.object({
+      id: z.string(),
+      url: z.string()
+    })).optional()
 }).strict()
 
 export const createUpdateProduct = async (formData: FormData) => {
   const data = Object.fromEntries(formData)
 
   const parsedStockDetails = JSON.parse(formData.get('stockDetails') as string)
+  const parsedImages = JSON.parse(formData.get('images') as string)
 
   const dataToValidate = {
     ...data,
     stockDetails: parsedStockDetails,
-    images: formData.getAll('images')
+    images: parsedImages
   }
 
   const productParsed = productSchema.safeParse(dataToValidate)
@@ -146,17 +151,19 @@ export const createUpdateProduct = async (formData: FormData) => {
 
         // update images
         if (images && images.length > 0) {
-          const uploadedImages = await uploadImages(images)
+          await tx.productImage.deleteMany({
+            where: {
+              productId: product.id
+            }
+          })
 
-          if (!uploadedImages) {
-            throw new Error('Error al subir las imágenes')
-          }
+          const uploadImages = images.map(image => ({
+            productId: product.id ?? '',
+            url: image.url ?? ''
+          }))
 
           await prisma.productImage.createMany({
-            data: uploadedImages.map(image => ({
-              productId: product.id ?? '',
-              url: image ?? ''
-            }))
+            data: uploadImages
           })
         }
 
@@ -168,6 +175,7 @@ export const createUpdateProduct = async (formData: FormData) => {
           data: {
             title: restProduct.title,
             description: restProduct.description ?? 'just a description',
+            history: restProduct.history ?? 'just a history',
             price: restProduct.price,
             slug: restProduct.slug,
             categoryId: restProduct.categoryId
@@ -213,17 +221,13 @@ export const createUpdateProduct = async (formData: FormData) => {
 
         // create images
         if (images && images.length > 0) {
-          const uploadedImages = await uploadImages(images)
-
-          if (!uploadedImages) {
-            throw new Error('Error al subir las imágenes, rollingback transaction...')
-          }
+          const uploadImages = images.map(image => ({
+            productId: product.id ?? '',
+            url: image.url ?? ''
+          }))
 
           await tx.productImage.createMany({
-            data: uploadedImages.map(image => ({
-              productId: product.id ?? '',
-              url: image ?? ''
-            }))
+            data: uploadImages
           })
         }
 
@@ -245,27 +249,6 @@ export const createUpdateProduct = async (formData: FormData) => {
       ok: false,
       message: 'Error al crear/actualizar el producto'
     }
-  }
-}
-
-const uploadImages = async (images: File[]) => {
-  try {
-    const uploadPromises = images.map(async (image: File) => {
-      try {
-        const buffer = await image.arrayBuffer()
-        const base64Image = Buffer.from(buffer).toString('base64')
-
-        return await cloudinary.uploader.upload(`data:image/png;base64,${base64Image}`).then(r => r.secure_url)
-      } catch (error) {
-        return null
-      }
-    })
-
-    const uploadedImages = await Promise.all(uploadPromises)
-
-    return uploadedImages
-  } catch (error) {
-    return null
   }
 }
 

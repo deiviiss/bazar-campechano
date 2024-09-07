@@ -46,7 +46,7 @@ export const Sidebar = () => {
         />
 
         {/* menú */}
-        <div className='mt-20'>
+        <div className='mt-16'>
           {
             !isAuthenticated
               ? (
@@ -100,7 +100,7 @@ export const Sidebar = () => {
               </Link>
               <Link href='/admin/products'
                 onClick={() => { closeMenu() }}
-                className='flex items-center mt-5 p-2 hover:bg-black hover:text-white rounded-none transition-all'>
+                className='flex items-center mt-10 p-2 hover:bg-black hover:text-white rounded-none transition-all'>
                 <IoShirtOutline size={30} />
                 <span className='ml-3 text-xl'>Productos</span>
               </Link>

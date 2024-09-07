@@ -8,8 +8,9 @@ import { IoCloseCircleOutline } from 'react-icons/io5'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { StockDetails } from './ProductFormStockDetails'
+import { ProductImage } from '../product-image/ProductImage'
 import { createUpdateProduct, deleteProductImage } from '@/actions'
-import { ProductImage } from '@/components'
+import { CloudinaryButton } from '@/components/CloudinaryButton'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
@@ -23,7 +24,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { type CategoryName, type Category, type ProductType, type ClotheStockDetail, type ShoeStockDetail, type ToyStockDetail } from '@/interfaces'
+import { type CategoryName, type Category, type ProductType, type ClotheStockDetail, type ShoeStockDetail, type ToyStockDetail, type ProductImage as IProductImage } from '@/interfaces'
 
 const initialToyStockDetails: ToyStockDetail[] = [
   { ageRange: '3 - 5', inStock: 0 },
@@ -103,7 +104,7 @@ const productSchema = z.object({
       message: 'La descripción debe tener al menos 150 caracteres.'
     })
     .max(350, {
-      message: 'La descripción debe tener máximo 300 caracteres.'
+      message: 'La descripción debe tener máximo 350 caracteres.'
     }),
   history: z.string().optional(),
   slug: z
@@ -128,8 +129,8 @@ const productSchema = z.object({
       message: 'El precio debe ser mayor a 0.'
     })
     .transform(val => Number(val.toFixed(2))),
-  categoryId: z.string().uuid(),
-  productImage: z.array(z.instanceof(File)).refine(images => images.length <= 5 * 1024 * 1024, 'Las imágenes no deben superar los 5MB').optional()
+  categoryId: z.string().uuid()
+  // productImage: z.array(z.instanceof(File)).refine(images => images.length <= 5 * 1024 * 1024, 'Las imágenes no deben superar los 5MB').optional()
 })
 
 const labels: Record<CategoryName, string> = {
@@ -153,6 +154,8 @@ export const ProductForm = ({ product, categories }: Props) => {
 
   if (categoryName === undefined) throw new Error('No se encontró la categoría del producto')
 
+  const [images, setImages] = useState<IProductImage[]>(product?.productImage || [])
+
   const [stockDetails, setStockDetails] = useState(product?.stockDetails || stockDetailsByCategoryName[categoryName])
 
   const defaultValuesForm = {
@@ -162,8 +165,7 @@ export const ProductForm = ({ product, categories }: Props) => {
     description: product?.description || '',
     history: product?.history || '',
     price: product?.price || 0,
-    categoryId,
-    productImage: undefined
+    categoryId
   }
 
   const form = useForm<z.infer<typeof productSchema>>({
@@ -181,7 +183,7 @@ export const ProductForm = ({ product, categories }: Props) => {
 
     //! when changing between product categories, the stockDetails is not being reset
     setStockDetails(categoryDetails)
-  }, [categoryId, form.reset, categoryName])
+  }, [categoryId, categoryName])
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     setIsSubmitting(true)
@@ -197,9 +199,18 @@ export const ProductForm = ({ product, categories }: Props) => {
       return
     }
 
+    if (images.length <= 0) {
+      toast.error('Debes ingresar al menos una imagen', {
+        position: 'top-right',
+        duration: 5000
+      })
+      setIsSubmitting(false)
+      return
+    }
+
     const formData = new FormData()
 
-    const { productImage, ...productToSave } = values
+    const { ...productToSave } = values
 
     if (productToSave.id) formData.append('id', productToSave.id)
     formData.append('title', productToSave.title)
@@ -211,10 +222,8 @@ export const ProductForm = ({ product, categories }: Props) => {
     formData.append('history', productToSave.history || '')
     formData.append('categoryName', categoryName as string)
 
-    if (productImage) {
-      for (let i = 0; i < productImage.length; i++) {
-        formData.append('images', productImage[i])
-      }
+    if (images) {
+      formData.append('images', JSON.stringify(images))
     }
 
     const { ok, product } = await createUpdateProduct(formData)
@@ -268,12 +277,16 @@ export const ProductForm = ({ product, categories }: Props) => {
 
   const handleDeleteImageClick = async (id: string, url: string) => {
     setIsSubmitting(true)
+
     const rta = await deleteProductImage(id, url)
     if (!rta?.ok) {
       noticeFailSavedDeleteImage(rta.message)
       setIsSubmitting(false)
       return
     }
+
+    setImages((prevImages) => prevImages.filter((image) => image.id !== id))
+
     setIsSubmitting(false)
     noticeSuccessDeleteImage()
   }
@@ -422,10 +435,11 @@ export const ProductForm = ({ product, categories }: Props) => {
 
         {/* stockDetails & images  */}
         <div className='flex flex-col gap-7 h-fit'>
+
           {/* stockDetails */}
-          {
-            StockDetails({ stockDetails, setStockDetails })
-          }
+          <StockDetails
+            stockDetails={stockDetails} setStockDetails={setStockDetails}
+          />
 
           {/* productImage */}
           <Card>
@@ -435,54 +449,36 @@ export const ProductForm = ({ product, categories }: Props) => {
 
             {/* productImage */}
             <CardContent>
-              <FormField
-                control={form.control}
-                name='productImage'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Imagen</FormLabel>
-                    <FormControl>
-                      <Input
-                        type='file'
-                        multiple
-                        onChange={(e) => {
-                          // convert FileList to File Array
-                          field.onChange(Array.from(e.target.files || []))
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 overflow-auto py-5">
-                {
-                  product?.productImage &&
-                  product.productImage?.map((image, index) => (
-                    <div
-                      className='flex flex-col items-center justify-center gap-1 relative'
-                      key={`${image.url} ${index}`}>
-                      <ProductImage
-                        src={image.url}
-                        alt={product.title ? product.title : 'Producto'}
-                        width={200}
-                        height={200}
-                        className="rounded-t shadow-md" />
-                      <Button
-                        disabled={isSubmitting}
-                        size='icon'
-                        variant='destructive'
-                        className='absolute w-5 h-5 rounded-lg top-0 right-0 p-0'
-                        onClick={() => { openConfirmDeleteImage(image.id, image.url) }}
-                        type='button'
-                      >
-                        <IoCloseCircleOutline className='w-6 h-6' />
-                      </Button>
-                    </div>
-                  ))
-                }
-              </div>
-
+              {
+                images.length > 0 && (
+                  <div className="grid grid-cols-1 min-[450px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 overflow-auto py-5">
+                    {images.map((image, index) => (
+                      <div
+                        className='flex flex-col items-center justify-center gap-1 relative'
+                        key={`${image.url} ${index}`}>
+                        <ProductImage
+                          src={image.url}
+                          alt={product?.title ? product.title : 'Producto'}
+                          width={200}
+                          height={200}
+                          className="rounded-t shadow-md"
+                        />
+                        <Button
+                          disabled={isSubmitting}
+                          size='icon'
+                          variant='destructive'
+                          className='absolute w-5 h-5 rounded-lg top-0 right-0 p-0'
+                          onClick={() => { openConfirmDeleteImage(image.id, image.url) }}
+                          type='button'
+                        >
+                          <IoCloseCircleOutline className='w-6 h-6' />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )
+              }
+              <CloudinaryButton images={images} setImages={setImages} />
             </CardContent>
           </Card>
         </div>

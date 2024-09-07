@@ -1,41 +1,21 @@
 'use server'
 
 import { v2 as cloudinary } from 'cloudinary'
-import { revalidatePath } from 'next/cache'
-import prisma from '@/lib/prisma'
+import { isValidFileSystemUrl } from '@/utils'
 
 // config cloudinary // TODO: Chance for folder name
 cloudinary.config(process.env.CLOUDINARY_URL ?? '')
 
 export const deleteProductImage = async (imageId: string, imageUrl: string) => {
-  if (!imageUrl.startsWith('http')) {
+  if (isValidFileSystemUrl(imageUrl)) {
     return {
       ok: false,
       message: 'Imagen de sistema, no se puede eliminar'
     }
   }
 
-  const imageName = imageUrl.split('/').pop()?.split('.')[0] ?? ''
-
   try {
-    await cloudinary.uploader.destroy(imageName)
-    const deletedImage = await prisma.productImage.delete({
-      where: {
-        id: imageId
-      },
-      select: {
-        product: {
-          select: {
-            slug: true
-          }
-        }
-      }
-    })
-
-    // revalidate paths in all routes where product name exist
-    revalidatePath('/admin/products')
-    revalidatePath(`/admin/product/${deletedImage.product.slug}`)
-    revalidatePath(`/products/${deletedImage.product.slug}`)
+    await cloudinary.uploader.destroy(imageId)
 
     return {
       ok: true,

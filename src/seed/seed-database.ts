@@ -55,7 +55,7 @@ const main = async () => {
     })
 
     const imagesData = images.map((image) => ({
-      url: image,
+      url: `file-system/${image}`,
       productId: dbProduct.id
     }))
 
