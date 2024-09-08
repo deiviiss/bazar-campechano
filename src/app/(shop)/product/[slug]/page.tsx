@@ -1,6 +1,7 @@
 import { type Metadata, type ResolvingMetadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { getCldOgImageUrl } from 'next-cloudinary'
 import { IoArrowBackOutline, IoShareSocialOutline } from 'react-icons/io5'
 import { getPaginationProducts, getProductBySlug } from '@/actions'
 import { AccordionDescription, ButtonBack, ButtonShare, CurrentProductsGrid, ProductCarrousel, ProductImage, ProductPurchaseOptions, TitleCategory } from '@/components'
@@ -17,9 +18,13 @@ interface Props {
 
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   const slug = params.slug
-
   const product = await getProductBySlug(slug)
-  const imgSrc = (product?.productImage[1].url)
+
+  const url = getCldOgImageUrl({
+    src: product?.productImage[1].url || ''
+  })
+
+  const imgSrc = (url)
     ? product?.productImage[1].url.startsWith('http')
       ? product?.productImage[1].url
       : `/products/${product?.productImage[1].url}`
@@ -31,7 +36,13 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
     openGraph: {
       title: product?.title || 'Product page title',
       description: product?.description || 'Product page description',
-      images: imgSrc
+      images: [
+        {
+          width: 1200,
+          height: 627,
+          url: imgSrc
+        }
+      ]
     }
   }
 }
@@ -55,7 +66,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
 
         {/* desktop */}
-        <div className='hidden min-[960px]:col-span-2 min-[960px]:grid grid-cols-2'>
+        <div className='hidden min-[960px]:col-span-2 min-[960px]:grid grid-cols-2 gap-[1.5px] bg-black'>
           {product.productImage.map((image, index) => (
             <ProductImage
               key={index}
