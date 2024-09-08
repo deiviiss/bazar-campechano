@@ -21,8 +21,11 @@ export function CloudinaryButton({ images, setImages }: IUploaderProps) {
       return
     }
 
+    // cast result.info to CloudinaryUploadWidgetInfo
+    const info = result.info
+
     setImages((prev: ProductImage[]) => {
-      const updatedImages = [...prev, { url: result.info?.public_id || '', id: result.info?.public_id || '' }]
+      const updatedImages = [...prev, { url: info.public_id, id: info.public_id }]
 
       return updatedImages
     })
