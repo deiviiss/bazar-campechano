@@ -7,6 +7,7 @@ import { getPaginationProducts, getProductBySlug } from '@/actions'
 import { AccordionDescription, ButtonBack, ButtonShare, CurrentProductsGrid, ProductCarrousel, ProductImage, ProductPurchaseOptions, TitleCategory } from '@/components'
 import { Button } from '@/components/ui/button'
 import { titleFont } from '@/config/fonts'
+import { getImageSrc, isValidFileSystemUrl } from '@/utils'
 
 export const revalidate = 60 * 60 * 24 * 7 // 1 week
 
@@ -19,16 +20,29 @@ interface Props {
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   const slug = params.slug
   const product = await getProductBySlug(slug)
+  const imgSrc = getImageSrc(product?.productImage[1].url || '')
 
-  const url = getCldOgImageUrl({
-    src: product?.productImage[1].url || ''
-  })
+  if (!isValidFileSystemUrl(imgSrc)) {
+    const url = getCldOgImageUrl({
+      src: imgSrc
+    })
 
-  const imgSrc = (url)
-    ? product?.productImage[1].url.startsWith('http')
-      ? product?.productImage[1].url
-      : `/products/${product?.productImage[1].url}`
-    : '/imgs/placeholder.jpg'
+    return {
+      title: product?.title || 'Product page title',
+      description: product?.description || 'Product page description',
+      openGraph: {
+        title: product?.title || 'Product page title',
+        description: product?.description || 'Product page description',
+        images: [
+          {
+            width: 1200,
+            height: 627,
+            url
+          }
+        ]
+      }
+    }
+  }
 
   return {
     title: product?.title || 'Product page title',
