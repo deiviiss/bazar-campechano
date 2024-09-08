@@ -1,7 +1,6 @@
 'use client'
 
 import { CldUploadWidget, type CloudinaryUploadWidgetError, type CloudinaryUploadWidgetResults } from 'next-cloudinary'
-import { useState } from 'react'
 import { IoCloudDoneOutline } from 'react-icons/io5'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
@@ -12,9 +11,10 @@ interface IUploaderProps {
   setImages: (images: ProductImage[] | ((prevImages: ProductImage[]) => ProductImage[])) => void
 }
 
+const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+
 export function CloudinaryButton({ images, setImages }: IUploaderProps) {
-  const [widgetOpen, setWidgetOpen] = useState(false)
-  const isImageComplete = images.length >= 4
+  const isImageComplete = images.length >= 5
 
   function handleSuccess(result: CloudinaryUploadWidgetResults) {
     if (!result.info || typeof result.info === 'string') {
@@ -46,7 +46,7 @@ export function CloudinaryButton({ images, setImages }: IUploaderProps) {
         {
           !isImageComplete && (
             <CldUploadWidget
-              uploadPreset="bazar-campechano"
+              uploadPreset={uploadPreset}
               options={{
                 sources: ['local', 'url', 'camera', 'image_search'],
                 showSkipCropButton: false,
@@ -56,8 +56,6 @@ export function CloudinaryButton({ images, setImages }: IUploaderProps) {
               }}
               onError={handleError}
               onSuccess={handleSuccess}
-              onOpen={() => { setWidgetOpen(true) }}
-              onClose={() => { setWidgetOpen(false) }}
             >
               {({ widget, cloudinary, open }) => (
                 <Button
@@ -68,7 +66,7 @@ export function CloudinaryButton({ images, setImages }: IUploaderProps) {
                   }}
                 >
                   <IoCloudDoneOutline className="mr-2" />
-                  {widgetOpen ? 'Subiendo...' : 'Subir imagen'}
+                  Subir imagen
                 </Button>
               )}
             </CldUploadWidget>
