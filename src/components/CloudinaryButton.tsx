@@ -17,12 +17,15 @@ export function CloudinaryButton({ images, setImages }: IUploaderProps) {
   const isImageComplete = images.length >= 4
 
   function handleSuccess(result: CloudinaryUploadWidgetResults) {
-    if (!result.info) {
+    if (!result.info || typeof result.info === 'string') {
       return
     }
 
+    // cast result.info to CloudinaryUploadWidgetInfo
+    const info = result.info
+
     setImages((prev: ProductImage[]) => {
-      const updatedImages = [...prev, { url: result.info?.public_id || '', id: result.info?.public_id || '' }]
+      const updatedImages = [...prev, { url: info.public_id, id: info.public_id }]
 
       return updatedImages
     })
