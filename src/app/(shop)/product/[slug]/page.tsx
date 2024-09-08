@@ -24,7 +24,8 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 
   if (!isValidFileSystemUrl(imgSrc)) {
     const url = getCldOgImageUrl({
-      src: imgSrc
+      src: imgSrc,
+      format: 'png'
     })
 
     return {
