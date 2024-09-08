@@ -17,7 +17,7 @@ export function CloudinaryButton({ images, setImages }: IUploaderProps) {
   const isImageComplete = images.length >= 4
 
   function handleSuccess(result: CloudinaryUploadWidgetResults) {
-    if (!result.info) {
+    if (!result.info || typeof result.info?.public_id !== 'string') {
       return
     }
 
