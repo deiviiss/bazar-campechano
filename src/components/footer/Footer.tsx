@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { CiFacebook, CiInstagram, CiTwitter, CiYoutube } from 'react-icons/ci'
+import { AiOutlinePinterest } from 'react-icons/ai'
+import { CiFacebook } from 'react-icons/ci'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { titleFont } from '@/config/fonts'
 
@@ -56,9 +57,7 @@ export const Footer = () => {
 
         <CardContent className='w-full justify-start items-center flex gap-3 md:justify-end'>
           <CiFacebook size={35} />
-          <CiTwitter size={35} />
-          <CiInstagram size={35} />
-          <CiYoutube size={35} />
+          <AiOutlinePinterest size={35} />
         </CardContent>
       </Card>
     </div>
