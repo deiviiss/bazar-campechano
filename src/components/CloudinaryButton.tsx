@@ -14,7 +14,7 @@ interface IUploaderProps {
 const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
 
 export function CloudinaryButton({ images, setImages }: IUploaderProps) {
-  const isImageComplete = images.length >= 5
+  const isImageComplete = images.length >= 4
 
   function handleSuccess(result: CloudinaryUploadWidgetResults) {
     if (!result.info || typeof result.info === 'string') {
