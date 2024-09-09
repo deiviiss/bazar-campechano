@@ -28,6 +28,7 @@ export { CurrentProductsGrid } from './products/product-grid/CurrentProductsGrid
 // Product
 export * from './product/quantity-selector/QuantitySelector'
 export * from './product/size-selector/SizeSelector'
+export { CloudinaryButton } from './product/cloudinary-button/CloudinaryButton'
 export { ProductSlideshow } from './product/slideshow/ProductSlideshow'
 export { ProductCarrousel } from './product/carrousel/ProductCarrousel'
 export { AccordionDescription } from './product/accordion-description/AccordionDescription'
