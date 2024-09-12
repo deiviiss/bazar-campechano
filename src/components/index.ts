@@ -66,3 +66,7 @@ export { MenuOptionsUser } from './users/table/MenuOptions'
 
 // Footer
 export { Footer } from './footer/Footer'
+
+// isomorphic
+// cards
+export { MetricCard } from './cards/MetricCard'
