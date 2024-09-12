@@ -8,7 +8,11 @@
     "start": "next start",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx} --fix",
     "prisma:deploy": "npx prisma migrate deploy && prisma generate",
-    "seed": "ts-node src/seed/seed-database"
+    "seed": "ts-node src/seed/seed-database",
+    "clean:hard": "rm -rf node_modules .next postgres",
+    "clean:soft": "rm -rf .next",
+    "reset:hard": "npm run clean:hard && npm install && docker-compose up -d && npm run seed && clear && npm run dev",
+    "reset:soft": "npm run clean:soft && npm run seed && clear && npm run dev"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -22,6 +26,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.0",
+    "@tailwindcss/container-queries": "^0.1.1",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.2.0",
@@ -38,6 +43,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.52.2",
     "react-icons": "^5.0.1",
+    "recharts": "^2.12.7",
     "rizzui": "^0.8.7",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",

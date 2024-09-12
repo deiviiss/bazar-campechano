@@ -13,7 +13,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className='px-1 md:p-4 min-[992px]:p-6 min-[1200px]:p-10 mt-[60.67px] pt-10'>
+    <div className='px-1 pt-10 mt-[60.67px] md:p-4 min-[992px]:p-6 min-[1200px]:p-10 pb-10'>
       {children}
     </div>
   )

@@ -3,7 +3,7 @@
 import { CldUploadWidget, type CloudinaryUploadWidgetError, type CloudinaryUploadWidgetResults } from 'next-cloudinary'
 import { IoCloudDoneOutline } from 'react-icons/io5'
 import { toast } from 'sonner'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 import { type ProductImage } from '@/interfaces'
 
 interface IUploaderProps {
