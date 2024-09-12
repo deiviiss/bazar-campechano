@@ -1,4 +1,5 @@
 import { Title, Text } from 'rizzui'
+import { cn } from '@/lib/utils'
 
 interface WelcomeBannerTypes {
   title: React.ReactNode
@@ -18,7 +19,10 @@ export default function WelcomeBanner({
 }: React.PropsWithChildren<WelcomeBannerTypes>) {
   return (
     <div
-      className={`m:p-6 lg:p-7 dark:bg-gray-100' ${className}`}
+      className={cn(
+        'relative flex items-center justify-between rounded-lg bg-gray-100/60 p-5 sm:p-6 lg:p-7 dark:bg-gray-100',
+        className
+      )}
     >
       <div className={contentClassName}>
         <Title as="h2" className="mb-2 text-2xl sm:mb-3 md:text-3xl">

@@ -156,8 +156,24 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
     const subTotal = product.product.price * productQuantity
 
     totals.subTotal += subTotal
-    totals.tax += subTotal * 0.16
-    totals.total += subTotal + subTotal * 0.16
+    // Determine if pickup in store applies
+    const pickupInStore = shippingMethod === 'pickup'
+
+    // Calculate tax based on shipping method and subtotal
+    const productTax = pickupInStore
+      ? 0
+      : totals.subTotal > 199
+        ? 0
+        : 45
+
+    // Update tax
+    totals.tax = productTax
+
+    // Calculate total for the current set of products
+    const productTotal = subTotal + productTax
+
+    // Update total
+    totals.total += productTotal
 
     return totals
   }, { subTotal: 0, tax: 0, total: 0 })
@@ -372,6 +388,7 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
     }
 
     revalidatePath('/')
+    revalidatePath('/admin')
 
     return { ok: true, order: prismaTX.order }
   } catch (error) {

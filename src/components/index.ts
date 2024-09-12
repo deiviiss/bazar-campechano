@@ -1,5 +1,5 @@
 // auth
-export * from './auth/ButtonLogout'
+export { ButtonLogout } from './auth/ButtonLogout'
 
 // orders
 export { OrderStatus } from './orders/OrderStatus'
@@ -11,10 +11,10 @@ export { CardOrderAdmin } from './orders/card/CardOrderAdmin'
 export { TableOrder } from './orders-table/TableOrder'
 
 // Providers
-export * from './providers/Providers'
+export { Providers } from './providers/Providers'
 
 // payment-methods
-export * from './payment-methods/paypal/PayPalButton'
+export { PayPalButton } from './payment-methods/paypal/PayPalButton'
 export { TransferButton } from './payment-methods/transfer/TransferButton'
 export { CashButton } from './payment-methods/cash/CashButton'
 
@@ -26,15 +26,15 @@ export { ProductItem } from './products/product-grid/ProductItem'
 export { CurrentProductsGrid } from './products/product-grid/CurrentProductsGrid'
 
 // Product
-export * from './product/quantity-selector/QuantitySelector'
-export * from './product/size-selector/SizeSelector'
+export { SizeSelector } from './product/size-selector/SizeSelector'
+export { QuantitySelector } from './product/quantity-selector/QuantitySelector'
+export { CloudinaryButton } from './product/cloudinary-button/CloudinaryButton'
 export { ProductSlideshow } from './product/slideshow/ProductSlideshow'
 export { ProductCarrousel } from './product/carrousel/ProductCarrousel'
 export { AccordionDescription } from './product/accordion-description/AccordionDescription'
-export * from './product/stock-label/StockLabel'
 export { ProductForm } from './product/product-form/ProductForm'
 export { ProductFormBasic } from './product/product-form/ProductFormBasic'
-export * from './product/product-image/ProductImage'
+export { ProductImage } from './product/product-image/ProductImage'
 export { ProductTable } from './products/product-table/ProductTable'
 export { ProductSearch } from './product/product-search/ProductSearch'
 export { ProductFilter } from './product/product-filter/ProductFilter'
@@ -45,16 +45,15 @@ export { AddToCartProduct } from './product/add-to-card-product/AddToCartProduct
 export { ProductPurchaseOptions } from './product/product-purchased-options/ProductPurchaseOptions'
 
 // UI
-export * from './ui/sidebar/Sidebar'
+export { Sidebar } from './ui/sidebar/Sidebar'
 export { NextProgress } from './ui/next-progress/NextProgress'
 export { HeaderHero } from './ui/header/HeaderHero'
 export { Title } from './ui/title/Title'
 export { TitleHome } from './ui/title-home/TitleHome'
 export { TitleCategory } from './ui/title-category/TitleCategory'
-export * from './ui/top-menu/TopMenu'
-export * from './ui/not-found/PageNotFound'
-export * from './ui/pagination/Pagination'
-export * from './ui/button-back-page/ButtonBackPage'
+export { TopMenu } from './ui/top-menu/TopMenu'
+export { PageNotFound } from './ui/not-found/PageNotFound'
+export { Pagination } from './ui/pagination/Pagination'
 export { ButtonBack } from './ui/button-back/ButtonBack'
 export { ButtonScrollTop } from './ui/button-scroll-top/ButtonScrollTop'
 export { NavigationAndContactButtons } from './navigation-contact-buttons/NavigationAndContactButtons'
@@ -66,4 +65,8 @@ export { EditForm } from './users/edit-form/EditForm'
 export { MenuOptionsUser } from './users/table/MenuOptions'
 
 // Footer
-export * from './footer/Footer'
+export { Footer } from './footer/Footer'
+
+// isomorphic
+// cards
+export { MetricCard } from './cards/MetricCard'

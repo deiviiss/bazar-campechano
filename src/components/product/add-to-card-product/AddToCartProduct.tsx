@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { type Product, type CartProduct, type ProductToy, type ProductShoe, type ProductClothe, type ClotheSize, type ShoeSize, type AgeRange } from '@/interfaces'
 import { useCartStore } from '@/store'
+import { isClothe, isShoe, isToy } from '@/utils/productTypeGuards'
 
 interface Props {
   product: Product | ProductClothe | ProductShoe | ProductToy
@@ -25,16 +26,16 @@ export const AddToCartProduct = ({ product, setSelectedClotheSize, setSelectedSh
     let shoeSize: ShoeSize | undefined
     let ageRange: AgeRange | null = null
 
-    if ('clotheSize' in product) {
+    if (isClothe(product)) {
       clotheSize = product.clotheSize
     }
 
-    if ('shoeSize' in product) {
+    if (isShoe(product)) {
       shoeSize = product.shoeSize
     }
 
-    if ('ageRange' in product) {
-      ageRange = product.ageRange as AgeRange
+    if (isToy(product)) {
+      ageRange = product.stockDetails[0].ageRange
     }
 
     const cartProduct: CartProduct = {

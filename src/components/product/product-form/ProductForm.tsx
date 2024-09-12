@@ -10,7 +10,7 @@ import { z } from 'zod'
 import { StockDetails } from './ProductFormStockDetails'
 import { ProductImage } from '../product-image/ProductImage'
 import { createUpdateProduct, deleteProductImage } from '@/actions'
-import { CloudinaryButton } from '@/components/CloudinaryButton'
+import { CloudinaryButton } from '@/components'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
