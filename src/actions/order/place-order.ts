@@ -73,6 +73,12 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
 
   const validateShoeSizes = shoeSizes.filter((size): size is ShoeSize => size !== undefined)
 
+  const ageRanges = productsId
+    .filter(product => typeof product.ageRange === 'string')
+    .map(product => product.ageRange)
+
+  const validateAgeRanges = ageRanges.filter((range): range is AgeRange => range !== undefined)
+
   const productsIds = productsId.map(product => product.productId)
 
   const clotheStock = await prisma.clotheStock.findMany({
@@ -119,6 +125,9 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
 
   const toyStock = await prisma.toyStock.findMany({
     where: {
+      ageRange: {
+        in: validateAgeRanges
+      },
       product: {
         id: {
           in: productsId.map(product => product.productId)
@@ -211,10 +220,12 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
       // Update stock
       const updatedProductsPromises = allProductsStock.map(async (product) => {
         if (isClothe(product.product)) {
-          const productDetails = productsId.find(item =>
-            item.productId === product.product.id && (
+          const productDetails = productsId.find(item => {
+            return item.productId === product.product.id && (
               item.clotheSize === product.clotheSize
             )
+          }
+
           )
 
           const clotheSize: ClotheSize | undefined = productDetails?.clotheSize
@@ -301,19 +312,23 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
         }
 
         if (isToy(product.product)) {
-          const productDetails = productsId.find(item =>
-            item.productId === product.product.id && (
+          const productDetails = productsId.find(item => {
+            return item.productId === product.product.id && (
               item.ageRange === product.ageRange
             )
+          }
           )
 
+          const ageRange: AgeRange | undefined = productDetails?.ageRange
           const quantity = productDetails?.quantity
 
+          if (!ageRange) throw new Error('Rango de edad no encontrado')
           if (!quantity || quantity <= 0) throw new Error('La cantidad no puede ser 0')
 
           const productToyStock = await tx.toyStock.findFirst({
             where: {
-              productId: product.product.id
+              productId: product.product.id,
+              ageRange
             },
             select: {
               id: true,
