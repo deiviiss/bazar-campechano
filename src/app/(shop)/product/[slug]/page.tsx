@@ -66,7 +66,6 @@ export default async function ProductPage({ params }: Props) {
   const { slug } = params
   const { products } = await getPaginationProducts({ page: 1 })
   const product = await getProductBySlug(slug)
-
   if (!product) {
     notFound()
   }
@@ -102,7 +101,7 @@ export default async function ProductPage({ params }: Props) {
 
           <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
 
-          <ButtonShare className='fixed bottom-10 z-10 right-16 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 rounded-none border-black border bg-white h-12 w-12' icon={<IoShareSocialOutline size={25} />} />
+          <ButtonShare className='fixed bottom-10 z-10 right-16 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 rounded-none border-black border bg-white h-12 w-12' icon={<IoShareSocialOutline size={25} />} title={product.title} description={product.description || ''} />
 
           <div className='flex gap-2 justify-between'>
             <h2 className={`${titleFont.className} antialiased font-bold text-2xl uppercase`}>
