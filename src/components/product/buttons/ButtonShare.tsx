@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 
-const noticeCopyLinkProduct = () => {
-  toast('Link copiado al portapapeles', {
+const noticeShareProduct = () => {
+  toast.success('Producto compartido', {
     position: 'top-right',
     duration: 2000
   })
@@ -15,9 +15,11 @@ interface Props {
   name?: string
   icon?: JSX.Element
   className?: string
+  title: string
+  description: string
 }
 
-export const ButtonShare = ({ className, icon, name }: Props) => {
+export const ButtonShare = ({ className, icon, name, description, title }: Props) => {
   const [isVisible, setIsVisible] = useState(false)
   const fixedScrollThreshold = 2 // 2% scroll threshold
 
@@ -42,8 +44,14 @@ export const ButtonShare = ({ className, icon, name }: Props) => {
           variant='outline'
           className={className}
           onClick={() => {
-            navigator.clipboard.writeText(window.location.href)
-            noticeCopyLinkProduct()
+            if (navigator.share) {
+              navigator.share({
+                title,
+                text: description,
+                url: window.location.href
+              })
+                .then(() => { noticeShareProduct() })
+            }
           }}
         >
           {icon}
