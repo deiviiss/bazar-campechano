@@ -36,7 +36,7 @@ export const getPaginatedUsers = async ({ page = 1, take = 12 }: PaginationOptio
     }
   }
 
-  const totalCount = await prisma.order.count({})
+  const totalCount = await prisma.user.count({})
 
   const totalPages = Math.ceil(totalCount / take)
 

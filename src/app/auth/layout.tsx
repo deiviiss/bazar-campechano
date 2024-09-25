@@ -14,7 +14,7 @@ export default async function AuthLayout({
 
   return (
     <main className='flex justify-center'>
-      <div className='w-full sm:w-[350px] sm:px-0 px-10'>
+      <div className='w-full sm:w-[500px] sm:px-0 px-10'>
         {children}
       </div>
     </main>
