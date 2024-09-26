@@ -226,7 +226,7 @@ export const ProductForm = ({ product, categories }: Props) => {
       formData.append('images', JSON.stringify(images))
     }
 
-    const { ok, product } = await createUpdateProduct(formData)
+    const { ok } = await createUpdateProduct(formData)
 
     if (!ok) {
       noticeFailSaved()
@@ -236,7 +236,8 @@ export const ProductForm = ({ product, categories }: Props) => {
 
     setIsSubmitting(false)
     noticeSuccessSaved()
-    router.replace(`/admin/product/${product?.slug}`)
+    // router.replace(`/admin/product/${product?.slug}`)
+    router.push('/admin/products')
   }
 
   const openConfirmDeleteImage = (id: string, url: string) => {
