@@ -55,6 +55,9 @@ export const getPaginationProductsStock = async ({ page = 1, take = 12, query = 
             }
           }
         ]
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 

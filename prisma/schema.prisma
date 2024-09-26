@@ -87,6 +87,8 @@ model Product {
   toyStock     ToyStock[]
   shoeStock    ShoeStock[]
 
+  createdAt DateTime @default(now())
+
   @@map("products")
 }
 
