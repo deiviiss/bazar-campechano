@@ -236,7 +236,7 @@ export const ProductForm = ({ product, categories }: Props) => {
 
     setIsSubmitting(false)
     noticeSuccessSaved()
-    // router.replace(`/admin/product/${product?.slug}`)
+
     router.push('/admin/products')
   }
 

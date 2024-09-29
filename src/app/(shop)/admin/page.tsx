@@ -1,15 +1,20 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { IoBarChartOutline } from 'react-icons/io5'
 import { PiBankDuotone, PiChartPieSliceDuotone, PiGiftDuotone, PiPlusBold } from 'react-icons/pi'
 import welcomeImg from '../../../../public/imgs/shop-illustration.png'
+import { getUserSessionServer } from '@/actions'
 import { getCurrentMonthOrders, getLastMonthOrders, getCurrentMonthSales, getLastMonthSales, getLastMonthRevenue, getCurrentMonthRevenue } from '@/actions/dashboard'
 import WelcomeBanner from '@/components/banners/welcome'
-import { StatCards } from '@/components/dashboard'
+import { InventorySummary, StatCards } from '@/components/dashboard'
 import HandWaveIcon from '@/components/icons/hand-wave'
 import { Button } from '@/components/ui/button'
 import { type DashboardStatsArray } from '@/interfaces'
 
 export default async function AdminPage() {
+  // user
+  const user = await getUserSessionServer()
+
   // orders
   const { totalOrdersCount: totalCurrentOrdersCount, groupedData: currentMonthOrdersData } = await getCurrentMonthOrders()
   const { totalOrdersCount: totalLastOrdersCount } = await getLastMonthOrders()
@@ -92,7 +97,7 @@ export default async function AdminPage() {
         <WelcomeBanner
           title={
             <>
-              Buen día, <br /> David{' '}
+              Buen día, <br /> {user?.name}
               <HandWaveIcon className="inline-flex h-8 w-8" />
             </>
           }
@@ -121,7 +126,15 @@ export default async function AdminPage() {
         </WelcomeBanner>
 
         <StatCards className="@2xl:grid-cols-3 @3xl:gap-6 @4xl:col-span-2 @7xl:col-span-8" dashboardStatData={eComDashboardStatData} />
+      </div>
 
+      <div className='w-full col-span-2 mt-6'>
+        <div className="flex items-center space-x-2 mb-6 pl-1 sm:pl-3">
+          <div className="p-2 bg-blue-100 rounded-full"><IoBarChartOutline className="h-6 w-6 text-blue-500" /></div>
+          <h2 className="text-2xl font-bold text-gray-800">Resumen de inventario</h2>
+        </div>
+
+        <InventorySummary />
       </div>
     </div>
   )
