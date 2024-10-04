@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { CgSpinnerTwo } from 'react-icons/cg'
 import { toast } from 'sonner'
 import { placeOrder } from '@/actions'
 import { PaymentMethodNameWithIcon } from '@/components'
@@ -168,12 +169,17 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
         </p>
 
         <p className='pb-4 text-red-500'>{errorMessage}</p>
-
         <Button
           disabled={isPlacingOrder}
           onClick={async () => { await onPlaceOrder() }}
         >
-          Confirmar compra
+          <span className={`flex gap-1 items-center transition-opacity duration-300 ${isPlacingOrder ? 'opacity-0' : 'opacity-100'}`}>
+            Confirmar compra
+          </span>
+          <span className={`flex gap-1 items-center transition-opacity duration-300 ${isPlacingOrder ? 'opacity-100' : 'opacity-0'} absolute`}>
+            <CgSpinnerTwo className='animate-spin h-5 w-5 mr-3' />
+            Procesando
+          </span>
         </Button>
       </div>
     </div >

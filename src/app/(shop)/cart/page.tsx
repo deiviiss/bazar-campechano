@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ButtonShop } from './ui/ButtonShop'
 import { OrderSummary } from './ui/OrderSummary'
 import { ProductsInCart } from './ui/ProductsInCart'
 import { getPaginationProducts } from '@/actions'
@@ -36,16 +37,7 @@ export default async function CartPage() {
                 <OrderSummary />
 
                 <div className='mt-5 mb-2 w-full'>
-                  <Button
-                    asChild
-                    className='w-full'
-                  >
-                    <Link
-                      href="/checkout/shipping-method"
-                    >
-                      Comprar
-                    </Link>
-                  </Button>
+                  <ButtonShop />
                 </div>
               </div>
 

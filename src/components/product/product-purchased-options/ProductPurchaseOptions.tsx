@@ -64,7 +64,7 @@ export const ProductPurchaseOptions = ({ product }: Props) => {
         </div>)
         : (
           <div className='grid items-center gap-x-1 gap-y-2 my-3'>
-            <p className='mt-12 h-10 px-4 py-2 text-center rounded-none text-sm bg-yellow-200 text-secondary-foreground uppercase font-semibold'>Agotado</p>
+            <p className='mt-12 h-10 px-4 py-2 text-center rounded-none text-sm bg-yellow-200 text-secondary-foreground uppercase font-semibold'>vendido</p>
           </div>)
     )
   }
@@ -118,7 +118,7 @@ export const ProductPurchaseOptions = ({ product }: Props) => {
           </div>)
         : (
           <div className='grid items-center gap-x-1 gap-y-2 my-3'>
-            <p className='mt-12 h-10 px-4 py-2 text-center rounded-none text-sm bg-yellow-200 text-secondary-foreground uppercase font-semibold'>Agotado</p>
+            <p className='mt-12 h-10 px-4 py-2 text-center rounded-none text-sm bg-yellow-200 text-secondary-foreground uppercase font-semibold'>vendido</p>
           </div>)
     )
   }
@@ -141,7 +141,7 @@ export const ProductPurchaseOptions = ({ product }: Props) => {
           </div>)
         : (
           <div className='grid items-center gap-x-1 gap-y-2 my-3'>
-            <p className='mt-12 h-10 px-4 py-2 text-center rounded-none text-sm bg-yellow-200 text-secondary-foreground uppercase font-semibold'>Agotado</p>
+            <p className='mt-12 h-10 px-4 py-2 text-center rounded-none text-sm bg-yellow-200 text-secondary-foreground uppercase font-semibold'>vendido</p>
           </div>)
     )
   }
