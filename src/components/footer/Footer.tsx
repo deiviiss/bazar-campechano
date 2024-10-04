@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { AiOutlinePinterest } from 'react-icons/ai'
 import { CiFacebook } from 'react-icons/ci'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { titleFont } from '@/config/fonts'
@@ -56,8 +55,9 @@ export const Footer = () => {
         </CardTitle>
 
         <CardContent className='w-full justify-start items-center flex gap-3 md:justify-end'>
-          <CiFacebook size={35} />
-          <AiOutlinePinterest size={35} />
+          <Link href={'https://www.facebook.com/people/Bazar-Campechano/61566537580467/'} >
+            <CiFacebook size={35} />
+          </Link>
         </CardContent>
       </Card>
     </div>

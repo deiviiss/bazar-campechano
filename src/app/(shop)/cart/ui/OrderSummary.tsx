@@ -19,7 +19,7 @@ export const OrderSummary = () => {
 
   if (!loaded) {
     return (
-      <p>Cargando...</p>
+      <p className='animate-pulse'>Cargando...</p>
     )
   }
 

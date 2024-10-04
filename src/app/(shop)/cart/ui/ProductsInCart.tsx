@@ -33,7 +33,7 @@ export const ProductsInCart = () => {
 
   if (!loaded) {
     return (
-      <p>Cargando...</p>
+      <p className='animate-pulse'>Cargando...</p>
     )
   }
 
