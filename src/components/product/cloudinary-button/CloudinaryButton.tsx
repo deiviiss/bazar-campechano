@@ -50,7 +50,60 @@ export function CloudinaryButton({ images, setImages }: IUploaderProps) {
             // showSkipCropButton: false,
             // cropping: true,
             // croppingAspectRatio: 1,
-            clientAllowedFormats: ['png', 'jpeg', 'jpg']
+            clientAllowedFormats: ['png', 'jpeg', 'jpg'],
+            language: 'es',
+            text: {
+              es: {
+                menu: {
+                  files: 'Mis archivos',
+                  web: 'Web',
+                  camera: 'Cámara',
+                  image_search: 'Buscar imagen'
+                },
+                or: 'o',
+                camera: {
+                  capture: 'Capturar',
+                  cancel: 'Cancelar',
+                  take_pic: 'Tomar una foto y subirla',
+                  explanation: 'Asegúrate de que tu cámara esté conectada y que tu navegador permita la captura de cámara. Cuando estés listo, haz clic en Capturar.',
+                  camera_error: 'Hubo un error al acceder a la cámara',
+                  retry: 'Reintentar captura',
+                  file_name: 'camara_{{time}}'
+                },
+                queue: {
+                  title: 'Cola de subida',
+                  title_uploading_with_counter: 'Subiendo {{num}} archivos',
+                  title_processing_with_counter: 'Procesando {{num}} archivos',
+                  title_uploading_processing_with_counters: 'Subiendo {{uploading}} archivos, procesando {{processing}} archivos',
+                  title_uploading: 'Subiendo archivos',
+                  mini_title: 'Subido',
+                  mini_title_uploading: 'Subiendo',
+                  mini_title_processing: 'Procesando',
+                  show_completed: 'Mostrar completados',
+                  retry_failed: 'Reintentar fallidos',
+                  abort_all: 'Cancelar todo',
+                  upload_more: 'Subir más',
+                  done: 'Listo',
+                  mini_upload_count: '{{num}} subidos',
+                  mini_failed: '{{num}} fallidos',
+                  statuses: {
+                    uploading: 'Subiendo...',
+                    processing: 'Procesando...',
+                    timeout: 'Un archivo grande se está subiendo. Podría tardar un poco en aparecer en tu entorno de producto.',
+                    error: 'Error',
+                    uploaded: 'Hecho',
+                    aborted: 'Cancelado'
+                  }
+                },
+
+                local: {
+                  browse: 'Buscar',
+                  dd_title_single: 'Arrastra y suelta una imagen aquí',
+                  dd_title_multi: 'Arrastra y suelta imágenes aquí',
+                  select: 'Seleccionar'
+                }
+              }
+            }
           }}
           onError={handleError}
           onSuccess={handleSuccess}
