@@ -39,7 +39,7 @@ export default async function ShopPage({ searchParams }: Props) {
         <TitleHome
           title="De segunda mano"
           subtitle="Rebajas"
-          className='text-center uppercase pt-10'
+          className='text-center uppercase pt-10 mb-14'
         />
         <CurrentProductsGrid products={products} />
         <Button asChild variant='outline' className='flex justify-center mx-auto w-3/4 max-w-32 uppercase bg-transparent mt-[52px]'>
@@ -67,7 +67,7 @@ export default async function ShopPage({ searchParams }: Props) {
         <TitleHome
           title="Calzado de bazar"
           subtitle="precios justos"
-          className='text-center uppercase text-white pt-10'
+          className='text-center uppercase text-white pt-10 mb-14'
         />
         <NewProductsGrid products={shoeProducts} />
         <Button asChild variant='outline' className='flex justify-center mx-auto w-3/4 max-w-32 uppercase bg-transparent text-white mt-[52px]'>
@@ -81,7 +81,7 @@ export default async function ShopPage({ searchParams }: Props) {
         <TitleHome
           title="Los más divertido"
           subtitle="Juguetes"
-          className='text-center uppercase text-white pt-10'
+          className='text-center uppercase text-white pt-10 mb-14'
         />
         <NewProductsGrid products={toyProducts} />
         <Button asChild variant='outline' className='flex justify-center mx-auto w-3/4 max-w-32 uppercase bg-transparent mt-[52px] text-white'>
