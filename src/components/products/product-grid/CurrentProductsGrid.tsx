@@ -50,7 +50,7 @@ export const CurrentProductsGrid = ({ products }: Props) => {
   }, [products])
   return (
     <>
-      <div className="relative w-full">
+      <div className="relative w-full mt-14">
         <Button onClick={scrollLeft} disabled={isLeftDisabled} className="absolute left-2 -top-7 transform -translate-y-1/2 px-3 pr-2">
           <MdArrowBackIos className='w-5 h-5' />
         </Button>

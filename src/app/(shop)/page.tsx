@@ -39,7 +39,7 @@ export default async function ShopPage({ searchParams }: Props) {
         <TitleHome
           title="De segunda mano"
           subtitle="Rebajas"
-          className='text-center uppercase pt-10 mb-14'
+          className='text-center uppercase pt-10'
         />
         <CurrentProductsGrid products={products} />
         <Button asChild variant='outline' className='flex justify-center mx-auto w-3/4 max-w-32 uppercase bg-transparent mt-[52px]'>
