@@ -10,7 +10,7 @@ export default async function CartPage() {
   const { products } = await getPaginationProducts({ page: 1 })
   return (
     <>
-      <div className='mt-[60.67px] pt-10 px-1 sm:px-5 md:px-10 lg:px-14 xl:px-20'>
+      <div className='mt-[104.67px] pt-10 px-1 sm:px-5 md:px-10 lg:px-14 xl:px-20'>
         <Title title='Carrito' subtitle="Tus compras en el carrito" />
         <div className="flex justify-start items-center mb-20 px-1 sm:px-0">
 

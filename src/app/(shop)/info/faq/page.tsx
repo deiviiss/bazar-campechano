@@ -10,7 +10,7 @@ export default async function FaqPage() {
   }
 
   return (
-    <div className='px-1 sm:px-3 mt-[60.67px] pt-10'>
+    <>
       <TitleCategory title="Preguntas Frecuentes" subtitle='' />
       <div className='max-w-[920px]'>
         <div className='px-3 pb-4'>
@@ -37,6 +37,6 @@ export default async function FaqPage() {
 
         <NavigationAndContactButtons email={emailAdmin.email} />
       </div>
-    </div>
+    </>
   )
 }

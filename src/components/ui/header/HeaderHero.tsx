@@ -6,7 +6,7 @@ import { titleFont } from '@/config/fonts'
 export const HeaderHero = () => {
   return (
     <>
-      <header className="w-full pt-14 bg-slate-300"></header>
+      <header className="w-full pt-[104.67px] bg-slate-300"></header>
       <Image src={hero} alt="hero image" className="object-cover h-[480px]" />
       {/* main container */}
       <div className="w-full overflow-hidden bg-[#0E0F0F]">

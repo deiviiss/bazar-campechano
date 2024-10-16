@@ -10,7 +10,7 @@ export default async function AboutPage() {
   }
 
   return (
-    <div className='px-1 sm:px-3 mt-[60.67px] pt-10'>
+    <>
       <TitleCategory title="Quiénes Somos" subtitle='' />
       <div className='max-w-[920px]'>
         <div className='px-3 pb-4'>
@@ -27,6 +27,6 @@ export default async function AboutPage() {
 
         <NavigationAndContactButtons email={emailAdmin.email} />
       </div>
-    </div>
+    </>
   )
 }
