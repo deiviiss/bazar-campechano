@@ -72,7 +72,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <div className='mb-20 mt-[104.67px] min-[960px]:pt-6 min-[960px]:mx-6 grid min-[960px]:grid-cols-3 gap-3'>
+      <div className='mb-20 mt-[104.67px] sm:mt-[60.67px] min-[960px]:pt-6 min-[960px]:mx-6 grid min-[960px]:grid-cols-3 gap-3'>
 
         {/* mobile */}
         <div className='min-[960px]:hidden relative'>

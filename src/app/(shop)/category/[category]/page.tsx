@@ -55,7 +55,7 @@ export default async function CategoryByPage({ params, searchParams }: Props) {
   const { products, totalPages } = result
 
   return (
-    <div className='mt-[104.67px] pt-10'>
+    <div className='mt-[104.67px] sm:mt-[60.67px] pt-10'>
       <div className='flex justify-between mb-6 gap-2'>
         <ProductSearch placeholder='Buscar producto...' />
 
