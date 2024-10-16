@@ -10,7 +10,7 @@ export default async function RefundsPage() {
   }
 
   return (
-    <div className='px-1 sm:px-3 mt-[60.67px] pt-10'>
+    <>
       <TitleCategory title="Política de Reembolso y Devoluciones" subtitle='' />
       <div className='max-w-[920px]'>
         <div className='px-3 pb-4'>
@@ -48,6 +48,6 @@ export default async function RefundsPage() {
 
         <NavigationAndContactButtons email={emailAdmin.email} />
       </div>
-    </div>
+    </>
   )
 }

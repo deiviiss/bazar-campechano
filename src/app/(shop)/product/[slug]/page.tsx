@@ -72,7 +72,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <div className='mb-20 mt-[60.67px] min-[960px]:pt-6 min-[960px]:mx-6 grid min-[960px]:grid-cols-3 gap-3'>
+      <div className='mb-20 mt-[104.67px] min-[960px]:pt-6 min-[960px]:mx-6 grid min-[960px]:grid-cols-3 gap-3'>
 
         {/* mobile */}
         <div className='min-[960px]:hidden relative'>
@@ -97,7 +97,7 @@ export default async function ProductPage({ params }: Props) {
         <div className="col-span-1 p-0 px-2 h-fit">
 
           {/* mobile */}
-          <ButtonBack className='absolute top-[4.3rem] right-3 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 min-[960px]:hidden rounded-none border-black border bg-white' icon={<IoArrowBackOutline />} />
+          <ButtonBack className='absolute top-28 right-3 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 min-[960px]:hidden rounded-none border-black border bg-white' icon={<IoArrowBackOutline />} />
 
           <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
 

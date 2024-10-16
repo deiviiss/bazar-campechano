@@ -10,7 +10,7 @@ export default async function PrivacyPage() {
   }
 
   return (
-    <div className='px-1 sm:px-3 mt-[60.67px] pt-10'>
+    <div>
       <TitleCategory title="Políticas de privacidad" subtitle='' />
       <div className='max-w-[920px]'>
         <div className='px-3 pb-4'>
