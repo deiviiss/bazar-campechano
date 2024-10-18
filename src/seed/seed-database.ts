@@ -66,31 +66,31 @@ const main = async () => {
     if (type === 'clothe') {
       const productStockDataSizeXs = {
         productId: dbProduct.id,
-        inStock: 16,
+        inStock: 1,
         clotheSize: 'XS' as ClotheSize
       }
 
       const productStockDataSizeS = {
         productId: dbProduct.id,
-        inStock: 15,
+        inStock: 1,
         clotheSize: 'S' as ClotheSize
       }
 
       const productStockDataSizeM = {
         productId: dbProduct.id,
-        inStock: 18,
+        inStock: 1,
         clotheSize: 'M' as ClotheSize
       }
 
       const productStockDataSizeL = {
         productId: dbProduct.id,
-        inStock: 11,
+        inStock: 1,
         clotheSize: 'L' as ClotheSize
       }
 
       const productStockDataSizeXL = {
         productId: dbProduct.id,
-        inStock: 8,
+        inStock: 1,
         clotheSize: 'XL' as ClotheSize
       }
 
@@ -118,7 +118,7 @@ const main = async () => {
     if (type === 'toy') {
       const productStockData = {
         productId: dbProduct.id,
-        inStock: 9,
+        inStock: 1,
         ageRange: '3 - 5'
       }
 
@@ -130,31 +130,31 @@ const main = async () => {
     if (type === 'shoe') {
       const productStockDataSize25 = {
         productId: dbProduct.id,
-        inStock: 2,
+        inStock: 1,
         shoeSize: 25
       }
 
       const productStockDataSize26 = {
         productId: dbProduct.id,
-        inStock: 3,
+        inStock: 1,
         shoeSize: 26
       }
 
       const productStockDataSize27 = {
         productId: dbProduct.id,
-        inStock: 21,
+        inStock: 1,
         shoeSize: 27
       }
 
       const productStockDataSize24 = {
         productId: dbProduct.id,
-        inStock: 5,
+        inStock: 1,
         shoeSize: 24
       }
 
       const productStockDataSize23 = {
         productId: dbProduct.id,
-        inStock: 12,
+        inStock: 1,
         shoeSize: 23
       }
 

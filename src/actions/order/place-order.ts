@@ -52,6 +52,7 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
     }
   }
 
+  // session user
   const user = await getUserSessionServer()
 
   if (!user) {
@@ -61,36 +62,12 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
     }
   }
 
-  const clotheSizes = productsId
-    .filter(product => typeof product.clotheSize === 'string')
-    .map(product => product.clotheSize)
-
-  const validClotheSizes = clotheSizes.filter((size): size is ClotheSize => size !== undefined)
-
-  const shoeSizes = productsId
-    .filter(product => typeof product.shoeSize === 'number')
-    .map(product => product.shoeSize)
-
-  const validateShoeSizes = shoeSizes.filter((size): size is ShoeSize => size !== undefined)
-
-  const ageRanges = productsId
-    .filter(product => typeof product.ageRange === 'string')
-    .map(product => product.ageRange)
-
-  const validateAgeRanges = ageRanges.filter((range): range is AgeRange => range !== undefined)
-
-  const productsIds = productsId.map(product => product.productId)
-
   const clotheStock = await prisma.clotheStock.findMany({
     where: {
-      clotheSize: {
-        in: validClotheSizes
-      },
-      product: {
-        id: {
-          in: productsIds
-        }
-      }
+      OR: productsId.map(product => ({
+        productId: product.productId,
+        clotheSize: product.clotheSize
+      }))
     },
     include: {
       product: {
@@ -104,14 +81,10 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
 
   const shoeStock = await prisma.shoeStock.findMany({
     where: {
-      shoeSize: {
-        in: validateShoeSizes
-      },
-      product: {
-        id: {
-          in: productsIds
-        }
-      }
+      OR: productsId.map(product => ({
+        productId: product.productId,
+        shoeSize: product.shoeSize
+      }))
     },
     include: {
       product: {
@@ -125,14 +98,10 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
 
   const toyStock = await prisma.toyStock.findMany({
     where: {
-      ageRange: {
-        in: validateAgeRanges
-      },
-      product: {
-        id: {
-          in: productsId.map(product => product.productId)
-        }
-      }
+      OR: productsId.map(product => ({
+        productId: product.productId,
+        ageRange: product.ageRange
+      }))
     },
     include: {
       product: {
@@ -153,11 +122,23 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
     const productQuantity = items.quantity
 
     const product = allProductsStock.find(stock => {
-      return stock.product.id === items.productId && (
-        ('clotheSize' in stock && stock.clotheSize === items.clotheSize) ||
-        ('shoeSize' in stock && stock.shoeSize === items.shoeSize) ||
-        ('ageRange' in stock && stock.ageRange === items.ageRange)
-      )
+      if (stock.product.id !== items.productId) {
+        return false
+      }
+
+      if ('clotheSize' in stock && items.clotheSize) {
+        return stock.clotheSize === items.clotheSize
+      }
+
+      if ('shoeSize' in stock && items.shoeSize) {
+        return stock.shoeSize === items.shoeSize
+      }
+
+      if ('ageRange' in stock && items.ageRange) {
+        return stock.ageRange === items.ageRange
+      }
+
+      return false
     })
 
     if (!product) throw new Error('Product not found - 500')
@@ -190,13 +171,25 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
   const orderItems = productsId.map(item => {
     let price = 0
 
-    const productStock = allProductsStock.find(stock =>
-      stock.product.id === item.productId && (
-        ('clotheSize' in stock && stock.clotheSize === item.clotheSize) ||
-        ('shoeSize' in stock && stock.shoeSize === item.shoeSize) ||
-      ('ageRange' in stock && stock.ageRange === item.ageRange)
-      )
-    )
+    const productStock = allProductsStock.find(stock => {
+      if (stock.product.id !== item.productId) {
+        return false
+      }
+
+      if ('clotheSize' in stock && item.clotheSize) {
+        return stock.clotheSize === item.clotheSize
+      }
+
+      if ('shoeSize' in stock && item.shoeSize) {
+        return stock.shoeSize === item.shoeSize
+      }
+
+      if ('ageRange' in stock && item.ageRange) {
+        return stock.ageRange === item.ageRange
+      }
+
+      return false
+    })
 
     if (productStock) {
       price = productStock.product.price
@@ -221,18 +214,22 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
       const updatedProductsPromises = allProductsStock.map(async (product) => {
         if (isClothe(product.product)) {
           const productDetails = productsId.find(item => {
-            return item.productId === product.product.id && (
-              item.clotheSize === product.clotheSize
-            )
+            return item.productId === product.product.id && item.clotheSize === product.clotheSize
+          })
+
+          if (!productDetails) {
+            throw new Error(`Detalles del producto no encontrados para el producto ${product.product.title} con talla ${product.clotheSize}`)
           }
 
-          )
+          if (!productDetails.clotheSize) {
+            throw new Error(`Talla no disponible para el producto ${product.product.title}`)
+          }
 
-          const clotheSize: ClotheSize | undefined = productDetails?.clotheSize
-          const quantity = productDetails?.quantity
-
-          if (!clotheSize) throw new Error('Talla no disponible')
-          if (!quantity || quantity <= 0) throw new Error('La cantidad no puede ser 0')
+          if (!productDetails.quantity || productDetails.quantity <= 0) {
+            throw new Error('La cantidad no puede ser 0')
+          }
+          const clotheSize: ClotheSize = productDetails.clotheSize
+          const quantity = productDetails.quantity
 
           const productClotheStock = await tx.clotheStock.findFirst({
             where: {
@@ -273,11 +270,20 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
             )
           )
 
-          const shoeSize: ShoeSize | undefined = productDetails?.shoeSize
-          const quantity = productDetails?.quantity
+          if (!productDetails) {
+            throw new Error(`Detalles del producto no encontrados para el producto ${product.product.title} con talla ${product.shoeSize}`)
+          }
 
-          if (!shoeSize) throw new Error('Talla no encontrada')
-          if (!quantity || quantity <= 0) throw new Error('La cantidad no puede ser 0')
+          if (!productDetails.shoeSize) {
+            throw new Error(`Talla no disponible para el producto ${product.product.title}`)
+          }
+
+          if (!productDetails.quantity || productDetails.quantity <= 0) {
+            throw new Error('La cantidad no puede ser 0')
+          }
+
+          const shoeSize: ShoeSize = productDetails.shoeSize
+          const quantity = productDetails.quantity
 
           const productShoeStock = await tx.shoeStock.findFirst({
             where: {
@@ -319,11 +325,20 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
           }
           )
 
-          const ageRange: AgeRange | undefined = productDetails?.ageRange
-          const quantity = productDetails?.quantity
+          if (!productDetails) {
+            throw new Error(`Detalles del producto no encontrados para el producto ${product.product.title} con rango de edad ${product.ageRange}`)
+          }
 
-          if (!ageRange) throw new Error('Rango de edad no encontrado')
-          if (!quantity || quantity <= 0) throw new Error('La cantidad no puede ser 0')
+          if (!productDetails.ageRange) {
+            throw new Error(`Rango de edad no disponible para el producto ${product.product.title}`)
+          }
+
+          if (!productDetails.quantity || productDetails.quantity <= 0) {
+            throw new Error('La cantidad no puede ser 0')
+          }
+
+          const ageRange: AgeRange = productDetails.ageRange
+          const quantity = productDetails.quantity
 
           const productToyStock = await tx.toyStock.findFirst({
             where: {
