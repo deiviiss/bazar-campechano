@@ -56,6 +56,7 @@ export { PageNotFound } from './ui/not-found/PageNotFound'
 export { Pagination } from './ui/pagination/Pagination'
 export { ButtonBack } from './ui/button-back/ButtonBack'
 export { ButtonScrollTop } from './ui/button-scroll-top/ButtonScrollTop'
+export { ButtonContactWhatsApp } from './ui/button-contact-whatsapp/ButtonContactWhatsapp'
 export { NavigationAndContactButtons } from './navigation-contact-buttons/NavigationAndContactButtons'
 
 // users

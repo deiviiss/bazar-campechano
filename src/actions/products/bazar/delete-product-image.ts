@@ -1,10 +1,7 @@
 'use server'
 
-import { v2 as cloudinary } from 'cloudinary'
+import cloudinary from '@/lib/cloudinary'
 import { isValidFileSystemUrl } from '@/utils'
-
-// config cloudinary // TODO: Chance for folder name
-cloudinary.config(process.env.CLOUDINARY_URL ?? '')
 
 export const deleteProductImage = async (imageId: string, imageUrl: string) => {
   if (isValidFileSystemUrl(imageUrl)) {
