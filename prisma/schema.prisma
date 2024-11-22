@@ -65,6 +65,7 @@ model Category {
   name        CategoryName
   description String?
   products    Product[]
+  attribute   Attribute[]
 
   @@map("categories")
 }
@@ -87,7 +88,8 @@ model Product {
   toyStock     ToyStock[]
   shoeStock    ShoeStock[]
 
-  createdAt DateTime @default(now())
+  createdAt             DateTime                @default(now())
+  productAttributeValue ProductAttributeValue[]
 
   @@map("products")
 }
@@ -138,6 +140,42 @@ model ProductImage {
   @@map("product_images")
 }
 
+model Attribute {
+  id         String   @id @default(uuid())
+  name       String
+  inputType  String // e.g., "string", "number"
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  valueOptions          AttributeValueOption[]
+  productAttributeValue ProductAttributeValue[]
+
+  @@map("attributes")
+}
+
+model AttributeValueOption {
+  id                    String                  @id @default(uuid())
+  value                 String
+  attribute             Attribute               @relation(fields: [attributeId], references: [id])
+  attributeId           String
+  productAttributeValue ProductAttributeValue[]
+
+  @@map("attribute_value_options")
+}
+
+model ProductAttributeValue {
+  id            String               @id @default(uuid())
+  product       Product              @relation(fields: [productId], references: [id])
+  productId     String
+  attribute     Attribute            @relation(fields: [attributeId], references: [id])
+  attributeId   String
+  valueOption   AttributeValueOption @relation(fields: [valueOptionId], references: [id])
+  valueOptionId String
+  inStock       Int // Stock for this specific attribute-value combination
+
+  @@map("product_attribute_values")
+}
+
 model User {
   id            String    @id @default(uuid())
   email         String    @unique
@@ -162,7 +200,7 @@ model Country {
   id           String         @id
   name         String
   userAddress  UserAddress[]
-  OrderAddress OrderAddress[]
+  orderAddress OrderAddress[]
 
   @@map("countries")
 }
