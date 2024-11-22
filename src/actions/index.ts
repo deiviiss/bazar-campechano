@@ -29,8 +29,6 @@ export { paypalCheckPayment } from './payments/paypal-check-payment'
 
 // products
 export { getProductBySlug } from './products/bazar/get-product-by-slug'
-export { getProductBySlugSize } from './products/get-product-by-slug-size'
-export { getStockBySlug } from './products/get-stock-by-slug'
 export { getCategories } from './products/bazar/get-categories'
 export { createUpdateProduct } from './products/bazar/create-update-product'
 export { deleteProductImage } from './products/bazar/delete-product-image'
