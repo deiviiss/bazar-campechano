@@ -1,8 +1,9 @@
 'use server'
 
+import { type Country } from '@/interfaces'
 import prisma from '@/lib/prisma'
 
-export const getCountries = async () => {
+export const getCountries = async (): Promise<Country[]> => {
   try {
     const countries = await prisma.country.findMany({
       select: {

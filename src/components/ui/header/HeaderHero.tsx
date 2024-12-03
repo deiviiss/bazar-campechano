@@ -6,8 +6,13 @@ import { titleFont } from '@/config/fonts'
 export const HeaderHero = () => {
   return (
     <>
-      <header className="w-full pt-[104.67px] sm:pt-[60.67px] bg-slate-300"></header>
-      <Image src={hero} alt="hero image" className="object-cover h-[480px]" />
+      <header className="w-full pt-[100.67px] sm:pt-[56.67px] bg-slate-300"></header>
+      <Image
+        src={hero}
+        alt="hero image"
+        className="object-cover h-[480px]"
+        priority
+      />
       {/* main container */}
       <div className="w-full overflow-hidden bg-[#0E0F0F]">
         {/* slider container */}

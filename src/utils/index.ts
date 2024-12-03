@@ -1,6 +1,6 @@
 export * from './generatePaginationNumbers'
 export * from './sleep'
-export * from './currencyFormat'
+export * from './order/currencyFormat'
 export * from './validatePageNumber'
 export * from './statusNameSpanish'
 export * from './getImageSrc'

@@ -11,3 +11,5 @@ export * from './users/user.interface'
 export * from './orders/order.interface'
 
 export * from './dashboard/dashboard.interface'
+
+export * from './product-order/product-order.interface'

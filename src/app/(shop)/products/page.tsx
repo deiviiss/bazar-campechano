@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
 import { IoArrowBackOutline } from 'react-icons/io5'
-import { getPaginationProducts } from '@/actions'
-import { Pagination, ProductsGrid, ProductSearch, TitleCategory, ButtonBack } from '@/components'
+import { getProducts } from '@/actions/products'
+import { Pagination, TitleCategory, ButtonBack } from '@/components'
+import { ProductsGrid, ProductSearch } from '@/components/products'
 
 interface Props {
   searchParams: {
@@ -17,7 +18,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   const page = searchParams.page ? Number(searchParams.page) : 1
   const autofocus = searchParams.autofocus
 
-  const { products, totalPages } = await getPaginationProducts({ page, query })
+  const { products, totalPages } = await getProducts({ page, query })
   if (!products) {
     notFound()
   }

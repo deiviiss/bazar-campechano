@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { IoAdd } from 'react-icons/io5'
-import { getCategories, getPaginationProductsStock } from '@/actions'
-import { CardProduct, Pagination, ProductFilter, ProductSearch, Title } from '@/components'
+import { getCategories } from '@/actions'
+import { getProducts } from '@/actions/products'
+import { Pagination, Title } from '@/components'
+import { CardProduct, ProductFilter, ProductSearch } from '@/components/products'
 import { Button } from '@/components/ui/button'
 import { type CategoryName } from '@/interfaces'
 
@@ -18,7 +20,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   const query = searchParams.query || ''
   const page = searchParams.page ? parseInt(searchParams.page) : 1
 
-  const { products, totalPages } = await getPaginationProductsStock({ page, query, category: categoryName })
+  const { products, totalPages } = await getProducts({ page, query, category: categoryName })
 
   const categories = await getCategories()
 

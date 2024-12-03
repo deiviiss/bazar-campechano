@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { DeleteButtonProduct, ProductImage } from '@/components'
+import { ProductImage, DeleteButtonProduct } from '@/components/products'
 import { type Stock } from '@/interfaces'
 import { currencyFormat } from '@/utils'
 import { isClothe, isShoe, isToy } from '@/utils/productTypeGuards'

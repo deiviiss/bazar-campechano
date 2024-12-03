@@ -1,15 +1,15 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { CartProduct } from '@/interfaces'
+import { useCheckoutStore } from '@/store'
 
 interface State {
   cart: CartProduct[]
-  pickupInStore: boolean
 
   getTotalItems: () => number
   getSummaryInformation: () => {
     subtotal: number
-    tax: number
+    shippingCost: number
     total: number
     itemsInCart: number
   }
@@ -17,8 +17,6 @@ interface State {
   addProductToCart: (product: CartProduct) => void
   updateProductQuantity: (product: CartProduct, quantity: number) => void
   removeProductFromCart: (product: CartProduct) => void
-
-  setPickupInStore: (pickup: boolean) => void
 
   clearCart: () => void
 }
@@ -35,20 +33,21 @@ export const useCartStore = create<State>()(
       },
 
       getSummaryInformation: () => {
-        const { cart, getTotalItems, pickupInStore } = get()
+        const { cart, getTotalItems } = get()
 
         const subtotal = cart.reduce(
           (subtotal, product) => (product.quantity * product.price) + subtotal, 0
         )
 
+        const { shippingMethod } = useCheckoutStore.getState()
         // if subtotal is greater than 199, shipping is free
-        const tax = pickupInStore ? 0 : (subtotal > 199 ? 0 : 45)
-        const total = subtotal + tax
+        const shippingCost = shippingMethod === 'pickup' ? 0 : (subtotal > 199 ? 0 : 45)
+        const total = subtotal + shippingCost
         const itemsInCart = getTotalItems()
 
         return {
           subtotal,
-          tax,
+          shippingCost,
           total,
           itemsInCart
         }
@@ -59,11 +58,7 @@ export const useCartStore = create<State>()(
 
         // Check if the product is already in the cart with selected size
         const productInCart = cart.some(
-          (item) =>
-            item.id === product.id &&
-            item.clotheSize === product.clotheSize &&
-            item.shoeSize === product.shoeSize &&
-            item.ageRange === product.ageRange
+          (item) => item.id === product.id && item.size === product.size
         )
 
         // if the product is not in the cart, add it
@@ -74,12 +69,7 @@ export const useCartStore = create<State>()(
 
         // if the product is already in the cart with the selected size, update the quantity
         const updatedCartProducts = cart.map((item) => {
-          if (
-            item.id === product.id &&
-             item.clotheSize === product.clotheSize &&
-            item.shoeSize === product.shoeSize &&
-            item.ageRange === product.ageRange
-          ) {
+          if (item.id === product.id && item.size === product.size) {
             return { ...item, quantity: item.quantity + product.quantity }
           }
 
@@ -93,17 +83,11 @@ export const useCartStore = create<State>()(
         const { cart } = get()
 
         const updatedCartProducts = cart.map((item) => {
-          if (
-            item.id === product.id &&
-            item.clotheSize === product.clotheSize &&
-            item.shoeSize === product.shoeSize &&
-            item.ageRange === product.ageRange
-          ) {
+          if (item.id === product.id && item.size === product.size) {
             return { ...item, quantity }
           }
           return item
         })
-
         set({ cart: updatedCartProducts })
       },
 
@@ -111,11 +95,7 @@ export const useCartStore = create<State>()(
         const { cart } = get()
 
         const updatedCartProducts = cart.filter(
-          (item) =>
-            item.id !== product.id ||
-            item.clotheSize !== product.clotheSize ||
-            item.shoeSize !== product.shoeSize ||
-            item.ageRange !== product.ageRange
+          (item) => item.id !== product.id || item.size !== product.size
         )
 
         set({ cart: updatedCartProducts })
@@ -123,10 +103,6 @@ export const useCartStore = create<State>()(
 
       clearCart: () => {
         set({ cart: [] })
-      },
-
-      setPickupInStore: (pickup: boolean) => {
-        set({ pickupInStore: pickup })
       }
 
     }),

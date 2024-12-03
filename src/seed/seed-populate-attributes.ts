@@ -6,19 +6,19 @@ async function populateAttributes() {
     {
       name: 'size',
       inputType: 'string',
-      categoryId: 'c7e59d16-b1e5-4123-b163-a4f4b0ac9a6a', // category ID for Clothing
+      categoryId: '18b7d3ed-fd5b-488f-8a9f-d76a5247e169', // category ID for Clothe
       valueOptions: ['XS', 'S', 'M', 'L', 'XL', 'XXL']
     },
     {
       name: 'size',
       inputType: 'number',
-      categoryId: 'bd9e46a8-da3e-4444-a708-508efa9724f0', // category ID for Shoes
+      categoryId: '68a988e2-4648-432b-9735-f539d382d9d3', // category ID for Shoes
       valueOptions: ['23', '24', '25', '26', '27']
     },
     {
       name: 'ageRange',
       inputType: 'string',
-      categoryId: 'cfe6dff2-e260-4a06-94b9-dd9c740fb0ba', // category ID for Toys
+      categoryId: '3965f654-e0ec-4c00-a9f2-e91177ddc6bf', // category ID for Toys
       valueOptions: ['3 - 5', '6 - 8', '9 - 12']
     }
   ]

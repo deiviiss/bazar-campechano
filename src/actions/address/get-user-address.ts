@@ -1,3 +1,5 @@
+'use server'
+
 import prisma from '@/lib/prisma'
 
 export const getUserAddress = async (userId: string) => {
@@ -9,7 +11,6 @@ export const getUserAddress = async (userId: string) => {
     if (!address) return null
 
     const { countryId, id, address2, ...restAddress } = address
-
     return {
       ...restAddress,
       country: countryId,
