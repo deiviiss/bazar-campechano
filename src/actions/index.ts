@@ -28,18 +28,15 @@ export { setTransactionId } from './payments/set-transaction-id'
 export { paypalCheckPayment } from './payments/paypal-check-payment'
 
 // products
-export { getProductBySlug } from './products/bazar/get-product-by-slug'
-export { getProductBySlugSize } from './products/get-product-by-slug-size'
-export { getStockBySlug } from './products/get-stock-by-slug'
-export { getCategories } from './products/bazar/get-categories'
-export { createUpdateProduct } from './products/bazar/create-update-product'
-export { deleteProductImage } from './products/bazar/delete-product-image'
-export { deleteProductById } from './products/bazar/delete-product-by-id'
+export { getProductBySlug } from './products/get-product-by-slug'
+export { getCategories } from './categories/get-categories'
+export { createUpdateProduct } from './products/create-update-product'
+export { deleteProductImage } from './products/delete-product-image'
+export { deleteProductById } from './products/delete-product-by-id'
 
 // products / bazar
 export { getPaginationProducts } from './products/bazar/get-products-pagination'
 export { getPaginationProductsStock } from './products/bazar/get-products-stock-pagination'
-export { getPaginationFeaturedProducts } from './products/bazar/get-products-featured-pagination'
 export { getTotalProductsStock } from './products/bazar/get-total-products-stock'
 export { getProductStockByIdAndSize } from './products/bazar/get-product-stock-by-id-and-size'
 export { updateStockByAgeRangeAndProductId } from './products/bazar/update-stock-by-age-range-and-product-id'

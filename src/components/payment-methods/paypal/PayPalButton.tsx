@@ -15,7 +15,7 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
   const [{ isPending }] = usePayPalScriptReducer()
   const router = useRouter()
 
-  const rountedAmount = Math.round(amount * 100) / 100
+  const roundedAmount = Math.round(amount * 100) / 100
 
   if (isPending) {
     return (
@@ -58,7 +58,7 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
           invoice_id: orderId,
           amount: {
             currency_code: 'MXN',
-            value: `${rountedAmount}`
+            value: `${roundedAmount}`
           }
         }
       ]

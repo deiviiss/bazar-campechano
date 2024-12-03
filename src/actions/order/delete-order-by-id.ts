@@ -1,10 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { getProductStockByIdAndSize, getUserSessionServer } from '@/actions'
-import { type AgeRange } from '@/interfaces'
+import { getUserSessionServer } from '@/actions'
 import prisma from '@/lib/prisma'
-import { isClothe, isShoe, isToy } from '@/utils/productTypeGuards'
 
 export const deleteOrderById = async (id: string) => {
   const user = await getUserSessionServer()
@@ -16,136 +14,93 @@ export const deleteOrderById = async (id: string) => {
     }
   }
 
-  try {
-    const order = await prisma.order.findUnique({
-      where: {
-        id
-      },
-      include: {
-        orderAddresses: true,
-        orderItem: {
-          select: {
-            id: true,
-            price: true,
-            quantity: true,
-            clotheSize: true,
-            shoeSize: true,
-            toyAgeRange: true,
-            productId: true,
-            product: {
-              include: {
-                productImage: {
-                  take: 1
-                },
-                category: true
-              }
+  const order = await prisma.order.findUnique({
+    where: {
+      id
+    },
+    include: {
+      orderAddresses: true,
+      orderItem: {
+        include: {
+          product: {
+            include: {
+              productAttributeValue: {
+                include: {
+                  valueOption: true,
+                  attribute: true
+                }
+              },
+              category: true
             }
-          }
+          },
+          attributes: true
         }
-      }
-    })
-
-    if (!order) throw new Error(`${id} not found`)
-
-    if (order.isPaid) {
-      return {
-        ok: false,
-        message: 'Pedido pagado no se puede eliminar'
       }
     }
+  })
 
-    await prisma.$transaction(async () => {
-      // update stock for each stock product
+  if (!order) throw new Error(`${id} not found`)
+
+  if (order.isPaid) {
+    return {
+      ok: false,
+      message: 'Pedido pagado no se puede eliminar'
+    }
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      // Update inventory based on order items
       for (const item of order.orderItem) {
-        if (isClothe(item.product)) {
-          if (!item.clotheSize) {
-            throw new Error('Clothe size not found')
-          }
+        // Check if the product has size attribute
+        const hasSize = item.product.productAttributeValue.some(attr => attr.attribute.name === 'size')
 
-          const productStock = await getProductStockByIdAndSize({ productId: item.productId, clotheSize: item.clotheSize })
+        if (hasSize) {
+          for (const attr of item.attributes) {
+            const stockForAttribute = await tx.productAttributeValue.findFirst({
+              where: {
+                productId: item.productId,
+                valueOption: {
+                  value: attr.value
+                }
+              }
+            })
 
-          if (!productStock) {
-            throw new Error('Product not found in stock')
-          }
-
-          // update stock for item
-          await prisma.clotheStock.update({
-            where: {
-              id: productStock.id
-            },
-            data: {
-              inStock: productStock.inStock + item.quantity
+            if (!stockForAttribute) {
+              throw new Error(`Stock no encontrado para el atributo ${attr.value}`)
             }
-          })
+
+            // Update stock
+            await tx.productAttributeValue.update({
+              where: { id: stockForAttribute.id },
+              data: { inStock: { increment: item.quantity } }
+            })
+          }
         }
 
-        if (isShoe(item.product)) {
-          if (!item.shoeSize) {
-            throw new Error('Shoe size not found')
-          }
-
-          const productStock = await getProductStockByIdAndSize({ productId: item.productId, shoeSize: item.shoeSize })
-
-          if (!productStock) {
-            throw new Error('Product not found in stock')
-          }
-
-          // update stock for item
-          await prisma.shoeStock.update({
+        if (!hasSize) {
+          const stockForProduct = await tx.productAttributeValue.findFirst({
             where: {
-              id: productStock.id
-            },
-            data: {
-              inStock: productStock.inStock + item.quantity
+              productId: item.productId
             }
           })
-        }
 
-        if (isToy(item.product)) {
-          if (!item.toyAgeRange) {
-            throw new Error('Toy age range not found')
+          if (!stockForProduct) {
+            throw new Error(`Stock no encontrado para el producto ${item.productId}`)
           }
 
-          const productStock = await getProductStockByIdAndSize({ productId: item.productId, ageRange: item.toyAgeRange as AgeRange })
-
-          if (!productStock) {
-            throw new Error('Product not found in stock')
-          }
-
-          // update stock for item
-          await prisma.toyStock.update({
-            where: {
-              id: productStock.id
-            },
-            data: {
-              inStock: productStock.inStock + item.quantity
-            }
+          // Update stock
+          await tx.productAttributeValue.update({
+            where: { id: stockForProduct.id },
+            data: { inStock: { increment: item.quantity } }
           })
         }
-
-        //  delete item from order
-        await prisma.orderItem.delete({
-          where: {
-            id: item.id
-          }
-        })
       }
 
-      // delete order address
-      await prisma.orderAddress.delete({
-        where: {
-          id: order.orderAddresses?.id
-        }
+      // Delete order and all related data
+      await tx.order.delete({
+        where: { id }
       })
-
-      // delete order
-      await prisma.order.delete({
-        where: {
-          id
-        }
-      })
-
-      return 'ok'
     })
 
     revalidatePath('/admin/orders')

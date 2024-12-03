@@ -21,26 +21,14 @@ export const getOrderById = async (id: string) => {
       include: {
         orderAddresses: true,
         orderItem: {
-          select: {
-            price: true,
-            quantity: true,
-            clotheSize: true,
-            shoeSize: true,
-            toyAgeRange: true,
-
+          include: {
             product: {
-              select: {
-                title: true,
-                slug: true,
-
-                productImage: {
-                  select: {
-                    url: true
-                  },
-                  take: 1
-                }
+              include: {
+                productImage: true,
+                category: true
               }
-            }
+            },
+            attributes: true
           }
         }
       }

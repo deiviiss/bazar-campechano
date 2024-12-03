@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getPaginationFeaturedProducts, getPaginationProducts } from '@/actions'
-import { NewProductsGrid, FeaturedProductsGrid, CurrentProductsGrid, TitleHome, HeaderHero } from '@/components'
+import { getFeaturedProducts, getProducts } from '@/actions/products'
+import { TitleHome, HeaderHero } from '@/components'
+import { NewProductsGrid, FeaturedProductsGrid, CurrentProductsGrid } from '@/components/products'
 import { Button } from '@/components/ui/button'
 
 interface Props {
@@ -16,15 +17,15 @@ export default async function ShopPage({ searchParams }: Props) {
   const query = searchParams.query || ''
   const page = searchParams.page ? Number(searchParams.page) : 1
 
-  const { products } = await getPaginationProducts({ page, query })
+  const { products } = await getProducts({ page, query })
 
-  const { products: toyProducts } = await getPaginationProducts({ page, category: 'toy' })
+  const { products: featuredProducts } = await getFeaturedProducts({ page, query })
 
-  const { products: featuredProducts } = await getPaginationFeaturedProducts({ page, query })
+  const { products: toyProducts } = await getProducts({ page, category: 'toy' })
 
-  const { products: shoeProducts } = await getPaginationProducts({ page, category: 'shoe' })
+  const { products: shoeProducts } = await getProducts({ page, category: 'shoe' })
 
-  const { products: clotheProducts } = await getPaginationProducts({ page, category: 'clothe' })
+  const { products: clotheProducts } = await getProducts({ page, category: 'clothe' })
 
   if (!products || !featuredProducts) {
     return notFound()
@@ -35,7 +36,7 @@ export default async function ShopPage({ searchParams }: Props) {
       <HeaderHero />
 
       {/* new products */}
-      <div className='pb-10 mb-10'>
+      <div className='pb-10 sm:px-10 mb-10'>
         <TitleHome
           title="De segunda mano"
           subtitle="Rebajas"
@@ -49,7 +50,7 @@ export default async function ShopPage({ searchParams }: Props) {
         </Button>
       </div>
       {/* featured products */}
-      <div className='pb-10 mb-10 border-t border-black'>
+      <div className='pb-10 sm:px-10 mb-10 border-t border-black'>
         <TitleHome
           title="Lo último"
           subtitle="ofertas"
@@ -63,7 +64,7 @@ export default async function ShopPage({ searchParams }: Props) {
         </Button>
       </div>
       {/* shoe products */}
-      <div className='bg-slate-950 pb-28 border-b border-white'>
+      <div className='bg-slate-950 pb-28 sm:px-10 border-b border-white'>
         <TitleHome
           title="Calzado de bazar"
           subtitle="precios justos"
@@ -77,7 +78,7 @@ export default async function ShopPage({ searchParams }: Props) {
         </Button>
       </div>
       {/* toys products */}
-      <div className='bg-slate-950 pb-10 mb-10'>
+      <div className='bg-slate-950 pb-10 sm:px-10 mb-10'>
         <TitleHome
           title="Los más divertido"
           subtitle="Juguetes"
@@ -91,7 +92,7 @@ export default async function ShopPage({ searchParams }: Props) {
         </Button>
       </div>
       {/* clothe products */}
-      <div className='pb-10 mb-10'>
+      <div className='pb-10 sm:px-10 mb-10'>
         <TitleHome
           title="Hallazgos de moda"
           subtitle="Ropa"

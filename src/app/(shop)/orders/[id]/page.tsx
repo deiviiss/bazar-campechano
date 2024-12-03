@@ -1,7 +1,12 @@
 import { redirect } from 'next/navigation'
+import { BsTruck } from 'react-icons/bs'
 import { getOrderById } from '@/actions'
-import { CashButton, OrderStatus, paymentMethodNameSpanish, PayPalButton, ProductImage, Title, TransferButton } from '@/components'
+import { CashButton, OrderStatus, paymentMethodNameSpanish, PayPalButton, Title, TransferButton } from '@/components'
+import { ProductImage } from '@/components/products'
+import { Card, CardContent } from '@/components/ui/card'
+import { PICKUP_LOCATION } from '@/config/checkoutConfig'
 import { currencyFormat } from '@/utils'
+import { getShippingMessage } from '@/utils/order/getShippingMessage'
 
 interface Props {
   params: {
@@ -11,7 +16,6 @@ interface Props {
 
 export default async function OrdersByIdPage({ params }: Props) {
   const { id } = params
-
   const { ok, order } = await getOrderById(id)
 
   if (!ok || !order) {
@@ -58,7 +62,7 @@ export default async function OrdersByIdPage({ params }: Props) {
                     />
 
                     <div>
-                      <span>{item.clotheSize || item.shoeSize} - {item.product.title}</span>
+                      <span>{item.product.title} {item.product ? `${item.attributes.map(attr => `- ${attr.value}`).join(', ')}` : null}</span>
                       <p>{currencyFormat(Number(item.price))} x {item.quantity}</p>
                       <p className='font-bold'>Subtotal: {currencyFormat(item.price * item.quantity)}</p>
                     </div>
@@ -68,57 +72,79 @@ export default async function OrdersByIdPage({ params }: Props) {
             </div>
 
             {/* summary */}
-            <div className='bg-white rounded-xl shadow-xl p-7 pb-1'>
+            <Card>
+              <CardContent className='shadow-xl p-7'>
+                <h2 className='text-2xl mb-2 flex items-center'><BsTruck className="mr-2" />  Dirección de entrega</h2>
+                {
+                  isMethodPickup
+                    ? <>
+                      <p className='text-xl'>{PICKUP_LOCATION.place}</p>
+                      <p className='text-xl'>{PICKUP_LOCATION.name}</p>
+                      <div className="mb-7">
+                        <p>{PICKUP_LOCATION.address}</p>
+                        <p>{PICKUP_LOCATION.city}, {PICKUP_LOCATION.country} {PICKUP_LOCATION.postalCode}</p>
+                        <p className='mb-2'>Teléfono: {PICKUP_LOCATION.phone}</p>
+                        <p className='text-sm'>{PICKUP_LOCATION.hours}</p>
+                      </div>
+                    </>
+                    : <>
+                      <p className='text-xl'>{`${orderAddress?.firstName} ${orderAddress?.lastName}`}</p>
+                      <p className='text-xl'>{orderAddress?.lastName}</p>
+                      <div className="mb-7">
+                        <p>{orderAddress?.address}</p>
+                        <p>{orderAddress?.address2}</p>
+                        <p>{orderAddress?.postalCode}</p>
+                        <p>{orderAddress?.phone}</p>
+                        <p>{orderAddress?.city}, {orderAddress?.countryId}</p>
+                      </div>
+                    </>
+                }
 
-              <h2 className='text-2xl mb-2'>Dirección de entrega</h2>
-              <div className="mb-10">
-                <p className='text-xl'>{isMethodPickup ? orderAddress?.firstName : `${orderAddress?.firstName} ${orderAddress?.lastName}`}</p>
-                <p className='text-xl'>{isMethodPickup && orderAddress?.lastName}</p>
-                <p>{orderAddress?.address}</p>
-                <p>{orderAddress?.city}</p>
-                <p>CP {orderAddress?.postalCode}</p>
-                <p>{orderAddress?.phone}</p>
-              </div>
+                {/* divider */}
+                <div className='w-full h-0.5 rounded bg-gray-200 mb-7'></div>
 
-              {/* divider */}
-              <div className='w-full h-0.5 rounded bg-gray-200 mb-10'></div>
+                <h2 className='text-2xl mb-2'>Resumen del pedido</h2>
 
-              <h2 className='text-2xl mb-2'>Resumen del pedido</h2>
+                <div className='grid grid-cols-2'>
+                  <span className='text-right'>No. Productos</span>
+                  <span className='text-right'>{order.itemsInOrder === 1 ? '1 artículo' : `${order.itemsInOrder} artículos`}</span>
 
-              <div className='grid grid-cols-2'>
-                <span className='text-right'>No. Productos</span>
-                <span className='text-right'>{order.itemsInOrder === 1 ? '1 artículo' : `${order.itemsInOrder} artículos`}</span>
+                  <span className='text-right'>Subtotal</span>
+                  <span className='text-right'>{currencyFormat(order.subtotal)}</span>
 
-                <span className='text-right'>Subtotal</span>
-                <span className='text-right'>{currencyFormat(order.subtotal)}</span>
+                  {
+                    !isMethodPickup &&
+                    <>
+                      <span className='text-right'>Envió</span>
+                      <span className='text-right'>{getShippingMessage(order.shippingMethod, order.subtotal)}</span>
+                    </>
 
-                <span className='text-right'>Envió</span>
-                <span className='text-right'>{order.subtotal > 199 ? 'Gratis' : currencyFormat(order.tax)}</span>
+                  }
 
-                <span className='mt-5 text-2xl text-right'>Total</span>
-                <span className='mt-5 text-2xl text-right'>{currencyFormat(order.total)}</span>
-              </div>
+                  <span className='mt-5 text-2xl text-right'>Total</span>
+                  <span className='mt-5 text-2xl text-right'>{currencyFormat(order.total)}</span>
+                </div>
 
-              {/* divider */}
-              <div className='w-full h-0.5 rounded bg-gray-200 my-10'></div>
+                {/* divider */}
+                <div className='w-full h-0.5 rounded bg-gray-200 my-10'></div>
 
-              {
-                order.isPaid
-                  ? (
-                    <div className='mt-6'>
-                      <OrderStatus isPaid={order.isPaid} />
-                    </div>)
-                  : (paymentButtonComponents[order.paymentMethod])
-              }
+                {
+                  order.isPaid
+                    ? (
+                      <div className='mt-6'>
+                        <OrderStatus isPaid={order.isPaid} />
+                      </div>)
+                    : (paymentButtonComponents[order.paymentMethod])
+                }
 
-              {
-                order.isPaid && (<div className='text-center text-green-700 mb-5'>
-                  <p>Pagado con {paymentMethodNameSpanish[order.paymentMethod]}</p>
-                  <p>¡Gracias por tu compra!</p>
-                </div>)
-              }
-
-            </div>
+                {
+                  order.isPaid && (<div className='text-center text-green-700 mb-5'>
+                    <p>Pagado con {paymentMethodNameSpanish[order.paymentMethod]}</p>
+                    <p>¡Gracias por tu compra!</p>
+                  </div>)
+                }
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div >

@@ -54,17 +54,12 @@ enum PaymentMethod {
   transfer
 }
 
-enum CategoryName {
-  clothe
-  shoe
-  toy
-}
-
 model Category {
-  id          String       @id @default(uuid())
-  name        CategoryName
+  id          String      @id @default(uuid())
+  name        String      @unique
   description String?
   products    Product[]
+  attribute   Attribute[]
 
   @@map("categories")
 }
@@ -87,7 +82,8 @@ model Product {
   toyStock     ToyStock[]
   shoeStock    ShoeStock[]
 
-  createdAt DateTime @default(now())
+  createdAt             DateTime                @default(now())
+  productAttributeValue ProductAttributeValue[]
 
   @@map("products")
 }
@@ -138,6 +134,43 @@ model ProductImage {
   @@map("product_images")
 }
 
+model Attribute {
+  id         String   @id @default(uuid())
+  name       String
+  inputType  String // e.g., "string", "number"
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  valueOptions          AttributeValueOption[]
+  productAttributeValue ProductAttributeValue[]
+
+  @@map("attributes")
+}
+
+model AttributeValueOption {
+  id                    String                  @id @default(uuid())
+  value                 String
+  attribute             Attribute               @relation(fields: [attributeId], references: [id])
+  attributeId           String
+  productAttributeValue ProductAttributeValue[]
+  orderItems            OrderItem[]
+
+  @@map("attribute_value_options")
+}
+
+model ProductAttributeValue {
+  id            String               @id @default(uuid())
+  product       Product              @relation(fields: [productId], references: [id])
+  productId     String
+  attribute     Attribute            @relation(fields: [attributeId], references: [id])
+  attributeId   String
+  valueOption   AttributeValueOption @relation(fields: [valueOptionId], references: [id])
+  valueOptionId String
+  inStock       Int // Stock for this specific attribute-value combination
+
+  @@map("product_attribute_values")
+}
+
 model User {
   id            String    @id @default(uuid())
   email         String    @unique
@@ -162,7 +195,7 @@ model Country {
   id           String         @id
   name         String
   userAddress  UserAddress[]
-  OrderAddress OrderAddress[]
+  orderAddress OrderAddress[]
 
   @@map("countries")
 }
@@ -189,7 +222,7 @@ model UserAddress {
 model Order {
   id             String         @id @default(uuid())
   subtotal       Float
-  tax            Float
+  shippingCost   Float          @default(0)
   total          Float
   itemsInOrder   Int
   status         Status         @default(unpaid)
@@ -211,18 +244,17 @@ model Order {
 }
 
 model OrderItem {
-  id          String      @id @default(uuid())
-  quantity    Int
-  price       Float
-  clotheSize  ClotheSize?
-  shoeSize    Int?
-  toyAgeRange String?
+  id       String @id @default(uuid())
+  quantity Int
+  price    Float
 
-  order   Order  @relation(fields: [orderId], references: [id])
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId String
 
   product   Product @relation(fields: [productId], references: [id])
   productId String
+
+  attributes AttributeValueOption[]
 
   @@map("order_items")
 }
@@ -240,7 +272,7 @@ model OrderAddress {
   country   Country @relation(fields: [countryId], references: [id])
   countryId String
 
-  order   Order  @relation(fields: [orderId], references: [id])
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId String @unique
 
   @@map("order_addresses")

@@ -1,8 +1,9 @@
 import { type Metadata, type ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
 import { IoArrowBackOutline } from 'react-icons/io5'
-import { getPaginationProducts } from '@/actions'
-import { Pagination, ProductsGrid, ProductSearch, TitleCategory, ButtonBack } from '@/components'
+import { getProducts } from '@/actions/products'
+import { Pagination, TitleCategory, ButtonBack } from '@/components'
+import { ProductsGrid, ProductSearch } from '@/components/products'
 import { type CategoryName } from '@/interfaces'
 
 interface Props {
@@ -46,7 +47,7 @@ export default async function CategoryByPage({ params, searchParams }: Props) {
   const query = searchParams.query || ''
   const page = searchParams.page ? Number(searchParams.page) : 1
 
-  const result = await getPaginationProducts({ page, query, category: categoryName })
+  const result = await getProducts({ page, query, category: categoryName })
 
   if (!result) {
     notFound()

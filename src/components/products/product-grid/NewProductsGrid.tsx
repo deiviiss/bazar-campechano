@@ -2,18 +2,28 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
-import { ProductItem } from '@/components'
+import { ProductItem } from '@/components/products'
 import { Button } from '@/components/ui/button'
-import { type ProductType } from '@/interfaces'
+import { type ProductV2WithStock } from '@/interfaces'
+import { availableSizes } from '@/utils/availableSizes'
 
 interface Props {
-  products: ProductType[]
+  products: ProductV2WithStock[]
 }
 
 export const NewProductsGrid = ({ products }: Props) => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [isLeftDisabled, setIsLeftDisabled] = useState(true)
   const [isRightDisabled, setIsRightDisabled] = useState(false)
+
+  const preparedProducts: ProductV2WithStock[] = products.map(product => {
+    return ({
+      ...product,
+      hasStock: product.productAttributeValue.some(attr => attr.inStock > 0),
+      hasSize: product.productAttributeValue.some(attr => attr.attribute.name === 'size'),
+      availableSizes: availableSizes({ product })
+    })
+  })
 
   const checkScrollLimits = () => {
     if (scrollRef.current) {
@@ -51,23 +61,23 @@ export const NewProductsGrid = ({ products }: Props) => {
   return (
 
     <div className="relative w-full mt-14">
-      <Button onClick={scrollLeft} disabled={isLeftDisabled} className="absolute left-2 -top-7 transform -translate-y-1/2 px-3 pr-2">
+      <Button onClick={scrollLeft} disabled={isLeftDisabled} variant={'secondary'} className="absolute left-2 -top-7 transform -translate-y-1/2 px-3 pr-2">
         <MdArrowBackIos className='w-5 h-5' />
       </Button>
       <div
         ref={scrollRef}
-        className="flex w-full overflow-x-scroll"
+        className="flex w-full overflow-x-scroll pt-3"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {
-          products.map((product) => {
+          preparedProducts.map((product) => {
             return (
               <ProductItem key={product.slug} product={product} className='text-white' />
             )
           })
         }
       </div>
-      <Button onClick={scrollRight} disabled={isRightDisabled} className="absolute right-2 -top-7 transform -translate-y-1/2 px-3 pl-2">
+      <Button onClick={scrollRight} disabled={isRightDisabled} variant={'secondary'} className="absolute right-2 -top-7 transform -translate-y-1/2 px-3 pl-2">
         <MdArrowForwardIos className='w-5 h-5' />
       </Button>
     </div>

@@ -3,7 +3,7 @@ import { type ShippingMethod, type PaymentMethod, type Status } from '@prisma/cl
 export interface IOrder {
   id: string
   subtotal: number
-  tax: number
+  shippingCost: number
   total: number
   itemsInOrder: number
   status: Status

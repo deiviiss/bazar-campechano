@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
-import { ProductItem } from '@/components'
+import { ProductItem } from '@/components/products'
 import { Button } from '@/components/ui/button'
-import { type ProductType } from '@/interfaces'
+import { type ProductV2WithStock } from '@/interfaces'
 
 interface Props {
-  products: ProductType[]
+  products: ProductV2WithStock[]
 }
 
 export const CurrentProductsGrid = ({ products }: Props) => {
@@ -56,7 +56,7 @@ export const CurrentProductsGrid = ({ products }: Props) => {
         </Button>
         <div
           ref={scrollRef}
-          className="flex w-full overflow-x-scroll"
+          className="flex w-full overflow-x-scroll pt-3"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {

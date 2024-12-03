@@ -63,9 +63,7 @@ export interface CartProduct {
   slug: string
   title: string
   price: number
-  clotheSize?: ClotheSize
-  shoeSize?: ShoeSize
-  ageRange: AgeRange | null
+  size: string | number | undefined
   quantity: number
   image: string
 }
@@ -80,7 +78,7 @@ export interface ProductImage {
 export interface Category {
   id: string
   description: string | null
-  name: CategoryName
+  name: string
 }
 
 export interface Stock {
@@ -100,3 +98,55 @@ export interface ProductWithStock extends Product {
 export type ProductType = ProductClothe | ProductShoe | ProductToy
 
 export type StockDetailType = ClotheStockDetail | ShoeStockDetail | ToyStockDetail
+
+//* ** New interfaces for dynamic category ***
+export interface ProductV2 {
+  id: string
+  title: string
+  description: string | null
+  history: string | null
+  price: number
+  slug: string
+  productImage: ProductImage[]
+  categoryId: string
+  category: CategoryV2 // New interface for dynamic category
+  isActive: boolean
+  productAttributeValue: ProductAttributeValue[] // Dynamic attribute values
+}
+
+export interface ProductV2WithStock extends ProductV2 {
+  availableSizes: string[]
+  hasStock: boolean
+  hasSize: boolean
+}
+
+export interface CategoryV2 {
+  id: string
+  description: string | null
+  name: string // Dynamic name
+  attribute?: Attribute[]
+}
+
+export interface Attribute {
+  id: string
+  name: string // e.g., "size", "ageRange"
+  inputType: 'string' | 'number' // Define type of input for this attribute
+  categoryId: string
+  valueOptions: AttributeValueOption[]
+}
+
+export interface AttributeValueOption {
+  id: string
+  value: string // Should be a string for string attributes, and a number for number attributes
+  attributeId: string
+}
+
+export interface ProductAttributeValue {
+  id: string
+  productId: string
+  attributeId: string
+  valueOptionId: string
+  inStock: number // Current stock for this specific attribute-value combination
+  attribute: Attribute
+  valueOption: AttributeValueOption
+}

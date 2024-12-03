@@ -1,5 +1,5 @@
 import { IoArrowUpOutline, IoLogoWhatsapp } from 'react-icons/io5'
-import { ButtonContactWhatsApp, ButtonScrollTop, Footer, NextProgress, Sidebar, TopMenu } from '@/components'
+import { ButtonContactWhatsApp, ButtonScrollTop, Footer, NextProgress, Sidebar, SidebarCart, TopMenu } from '@/components'
 import { Toaster } from '@/components/ui/sonner'
 
 export default function ShopLayout({
@@ -13,6 +13,8 @@ export default function ShopLayout({
       <TopMenu />
 
       <Sidebar />
+
+      <SidebarCart />
 
       {children}
 

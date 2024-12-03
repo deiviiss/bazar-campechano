@@ -1,65 +1,88 @@
 import Link from 'next/link'
 import { CiFacebook } from 'react-icons/ci'
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { titleFont } from '@/config/fonts'
 
 export const Footer = () => {
   return (
-    <div className='grid md:grid-cols-2 gap-2 px-1 pb-2'>
-      <div className="flex flex-col min-[400px]:flex-row sm:mb-10 w-full h-full items-center gap-2 justify-center text-xs mb-1 ">
-        <Card className='w-full h-full bg-gray-300 py-5 px-4'>
-          <CardTitle className='mb-5'>
-            Nosotros
-          </CardTitle>
+    <footer className="w-full bg-primary text-gray-300 py-12 mt-16">
+      <div className="container px-4 md:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* About Us Section */}
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold tracking-tight text-white">Nosotros</h2>
+            <nav className="flex flex-col space-y-3">
+              <Link
+                href="/info/about"
+                className="hover:text-white transition-colors"
+              >
+                Quiénes somos
+              </Link>
+              <Link
+                href="/info/privacy"
+                className="hover:text-white transition-colors"
+              >
+                Políticas de privacidad
+              </Link>
+            </nav>
+          </div>
 
-          <CardContent className='p-0 flex flex-col text-start text-sm gap-3'>
-            <Link href={'/info/about'}>
-              Quiénes somos
-            </Link>
-            <Link href={'/info/privacy'}>
-              Políticas de privacidad
-            </Link>
-          </CardContent>
-        </Card>
+          {/* Help Section */}
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold tracking-tight text-white">Ayuda</h2>
+            <nav className="flex flex-col space-y-3">
+              <Link
+                href="/info/faq"
+                className="hover:text-white transition-colors"
+              >
+                Preguntas frecuentes
+              </Link>
+              <Link
+                href="/info/contact"
+                className="hover:text-white transition-colors"
+              >
+                Contáctanos
+              </Link>
+              <Link
+                href="/info/terms"
+                className="hover:text-white transition-colors"
+              >
+                Términos y condiciones
+              </Link>
+              <Link
+                href="/info/refunds"
+                className="hover:text-white transition-colors"
+              >
+                Política de devoluciones
+              </Link>
+            </nav>
+          </div>
 
-        <Card className='w-full h-full bg-gray-300 py-5 px-4'>
-          <CardTitle className='mb-5'>
-            Ayuda
-          </CardTitle>
-          <CardContent className='p-0 flex flex-col text-start text-sm gap-3'>
-            <Link href={'/info/faq'}>
-              Preguntas frecuentes
+          {/* Brand Section */}
+          <div className="space-y-4">
+            <Link href="/" className="inline-block">
+              <div className="flex flex-col space-y-1">
+                <span className={`${titleFont.className} text-xl font-bold tracking-wider text-white`}>
+                  Bazar Campechano
+                </span>
+                <span className="text-sm text-gray-400">
+                  © {new Date().getFullYear()} Todos los derechos reservados
+                </span>
+              </div>
             </Link>
-
-            <Link href={'/info/contact'}>
-              Contáctanos
-            </Link>
-
-            <Link href={'/info/terms'}>
-              Términos y condiciones
-            </Link>
-
-            <Link href={'/info/refunds'}>
-              Política de devoluciones
-            </Link>
-          </CardContent>
-        </Card>
+            <div className="flex items-center space-x-4">
+              <Link
+                href="https://www.facebook.com/people/Bazar-Campechano/61566537580467/"
+                className="text-gray-400 hover:text-white transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Síguenos en Facebook"
+              >
+                <CiFacebook className="h-6 w-6" />
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <Card className='w-full h-full bg-gray-300 py-5 px-4'>
-        <CardTitle className='mb-5'>
-          <Link href="/" >
-            <span className={`${titleFont.className} antialiased font-bold tracking-wider`}>Bazar Campechano</span>
-            <span>© {new Date().getFullYear()}</span>
-          </Link>
-        </CardTitle>
-
-        <CardContent className='w-full justify-start items-center flex gap-3 md:justify-end'>
-          <Link href={'https://www.facebook.com/people/Bazar-Campechano/61566537580467/'} >
-            <CiFacebook size={35} />
-          </Link>
-        </CardContent>
-      </Card>
-    </div>
+    </footer>
   )
 }

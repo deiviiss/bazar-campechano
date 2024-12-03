@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
 import { IoArrowBackOutline } from 'react-icons/io5'
 import { getCategories, getProductBySlug } from '@/actions'
-import { ButtonBack, ProductForm, Title } from '@/components'
+import { ButtonBack, Title } from '@/components/'
+import { ProductForm } from '@/components/products'
 
 interface Props {
   params: {
@@ -12,7 +13,7 @@ interface Props {
 export default async function ProductPage({ params }: Props) {
   const { slug } = params
 
-  const [product, categories] = await Promise.all([
+  const [{ product }, categories] = await Promise.all([
     getProductBySlug(slug),
     getCategories()
   ])
