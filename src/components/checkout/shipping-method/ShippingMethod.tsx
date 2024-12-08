@@ -40,11 +40,11 @@ export function ShippingMethod() {
       {shippingMethod === 'pickup' && (
         <div className="mt-4 p-4 bg-gray-100 rounded">
 
-          <h3 className='font-semibold'>{PICKUP_LOCATION.place}</h3>
+          <h3 className='font-semibold'>{PICKUP_LOCATION.firstName}</h3>
           <p>{PICKUP_LOCATION.address}</p>
           <p>{PICKUP_LOCATION.city}, {PICKUP_LOCATION.country} {PICKUP_LOCATION.postalCode}</p>
           <p className='mb-2'>Teléfono: {PICKUP_LOCATION.phone}</p>
-          <p>{PICKUP_LOCATION.hours}</p>
+          <p>Horario de atención: Lunes-Viernes: 9AM-5PM, Sábado: 10AM-2PM</p>
           <p className="my-2">Recuerda presentar tu DNI al momento de recibir tu pedido.</p>
         </div>
       )}

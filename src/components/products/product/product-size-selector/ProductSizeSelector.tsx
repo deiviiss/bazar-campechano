@@ -7,42 +7,45 @@ import { ButtonAddToCart } from '@/components/products'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { type ShoeSize, type ClotheSize, type ProductV2WithStock } from '@/interfaces'
-import { isClothe, isShoe } from '@/utils/productTypeGuards'
+import { type ProductAttributeSelection, type ProductV2WithStock } from '@/interfaces'
 
 interface Props {
   product: ProductV2WithStock
 }
 
 export const ProductSizeSelector = ({ product }: Props) => {
-  const [selectedSize, setSelectedSize] = useState<ShoeSize | ClotheSize | undefined>(undefined)
+  const [selectedAttributes, setSelectedAttributes] = useState<ProductAttributeSelection[]>([])
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   if (!product) {
     return null
   }
 
-  const sizesOptions = product.availableSizes
+  const sizeOptions = product.availableSizes
 
-  const handleSizeSelect = (value: string) => {
-    if (isShoe(product)) {
-      setSelectedSize(Number(value) as ShoeSize)
-    } else if (isClothe(product)) {
-      setSelectedSize(value as ClotheSize)
+  const handleSizeSelect = (selectedSize: string) => {
+    // Map size to attributeId and valueOptionId
+    const matchingAttribute = product.productAttributeValue.find(
+      (attr) => attr.valueOption.value === selectedSize && attr.attribute.name === 'size'
+    )
+
+    if (matchingAttribute) {
+      setSelectedAttributes([
+        {
+          attributeId: matchingAttribute.attributeId,
+          valueOptionId: matchingAttribute.valueOptionId,
+          value: selectedSize
+        }
+      ])
     }
   }
 
   const handleAddToCart = () => {
     setIsDialogOpen(false)
-    setSelectedSize(undefined)
+    setSelectedAttributes([])
   }
 
-  if (sizesOptions.length > 0) {
-    const productToAdd = {
-      ...product,
-      selectedSize
-    }
-
+  if (sizeOptions.length > 0) {
     return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
@@ -65,26 +68,22 @@ export const ProductSizeSelector = ({ product }: Props) => {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {sizesOptions.map((size) => (
-                    <SelectItem
-                      key={size}
-                      className="capitalize"
-                      value={size}
-                    >
+                  {sizeOptions.map((size) => (
+                    <SelectItem key={size} className="capitalize" value={size}>
                       {size}
                     </SelectItem>
                   ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
-            {selectedSize
+            {selectedAttributes.length > 0
               ? (
                 <ButtonAddToCart
-                  product={productToAdd}
+                  product={product}
+                  selectedAttributes={selectedAttributes}
                   handleAddToCart={handleAddToCart}
-                  nameButton='Agregar'
-                  className="font-semibold uppercase w-full bg-primary text-primary-foreground hover:text-primary-foreground hover:bg-primary/90"
-                  selectedSize={selectedSize}
+                  className="font-semibold uppercase w-full"
+                  nameButton="Agregar"
                 />)
               : (
                 <Button

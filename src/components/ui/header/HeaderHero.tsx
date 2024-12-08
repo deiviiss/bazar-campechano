@@ -14,7 +14,7 @@ export const HeaderHero = () => {
         priority
       />
       {/* main container */}
-      <div className="w-full overflow-hidden bg-[#0E0F0F]">
+      <div className="w-full overflow-hidden bg-primary">
         {/* slider container */}
         <div className="flex gap-10 items-center py-3 sm:py-4 whitespace-nowrap slide-track">
 

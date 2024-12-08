@@ -1,24 +1,35 @@
 import prisma from '../lib/prisma'
 
 async function populateAttributes() {
-  //! Change categoryId to the correct one
+  const categoryClotheIdDB = await prisma.category.findFirst({ where: { name: 'clothe' } })
+
+  const categoryShoeIdDB = await prisma.category.findFirst({ where: { name: 'shoe' } })
+
+  const categoryToyIdDB = await prisma.category.findFirst({ where: { name: 'toy' } })
+
+  if (!categoryClotheIdDB || !categoryShoeIdDB || !categoryToyIdDB) throw new Error('Category not found')
+
+  const categoryClotheId = categoryClotheIdDB?.id
+  const categoryShoeId = categoryShoeIdDB?.id
+  const categoryToyId = categoryToyIdDB?.id
+
   const attributes = [
     {
       name: 'size',
       inputType: 'string',
-      categoryId: '18b7d3ed-fd5b-488f-8a9f-d76a5247e169', // category ID for Clothe
+      categoryId: categoryClotheId,
       valueOptions: ['XS', 'S', 'M', 'L', 'XL', 'XXL']
     },
     {
       name: 'size',
       inputType: 'number',
-      categoryId: '68a988e2-4648-432b-9735-f539d382d9d3', // category ID for Shoes
+      categoryId: categoryShoeId,
       valueOptions: ['23', '24', '25', '26', '27']
     },
     {
       name: 'ageRange',
       inputType: 'string',
-      categoryId: '3965f654-e0ec-4c00-a9f2-e91177ddc6bf', // category ID for Toys
+      categoryId: categoryToyId,
       valueOptions: ['3 - 5', '6 - 8', '9 - 12']
     }
   ]

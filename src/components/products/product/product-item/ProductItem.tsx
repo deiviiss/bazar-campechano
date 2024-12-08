@@ -17,6 +17,14 @@ export const ProductItem = ({ product, className }: Props) => {
   const handleMouseEnter = () => { setDisplayImage(product.productImage[1].url) }
   const handleMouseLeave = () => { setDisplayImage(product.productImage[0].url) }
 
+  const attributeId = product.productAttributeValue.map(attr => {
+    return attr.attributeId
+  })[0]
+
+  const valueOptionId = product.productAttributeValue.map(attr => {
+    return attr.valueOptionId
+  })[0]
+
   return (
     <div className={`flex-shrink-0 max-w-[300px] px-2 min-[400px]:max-w-[400px] md:max-w-[200px] lg:max-w-[240px] xl:max-w-[280px] ${className}`}>
       <Link href={`/product/${product.slug}`}>
@@ -47,6 +55,12 @@ export const ProductItem = ({ product, className }: Props) => {
           {
             !hasSize && <ButtonAddToCart
               product={product}
+              selectedAttributes={[
+                {
+                  attributeId,
+                  valueOptionId
+                }
+              ]}
               className="font-semibold text-black"
             />
           }

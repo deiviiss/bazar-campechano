@@ -1,6 +1,5 @@
 // Product Selectors
 export { ProductSizeSelector } from './product/product-size-selector/ProductSizeSelector'
-export { SizeSelector } from './product/size-selector/SizeSelector'
 export { QuantitySelector } from './product/quantity-selector/QuantitySelector'
 
 // Product Buttons
@@ -8,7 +7,6 @@ export { ButtonAddToCart } from './product/buttons/ButtonAddToCart'
 export { DeleteButtonProduct } from './product/buttons/DeleteButton'
 export { ButtonShare } from './product/buttons/ButtonShare'
 export { CloudinaryButton } from './product/cloudinary-button/CloudinaryButton'
-export { AddToCartProduct } from './product/add-to-card-product/AddToCartProduct'
 
 // Product Forms
 export { ProductForm } from './product/product-form/ProductForm'

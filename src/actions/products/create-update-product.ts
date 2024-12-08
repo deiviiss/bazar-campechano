@@ -52,15 +52,19 @@ const productSchema = z.object({
   categoryId: z.string().uuid(),
   stockDetails: z.array(
     z.object({
-      id: z.string().uuid(),
-      attribute: z.object({
-        id: z.string().uuid(),
-        name: z.string()
-      }),
-      valueOption: z.object({
-        id: z.string().uuid(),
-        value: z.string()
-      }),
+      id: z.string().uuid().optional().nullable(),
+      attributeId: z.string().uuid({ message: 'El ID del atributo es requerido.' }),
+      valueOptionId: z.string().uuid({ message: 'El ID de la opción de valor es requerido.' }),
+      attribute: z
+        .object({
+          name: z.string()
+        })
+        .optional(),
+      valueOption: z
+        .object({
+          value: z.string()
+        })
+        .optional(),
       inStock: z.number().min(0, { message: 'El stock debe ser mayor o igual a 0.' })
     })
   ),
@@ -71,10 +75,17 @@ const productSchema = z.object({
     }))
 }).strict()
 
+const messages = {
+  productCreateSuccess: 'Product created successfully',
+  productUpdateSuccess: 'Product updated successfully',
+  productError: 'Error al crear/actualizar el producto'
+}
+
 export const createUpdateProduct = async (formData: FormData) => {
   const data = Object.fromEntries(formData)
 
   const parsedStockDetails = JSON.parse(formData.get('stockDetails') as string)
+
   const parsedImages = JSON.parse(formData.get('images') as string)
 
   const dataToValidate = {
@@ -88,7 +99,8 @@ export const createUpdateProduct = async (formData: FormData) => {
   if (!productParsed.success) {
     return {
       ok: false,
-      message: 'Error al crear el producto'
+      message: messages.productError,
+      errors: productParsed.error.format()
     }
   }
 
@@ -99,73 +111,92 @@ export const createUpdateProduct = async (formData: FormData) => {
 
   const { id, stockDetails, images, ...restProduct } = productData
 
+  const validStockDetails = stockDetails.filter(
+    (stock) => stock.inStock > 0 || stock.id
+  )
+
   // transaction for upload images, product
   try {
-    const prismaTx = await prisma.$transaction(async(tx) => {
+    const prismaTx = await prisma.$transaction(async (tx) => {
       // Update product
       if (id) {
         const product = await tx.product.update({
           where: { id },
           data: {
             ...restProduct,
-            productAttributeValue: {
-              deleteMany: {}, // Delete all existing attribute-value combinations
-              createMany: {
-                data: stockDetails.map((stock) => ({
-                  attributeId: stock.attribute.id,
-                  valueOptionId: stock.valueOption.id,
-                  inStock: stock.inStock
-                }))
-              }
-            },
             productImage: {
               deleteMany: {}, // Delete all existing images
               createMany: {
-                data: images.map((img) => ({ url: img.url }))
+                data: images.map((image) => ({ url: image.url }))
               }
             }
           }
         })
 
+        // Upsert stock details: update if exists, create if not
+        await Promise.all(validStockDetails.map(async (stock) =>
+          await tx.productAttributeValue.upsert({
+            where: {
+              productId_attributeId_valueOptionId: {
+                attributeId: stock.attributeId,
+                valueOptionId: stock.valueOptionId,
+                productId: id
+              }
+            },
+            update: {
+              inStock: stock.inStock
+            },
+            create: {
+              productId: id,
+              attributeId: stock.attributeId,
+              valueOptionId: stock.valueOptionId,
+              inStock: stock.inStock
+            }
+          })
+        ))
+
         return {
           ok: true,
-          message: 'Product updated successfully',
+          message: messages.productUpdateSuccess,
           product
         }
       }
 
-      // Create product
       const product = await tx.product.create({
         data: {
           ...restProduct,
+          productImage: {
+            createMany: {
+              data: images.map((image) => ({ url: image.url }))
+            }
+          },
           productAttributeValue: {
             createMany: {
-              data: stockDetails.map((stock) => ({
-                attributeId: stock.attribute.id,
-                valueOptionId: stock.valueOption.id,
+              data: validStockDetails.map((stock) => ({
+                attributeId: stock.attributeId,
+                valueOptionId: stock.valueOptionId,
                 inStock: stock.inStock
               }))
             }
-          },
-          productImage: {
-            createMany: {
-              data: images.map((img) => ({ url: img.url }))
-            }
           }
+
         }
       })
 
       return {
         ok: true,
-        message: 'Product created successfully',
+        message: messages.productUpdateSuccess,
         product
       }
     })
 
     // revalidate paths in all routes where product name exist
+    if (id) {
+      revalidatePath(`/admin/product/${prismaTx?.product.slug}`)
+      revalidatePath(`/products/${prismaTx?.product.slug}`)
+    }
+
     revalidatePath('/admin/products')
-    revalidatePath(`/admin/product/${prismaTx?.product.slug}`)
-    revalidatePath(`/products/${prismaTx?.product.slug}`)
 
     return {
       ok: true,

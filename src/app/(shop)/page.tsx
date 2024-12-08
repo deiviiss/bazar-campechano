@@ -64,7 +64,7 @@ export default async function ShopPage({ searchParams }: Props) {
         </Button>
       </div>
       {/* shoe products */}
-      <div className='bg-slate-950 pb-28 sm:px-10 border-b border-white'>
+      <div className='bg-primary pb-28 sm:px-10 border-b border-white'>
         <TitleHome
           title="Calzado de bazar"
           subtitle="precios justos"
@@ -78,7 +78,7 @@ export default async function ShopPage({ searchParams }: Props) {
         </Button>
       </div>
       {/* toys products */}
-      <div className='bg-slate-950 pb-10 sm:px-10 mb-10'>
+      <div className='bg-primary pb-10 sm:px-10 mb-10'>
         <TitleHome
           title="Los más divertido"
           subtitle="Juguetes"

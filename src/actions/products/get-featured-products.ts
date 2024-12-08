@@ -41,7 +41,11 @@ export const getFeaturedProducts = async ({ page = 1, take = 12, query = '', cat
           }
         },
         productAttributeValue: {
-          include: {
+          select: {
+            id: true,
+            inStock: true,
+            attributeId: true,
+            valueOptionId: true,
             attribute: {
               select: {
                 id: true,
@@ -106,6 +110,8 @@ export const getFeaturedProducts = async ({ page = 1, take = 12, query = '', cat
     const products: ProductV2WithStock[] = productsDB.map((product): ProductV2WithStock => {
       const productAttributeValue = product.productAttributeValue.map((attr) => ({
         id: attr.id,
+        attributeId: attr.attributeId,
+        valueOptionId: attr.valueOptionId,
         attribute: {
           id: attr.attribute.id,
           name: attr.attribute.name
@@ -157,7 +163,7 @@ export const getFeaturedProducts = async ({ page = 1, take = 12, query = '', cat
     }
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(error.message)
+      return { currentPage: page, totalPages: 0, products: [] }
     }
     throw new Error(String(error))
   }

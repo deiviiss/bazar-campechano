@@ -30,7 +30,9 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
 
   const cart = useCartStore(state => state.cart)
   const clearCart = useCartStore(state => state.clearCart)
-  const address = useAddressStore(state => state.address) || PICKUP_LOCATION
+  const address = useAddressStore(state => state.address)
+  const validAddress = address?.firstName?.trim() ? address : PICKUP_LOCATION
+
   const { setShippingMethod, setPaymentMethod } = useCheckoutStore()
 
   const { subtotal, total, itemsInCart } = useCartStore(state => state.getSummaryInformation())
@@ -60,6 +62,13 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
     })
   }
 
+  const noticeFailedOrder = () => {
+    toast.error('No se pudo crear el pedido, intente nuevamente', {
+      position: 'top-right',
+      duration: 3000
+    })
+  }
+
   useEffect(() => {
     setLoaded(true)
     if (itemsInCart === 0) {
@@ -80,12 +89,17 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
     const productToOrder: ProductToOrder[] = cart.map(product => ({
       productId: product.id,
       quantity: product.quantity,
-      attributes: product.size ? [{ value: String(product.size) }] : []
+      attributes: product.attributes?.length > 0
+        ? product.attributes.map(attr => ({
+          attributeId: attr.attributeId,
+          valueOptionId: attr.valueOptionId
+        }))
+        : [{ attributeId: product.attributes[0]?.attributeId, valueOptionId: product.attributes[0]?.valueOptionId }]
     }))
 
     const orderDetails = {
       productsId: productToOrder,
-      address,
+      address: validAddress,
       shippingMethod,
       paymentMethod
     }
@@ -95,7 +109,7 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
     // product sold out
     if (!ok) {
       setIsPlacingOrder(false)
-
+      noticeFailedOrder()
       setErrorMessage(String(message))
       return
     }
@@ -130,13 +144,13 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
               </div>
             </>
             : <>
-              <p className='text-xl'>{PICKUP_LOCATION.place}</p>
-              <p className='text-xl'>{PICKUP_LOCATION.name}</p>
+              <p className='text-xl'>{PICKUP_LOCATION.firstName}</p>
+              <p className='text-xl'>{PICKUP_LOCATION.lastName}</p>
               <div className="mb-7">
                 <p>{PICKUP_LOCATION.address}</p>
                 <p>{PICKUP_LOCATION.city}, {PICKUP_LOCATION.country} {PICKUP_LOCATION.postalCode}</p>
                 <p className='mb-2'>Teléfono: {PICKUP_LOCATION.phone}</p>
-                <p className='text-sm'>{PICKUP_LOCATION.hours}</p>
+                <p className='text-sm'>Horario de atención: Lunes-Viernes: 9AM-5PM, Sábado: 10AM-2PM</p>
               </div>
             </>
         }

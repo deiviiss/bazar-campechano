@@ -8,7 +8,9 @@ const main = async () => {
   await prisma.orderItem.deleteMany()
   await prisma.orderAddress.deleteMany()
   await prisma.order.deleteMany()
-
+  await prisma.productAttributeValue.deleteMany()
+  await prisma.attributeValueOption.deleteMany()
+  await prisma.attribute.deleteMany()
   await prisma.userAddress.deleteMany()
   await prisma.country.deleteMany()
   await prisma.clotheStock.deleteMany()
