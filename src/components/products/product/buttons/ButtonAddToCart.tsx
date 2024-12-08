@@ -2,17 +2,15 @@
 import { IoAdd } from 'react-icons/io5'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { type CartProduct, type ClotheSize, type ShoeSize, type ProductV2WithStock } from '@/interfaces'
+import { type ProductAttributeSelection, type CartProduct, type ProductV2WithStock } from '@/interfaces'
 import { useCartStore } from '@/store'
 
 interface Props {
   product: ProductV2WithStock
-  setSelectedClotheSize?: (size: ClotheSize | undefined) => void
-  setSelectedShoeSize?: (size: ShoeSize | undefined) => void
   handleAddToCart?: () => void
   className?: string
   nameButton?: string
-  selectedSize?: ClotheSize | ShoeSize | undefined
+  selectedAttributes: ProductAttributeSelection[] // Multiple attributes can be selected
 }
 
 const noticeAddToCart = () => {
@@ -22,7 +20,7 @@ const noticeAddToCart = () => {
   })
 }
 
-export const ButtonAddToCart = ({ product, setSelectedClotheSize, setSelectedShoeSize, handleAddToCart, className, nameButton, selectedSize }: Props) => {
+export const ButtonAddToCart = ({ product, handleAddToCart, className, nameButton, selectedAttributes }: Props) => {
   const addProductToCart = useCartStore(state => state.addProductToCart)
 
   const hasStock = product.hasStock
@@ -36,19 +34,11 @@ export const ButtonAddToCart = ({ product, setSelectedClotheSize, setSelectedSho
       title: product.title,
       price: product.price,
       image: product.productImage[0].url,
-      size: selectedSize,
+      attributes: selectedAttributes,
       quantity: 1
     }
 
     addProductToCart(cartProduct)
-
-    if (setSelectedClotheSize) {
-      setSelectedClotheSize(undefined)
-    }
-
-    if (setSelectedShoeSize) {
-      setSelectedShoeSize(undefined)
-    }
 
     handleAddToCart && handleAddToCart()
     noticeAddToCart()

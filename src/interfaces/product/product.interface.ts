@@ -58,16 +58,6 @@ export interface ProductToy extends Product {
   stockDetails: ToyStockDetail[]
 }
 
-export interface CartProduct {
-  id: string
-  slug: string
-  title: string
-  price: number
-  size: string | number | undefined
-  quantity: number
-  image: string
-}
-
 export type CategoryName = 'shoe' | 'toy' | 'clothe'
 
 export interface ProductImage {
@@ -111,7 +101,7 @@ export interface ProductV2 {
   categoryId: string
   category: CategoryV2 // New interface for dynamic category
   isActive: boolean
-  productAttributeValue: ProductAttributeValue[] // Dynamic attribute values
+  productAttributeValue: StockDetail[] // Dynamic attribute values
 }
 
 export interface ProductV2WithStock extends ProductV2 {
@@ -149,4 +139,27 @@ export interface ProductAttributeValue {
   inStock: number // Current stock for this specific attribute-value combination
   attribute: Attribute
   valueOption: AttributeValueOption
+}
+
+export type StockDetail = Omit<ProductAttributeValue, 'id' | 'productId' | 'attribute' | 'valueOption'> & {
+  id: string | null
+  productId: string | null
+  attribute: Pick<Attribute, 'id' | 'name' > // Include only 'name' from Attribute
+  valueOption: Pick<AttributeValueOption, 'id' | 'value'> // Include only 'value' from AttributeValueOption
+}
+
+export interface CartProduct {
+  id: string
+  slug: string
+  title: string
+  price: number
+  quantity: number
+  image: string
+  attributes: ProductAttributeSelection[] // Multiple attributes can be selected
+}
+
+export interface ProductAttributeSelection {
+  attributeId: string
+  valueOptionId: string
+  value?: string
 }

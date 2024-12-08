@@ -4,11 +4,11 @@ import { toast } from 'sonner'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { type ProductAttributeValue } from '@/interfaces'
+import { type StockDetail } from '@/interfaces'
 
 interface StockDetailsProps {
-  stockDetails: ProductAttributeValue[]
-  setStockDetails: (stockDetails: ProductAttributeValue[]) => void
+  stockDetails: StockDetail[]
+  setStockDetails: (stockDetails: StockDetail[]) => void
 }
 
 export const StockDetails = ({ stockDetails, setStockDetails }: StockDetailsProps) => {

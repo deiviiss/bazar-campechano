@@ -9,6 +9,8 @@
     "lint": "eslint src/**/*.{js,jsx,ts,tsx} --fix",
     "prisma:deploy": "npx prisma migrate deploy && prisma generate",
     "seed": "ts-node src/seed/seed-database",
+    "seed:attributes": "ts-node src/seed/seed-populate-attributes",
+    "seed:migrate-stock": "ts-node src/seed/seed-migrate-stock",
     "clean:hard": "rm -rf node_modules .next postgres",
     "clean:soft": "rm -rf .next",
     "reset:hard": "npm run clean:hard && npm install && docker-compose up -d && npm run seed && clear && npm run dev",

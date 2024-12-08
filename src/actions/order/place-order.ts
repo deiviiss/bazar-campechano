@@ -18,50 +18,53 @@ const validateStockForProduct = (product: ProductToOrder, productStocks: Array<{
   id: string
   productId: string
   valueOptionId: string
+  attributeId: string
   valueOption: { value: string }
   inStock: number
   product: {
     title: string
     price: number
+    categoryId: string
   }
 }>) => {
-  const stockForProduct = productStocks.find((stock) => {
-    const hasAttributes = Array.isArray(product.attributes) && product.attributes.length > 0
+  // Check if the product exists in the stock
+  const stock = productStocks.find((stock) => {
+    // verify if the productId matches
+    if (stock.productId !== product.productId) return false
 
-    return (
-      stock.productId === product.productId &&
-      (!hasAttributes ||
-        product.attributes.every((attr) => stock.valueOption.value === attr.value))
+    // verify if the attributes match
+    const attributesMatch = product.attributes.every((attr) =>
+      stock.attributeId === attr.attributeId &&
+      stock.valueOptionId === attr.valueOptionId
     )
+
+    return attributesMatch
   })
 
-  // Check if the product exists in the stock
-  if (!stockForProduct && product.attributes.length > 0) {
+  // Product not found in stock
+  if (!stock) {
     throw new Error(
-      'Producto no encontrado en el inventario. Revise los atributos del producto.'
+      product.attributes.length > 0
+        ? 'Producto no encontrado en el inventario con los atributos seleccionados.'
+        : 'Producto no encontrado en el inventario.'
     )
-  }
-
-  if (!stockForProduct) {
-    throw new Error('Producto con no encontrado en el inventario.')
   }
 
   // Check if there is enough stock
-  if (stockForProduct.inStock < product.quantity && product.attributes.length > 0) {
+  if (stock.inStock < product.quantity) {
+    const attributeDetails =
+      product.attributes.length > 0
+        ? ` con atributos ${product.attributes
+            .map((attr) => stock.valueOption.value)
+            .join(', ')}`
+        : ''
+
     throw new Error(
-      `Producto ${stockForProduct.product.title} con talla ${product.attributes
-        .map((attr) => attr.value)
-        .join(', ')} no tiene suficiente stock.`
+      `Producto ${stock.product.title}${attributeDetails} no tiene suficiente stock disponible.`
     )
   }
 
-  if (stockForProduct.inStock < product.quantity) {
-    throw new Error(
-      `Producto ${stockForProduct.product.title} no tiene suficiente stock disponible.`
-    )
-  }
-
-  return stockForProduct
+  return stock
 }
 
 export const placeOrder = async ({ productsId, address, paymentMethod, shippingMethod }: OrderDetails) => {
@@ -107,29 +110,15 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
 
     const productStocks = await prisma.productAttributeValue.findMany({
       where: {
-        OR: productsId.map(product => {
-          const hasAttributes = Array.isArray(product.attributes) && product.attributes.length > 0
-
-          return {
-            productId: product.productId,
-            ...(hasAttributes && {
-              valueOption: {
-                value: {
-                  in: product.attributes.map((attr) => attr.value)
-                }
-              }
-            })
-          }
-        })
+        productId: { in: productsId.map(product => product.productId) }
       },
       include: {
-        product: {
-          include: {
-            productImage: true,
-            category: true
+        product: true,
+        valueOption: {
+          select: {
+            value: true
           }
-        },
-        valueOption: true // Include details of the value of the attribute
+        }
       }
     })
 
@@ -184,11 +173,11 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
                 const matchingStock = productStocks.find(
                   (stock) =>
                     stock.productId === product.productId &&
-                stock.valueOption.value === attr.value
+                stock.attributeId === attr.attributeId
                 )
 
                 if (!matchingStock) {
-                  throw new Error(`Atributo no válido: ${attr.value}`)
+                  throw new Error('Atributo no válido')
                 }
 
                 return { id: matchingStock.valueOptionId }

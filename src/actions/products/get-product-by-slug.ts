@@ -1,6 +1,6 @@
 'use server'
 
-import { type ProductV2WithStock, type ProductAttributeValue } from '@/interfaces'
+import { type ProductV2WithStock, type StockDetail } from '@/interfaces'
 import prisma from '@/lib/prisma'
 
 interface IResponse {
@@ -19,7 +19,15 @@ export const getProductBySlug = async (slug: string): Promise<IResponse> => {
             url: true
           }
         },
-        category: true,
+        category: {
+          include: {
+            attribute: {
+              include: {
+                valueOptions: true
+              }
+            }
+          }
+        },
         productAttributeValue: {
           include: {
             attribute: {
@@ -37,9 +45,7 @@ export const getProductBySlug = async (slug: string): Promise<IResponse> => {
           }
         }
       },
-      where: {
-        slug
-      }
+      where: { slug }
     })
 
     if (!productDB) {
@@ -50,9 +56,40 @@ export const getProductBySlug = async (slug: string): Promise<IResponse> => {
       }
     }
 
-    const hasStock = productDB.productAttributeValue.some((attr) => attr.inStock > 0)
-    const hasSize = productDB.productAttributeValue.some(attr => attr.attribute.name === 'size')
-    const availableSizes = productDB.productAttributeValue
+    const { category, productAttributeValue } = productDB
+
+    // Create StockDetail for each attribute-value combination
+    const allOptions: StockDetail[] = category.attribute.flatMap(attr =>
+      attr.valueOptions.map(option => ({
+        id: null,
+        productId: productDB.id,
+        attributeId: attr.id,
+        valueOptionId: option.id,
+        inStock: 0,
+        attribute: {
+          id: attr.id,
+          name: attr.name
+        },
+        valueOption: {
+          id: option.id,
+          value: option.value
+        }
+      }))
+    )
+    // Add all options to the product
+    const completeAttributeValues = allOptions.map(option => {
+      const existing = productAttributeValue.find(
+        attr =>
+          attr.attributeId === option.attributeId &&
+          attr.valueOptionId === option.valueOptionId
+      )
+      return existing || option
+    })
+
+    const hasStock = completeAttributeValues.some((attr) => attr.inStock > 0)
+
+    const hasSize = completeAttributeValues.some(attr => attr.attribute.name === 'size')
+    const availableSizes = completeAttributeValues
       .filter(attr => attr.attribute.name === 'size' && attr.inStock > 0)
       .map(attr => attr.valueOption.value)
       .sort((a, b) => {
@@ -76,18 +113,7 @@ export const getProductBySlug = async (slug: string): Promise<IResponse> => {
         description: productDB.category.description
       },
       productImage: productDB.productImage,
-      productAttributeValue: productDB.productAttributeValue.map((attr) => ({
-        id: attr.id,
-        attribute: {
-          id: attr.attribute.id,
-          name: attr.attribute.name
-        },
-        valueOption: {
-          id: attr.valueOption.id,
-          value: attr.valueOption.value
-        },
-        inStock: attr.inStock
-      })) as ProductAttributeValue[],
+      productAttributeValue: completeAttributeValues,
       hasStock,
       hasSize,
       availableSizes

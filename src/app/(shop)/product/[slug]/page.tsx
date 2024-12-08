@@ -122,6 +122,12 @@ export default async function ProductPage({ params }: Props) {
                 product={product}
                 className="font-semibold text-black"
                 nameButton='Agregar al carrito'
+                selectedAttributes={[
+                  {
+                    attributeId: product.productAttributeValue[0].attributeId,
+                    valueOptionId: product.productAttributeValue[0].valueOptionId
+                  }
+                ]}
               />
             </div>
           }

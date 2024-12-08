@@ -25,7 +25,6 @@ export const useCartStore = create<State>()(
   persist(
     (set, get) => ({
       cart: [],
-      pickupInStore: false,
 
       getTotalItems: () => {
         const { cart } = get()
@@ -58,7 +57,9 @@ export const useCartStore = create<State>()(
 
         // Check if the product is already in the cart with selected size
         const productInCart = cart.some(
-          (item) => item.id === product.id && item.size === product.size
+          (item) =>
+            item.id === product.id &&
+      JSON.stringify(item.attributes) === JSON.stringify(product.attributes)
         )
 
         // if the product is not in the cart, add it
@@ -69,7 +70,10 @@ export const useCartStore = create<State>()(
 
         // if the product is already in the cart with the selected size, update the quantity
         const updatedCartProducts = cart.map((item) => {
-          if (item.id === product.id && item.size === product.size) {
+          if (
+            item.id === product.id &&
+      JSON.stringify(item.attributes) === JSON.stringify(product.attributes)
+          ) {
             return { ...item, quantity: item.quantity + product.quantity }
           }
 
@@ -83,7 +87,10 @@ export const useCartStore = create<State>()(
         const { cart } = get()
 
         const updatedCartProducts = cart.map((item) => {
-          if (item.id === product.id && item.size === product.size) {
+          if (
+            item.id === product.id &&
+      JSON.stringify(item.attributes) === JSON.stringify(product.attributes)
+          ) {
             return { ...item, quantity }
           }
           return item
@@ -95,7 +102,9 @@ export const useCartStore = create<State>()(
         const { cart } = get()
 
         const updatedCartProducts = cart.filter(
-          (item) => item.id !== product.id || item.size !== product.size
+          (item) =>
+            item.id !== product.id ||
+      JSON.stringify(item.attributes) !== JSON.stringify(product.attributes)
         )
 
         set({ cart: updatedCartProducts })

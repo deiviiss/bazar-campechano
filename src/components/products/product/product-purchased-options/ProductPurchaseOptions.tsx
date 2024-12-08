@@ -4,15 +4,14 @@ import { useState } from 'react'
 import { ButtonAddToCart } from '@/components/products'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { type ShoeSize, type ClotheSize, type ProductV2WithStock } from '@/interfaces'
-import { isClothe, isShoe } from '@/utils/productTypeGuards'
+import { type ProductAttributeSelection, type ProductV2WithStock } from '@/interfaces'
 
 interface Props {
   product: ProductV2WithStock
 }
 
 export const ProductPurchaseOptions = ({ product }: Props) => {
-  const [selectedSize, setSelectedSize] = useState<ShoeSize | ClotheSize | undefined>(undefined)
+  const [selectedAttributes, setSelectedAttributes] = useState<ProductAttributeSelection[]>([])
 
   if (!product) {
     return null
@@ -20,24 +19,28 @@ export const ProductPurchaseOptions = ({ product }: Props) => {
 
   const sizeOptions = product.availableSizes
 
-  const handleSizeSelect = (value: string) => {
-    if (isShoe(product)) {
-      setSelectedSize(Number(value) as ShoeSize)
-    } else if (isClothe(product)) {
-      setSelectedSize(value as ClotheSize)
+  const handleSizeSelect = (selectedSize: string) => {
+    // Map size to attributeId and valueOptionId
+    const matchingAttribute = product.productAttributeValue.find(
+      (attr) => attr.valueOption.value === selectedSize && attr.attribute.name === 'size'
+    )
+
+    if (matchingAttribute) {
+      setSelectedAttributes([
+        {
+          attributeId: matchingAttribute.attributeId,
+          valueOptionId: matchingAttribute.valueOptionId,
+          value: selectedSize
+        }
+      ])
     }
   }
 
   const handleAddToCart = () => {
-    setSelectedSize(undefined)
+    setSelectedAttributes([])
   }
 
   if (sizeOptions.length > 0) {
-    const productToAdd = {
-      ...product,
-      selectedSize
-    }
-
     return (
       <div className="grid gap-4 py-4">
         <Select onValueChange={handleSizeSelect}>
@@ -47,25 +50,21 @@ export const ProductPurchaseOptions = ({ product }: Props) => {
           <SelectContent>
             <SelectGroup>
               {sizeOptions.map((size) => (
-                <SelectItem
-                  key={size}
-                  className="capitalize"
-                  value={size}
-                >
+                <SelectItem key={size} className="capitalize" value={size}>
                   {size}
                 </SelectItem>
               ))}
             </SelectGroup>
           </SelectContent>
         </Select>
-        {selectedSize
+        {selectedAttributes.length > 0
           ? (
             <ButtonAddToCart
-              product={productToAdd}
+              product={product}
+              selectedAttributes={selectedAttributes}
               handleAddToCart={handleAddToCart}
               className="font-semibold uppercase w-full"
-              nameButton='agregar'
-              selectedSize={selectedSize}
+              nameButton="Agregar"
             />)
           : (
             <Button

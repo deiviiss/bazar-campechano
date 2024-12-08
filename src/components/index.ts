@@ -42,7 +42,7 @@ export { EditForm } from './users/edit-form/EditForm'
 export { MenuOptionsUser } from './users/table/MenuOptions'
 
 // Footer
-export { Footer } from './footer/Footer'
+export { Footer } from './ui/footer/Footer'
 
 // isomorphic
 // cards

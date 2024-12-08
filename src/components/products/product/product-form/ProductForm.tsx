@@ -24,7 +24,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { type CategoryName, type ProductImage as IProductImage, type ProductV2WithStock, type CategoryV2, type ProductAttributeValue } from '@/interfaces'
+import { type CategoryName, type ProductImage as IProductImage, type ProductV2WithStock, type CategoryV2, type StockDetail } from '@/interfaces'
 
 const noticeFailSaved = () => {
   toast.error('No se pudo guardar el producto, intente nuevamente', {
@@ -114,27 +114,27 @@ interface Props {
   categories: CategoryV2[]
 }
 
-const getInitialStockDetails = (categoryId: string, categories: CategoryV2[]): ProductAttributeValue[] => {
+const initializeStockForNewProduct = (categoryId: string, categories: CategoryV2[]): StockDetail[] => {
   const category = categories.find((cat) => cat.id === categoryId)
   if (!category || !category.attribute) return []
 
   return category.attribute.flatMap((attr) =>
     attr.valueOptions.map((option) => ({
+      id: null, // Create in the backend
+      productId: null, //  Get from the backend
+
       attributeId: attr.id,
       valueOptionId: option.id,
       inStock: 0,
 
-      // Change this to the backend
-      id: crypto.randomUUID(), // Update in the backend
-      productId: '', // Update in the backend
       attribute: {
         id: attr.id,
-        name: attr.name,
-        inputType: attr.inputType,
-        categoryId,
-        valueOptions: attr.valueOptions
+        name: attr.name
       },
-      valueOption: option
+      valueOption: {
+        id: option.id,
+        value: option.value
+      }
     }))
   )
 }
@@ -151,7 +151,7 @@ export const ProductForm = ({ product, categories }: Props) => {
 
   const [images, setImages] = useState<IProductImage[]>(product?.productImage || [])
 
-  const [stockDetails, setStockDetails] = useState<ProductAttributeValue[]>(product?.productAttributeValue || getInitialStockDetails(categoryId, categories))
+  const [stockDetails, setStockDetails] = useState<StockDetail[]>(product?.productAttributeValue || initializeStockForNewProduct(categoryId, categories))
 
   const defaultValuesForm = {
     id: product?.id,
@@ -169,7 +169,7 @@ export const ProductForm = ({ product, categories }: Props) => {
 
   useEffect(() => {
     if (!product?.productAttributeValue?.length) {
-      const categoryDetails = getInitialStockDetails(categoryId, categories)
+      const categoryDetails = initializeStockForNewProduct(categoryId, categories)
       //! when changing between product categories, the stockDetails is not being reset
       setStockDetails(categoryDetails)
     }

@@ -27,25 +27,29 @@ export const ProductsInCart = () => {
   return (
     <>
       {
-        productsInCart.map(product => (
-          <div key={`${product.slug}-${product?.size}`} className="flex flex-col gap-1 ">
+        productsInCart.map(product => {
+          const size = product.attributes[0]?.value || null
 
-            <ProductImage
-              src={product.image}
-              alt={product.title}
-              width={100}
-              height={100}
-              className='mr-5 rounded w-20 h-20 object-cover'
-            />
+          return (
+            <div key={`${product.slug}`} className="flex flex-col gap-1 ">
 
-            <div>
-              <span>
-                {product.title} {product.size ? `- ${product.size}` : null} ({product.quantity})
-              </span>
-              <p className='font-semibold'>{currencyFormat(product.price * product.quantity)}</p>
+              <ProductImage
+                src={product.image}
+                alt={product.title}
+                width={100}
+                height={100}
+                className='mr-5 rounded w-20 h-20 object-cover'
+              />
+
+              <div>
+                <span>
+                  {product.title} {size ? `- ${size}` : null} ({product.quantity})
+                </span>
+                <p className='font-semibold'>{currencyFormat(product.price * product.quantity)}</p>
+              </div>
             </div>
-          </div>
-        ))
+          )
+        })
       }
     </>
   )

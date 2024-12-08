@@ -51,23 +51,33 @@ export default async function OrdersByIdPage({ params }: Props) {
 
               {/* items */}
               {
-                orderItem.map((item, index) => (
-                  <div key={index} className="flex flex-col mt-5">
-                    <ProductImage
-                      src={item.product.productImage[0].url}
-                      alt={item.product.title}
-                      width={100}
-                      height={100}
-                      className="w-20 h-20 object-cover rounded-lg"
-                    />
+                orderItem.map((item, index) => {
+                  const isClotheOrShoe = (categoryName: string): boolean => {
+                    return ['clothe', 'shoe'].includes(categoryName)
+                  }
+                  return (
+                    <div key={index} className="flex flex-col mt-5">
+                      <ProductImage
+                        src={item.product.productImage[0].url}
+                        alt={item.product.title}
+                        width={100}
+                        height={100}
+                        className="w-20 h-20 object-cover rounded-lg"
+                      />
 
-                    <div>
-                      <span>{item.product.title} {item.product ? `${item.attributes.map(attr => `- ${attr.value}`).join(', ')}` : null}</span>
-                      <p>{currencyFormat(Number(item.price))} x {item.quantity}</p>
-                      <p className='font-bold'>Subtotal: {currencyFormat(item.price * item.quantity)}</p>
+                      <div>
+                        <span>
+                          {item.product.title}
+                          {isClotheOrShoe(item.product.category.name)
+                            ? `${item.attributes.map(attr => ` - (${attr.value}`).join(', ')})`
+                            : null}
+                        </span>
+                        <p>{currencyFormat(Number(item.price))} x {item.quantity}</p>
+                        <p className='font-bold'>Subtotal: {currencyFormat(item.price * item.quantity)}</p>
+                      </div>
                     </div>
-                  </div>
-                ))
+                  )
+                })
               }
             </div>
 
@@ -78,13 +88,13 @@ export default async function OrdersByIdPage({ params }: Props) {
                 {
                   isMethodPickup
                     ? <>
-                      <p className='text-xl'>{PICKUP_LOCATION.place}</p>
-                      <p className='text-xl'>{PICKUP_LOCATION.name}</p>
+                      <p className='text-xl'>{PICKUP_LOCATION.firstName}</p>
+                      <p className='text-xl'>{PICKUP_LOCATION.lastName}</p>
                       <div className="mb-7">
                         <p>{PICKUP_LOCATION.address}</p>
                         <p>{PICKUP_LOCATION.city}, {PICKUP_LOCATION.country} {PICKUP_LOCATION.postalCode}</p>
                         <p className='mb-2'>Teléfono: {PICKUP_LOCATION.phone}</p>
-                        <p className='text-sm'>{PICKUP_LOCATION.hours}</p>
+                        <p className='text-sm'>Horario de atención: Lunes-Viernes: 9AM-5PM, Sábado: 10AM-2PM</p>
                       </div>
                     </>
                     : <>

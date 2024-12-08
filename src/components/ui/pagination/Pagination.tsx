@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5'
+import { Button } from '@/components/ui/button'
 import { generatePagination } from '@/utils'
 
 interface Props {
@@ -48,13 +49,17 @@ export const Pagination = ({ totalPages }: Props) => {
     <div className="flex text-center justify-center mt-10 mb-24">
       <nav aria-label="Page navigation">
         <ul className="flex list-style-none">
-          <li className="page-item">
+          <Button
+            asChild
+            size={'sm'}
+            className='mr-5 hover:text-primary/80'
+            variant={'link'}
+          >
             <Link
-              className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
               href={createPageUrl(+currentPage - 1)}>
               <IoChevronBackOutline size={30} />
             </Link>
-          </li>
+          </Button>
 
           {allPages.map((page, index) => {
             return (
@@ -62,9 +67,9 @@ export const Pagination = ({ totalPages }: Props) => {
                 <Link
                   className={
                     clsx(
-                      'page-link relative block py-1.5 px-3 border-0 outline-none transition-all duration-300 rounded-none text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none',
+                      'page-link relative block py-1.5 px-3 border-0 outline-none transition-all duration-300 rounded-none text-primary hover:bg-gray-200 focus:shadow-none',
                       {
-                        'bg-black  text-white hover:text-white hover:bg-black/70': page === currentPage
+                        'bg-primary text-white hover:text-white hover:bg-primary/70': page === currentPage
                       }
                     )
                   }
@@ -75,13 +80,18 @@ export const Pagination = ({ totalPages }: Props) => {
             )
           })}
 
-          <li className="page-item">
+          <Button
+            asChild
+            size={'sm'}
+            className='ml-5 hover:text-primary/80'
+            variant={'link'}
+          >
             <Link
-              className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
               href={createPageUrl(+currentPage + 1)}>
               <IoChevronForwardOutline size={30} />
             </Link>
-          </li>
+          </Button>
+
         </ul>
       </nav>
     </div>
