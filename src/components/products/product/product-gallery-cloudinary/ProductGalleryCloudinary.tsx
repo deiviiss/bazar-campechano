@@ -51,15 +51,18 @@ export const ProductGalleryCloudinary = ({
   }
 
   useEffect(() => {
-    initializeGallery()
+    const cloudinary = (window as any)?.cloudinary
+    if (cloudinary?.galleryWidget) {
+      initializeGallery()
+    }
   }, [cloudName, mediaAssets])
 
   return (
     <>
       <Script
         src="https://product-gallery.cloudinary.com/latest/all.js"
-        onLoad={initializeGallery}
-        strategy="afterInteractive"
+        onReady={initializeGallery}
+        strategy="lazyOnload"
         onError={() => { console.error('Failed to load Cloudinary script.') }}
       /><div
         ref={containerRef}
