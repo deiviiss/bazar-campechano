@@ -16,13 +16,18 @@ export const ProductGalleryCloudinary = ({
   const containerRef = useRef<HTMLDivElement | null>(null) // Reference to the container
 
   const initializeGallery = () => {
-    const cloudinary = (window as any)?.cloudinary
+    const cloudinary = window.cloudinary
 
     if (!cloudinary?.galleryWidget || !containerRef.current) {
       // eslint-disable-next-line no-console
       console.error('Cloudinary Product Gallery could not be initialized. Please check your Cloudinary configuration.')
       return
     }
+
+    // Filtra y mapea los objetos que tienen publicId
+    const filteredMediaAssets = mediaAssets
+      .filter((asset): asset is { publicId: string } => 'publicId' in asset) // Type guard
+      .map((asset) => ({ publicId: asset.publicId }))
 
     // clear the container
     containerRef.current.innerHTML = ''
@@ -31,7 +36,7 @@ export const ProductGalleryCloudinary = ({
     const gallery = cloudinary.galleryWidget({
       container: containerRef.current,
       cloudName,
-      mediaAssets,
+      mediaAssets: filteredMediaAssets,
       navigationButtonProps: {
         shape: 'square',
         size: 50,
@@ -51,7 +56,7 @@ export const ProductGalleryCloudinary = ({
   }
 
   useEffect(() => {
-    const cloudinary = (window as any)?.cloudinary
+    const cloudinary = window.cloudinary
     if (cloudinary?.galleryWidget) {
       initializeGallery()
     }

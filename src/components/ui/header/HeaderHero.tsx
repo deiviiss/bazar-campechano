@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { LiaShippingFastSolid } from 'react-icons/lia'
-import hero from '../../../../public/imgs/hero_image.jpg'
+import hero from '../../../../public/imgs/hero_image.webp'
 import { titleFont } from '@/config/fonts'
 
 export const HeaderHero = () => {
