@@ -24,7 +24,7 @@ export const ProductGalleryCloudinary = ({
       return
     }
 
-    // Filtra y mapea los objetos que tienen publicId
+    // Filter out assets that don't have a publicId
     const filteredMediaAssets = mediaAssets
       .filter((asset): asset is { publicId: string } => 'publicId' in asset) // Type guard
       .map((asset) => ({ publicId: asset.publicId }))

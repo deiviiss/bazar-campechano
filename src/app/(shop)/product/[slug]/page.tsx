@@ -6,12 +6,10 @@ import { IoArrowBackOutline, IoShareSocialOutline } from 'react-icons/io5'
 import { getProductBySlug } from '@/actions'
 import { getProducts } from '@/actions/products'
 import { TitleCategory, ButtonBack } from '@/components'
-import { ProductPurchaseOptions, AccordionDescription, ButtonShare, CurrentProductsGrid, ProductGalleryCloudinary, ButtonAddToCart } from '@/components/products'
+import { ProductPurchaseOptions, AccordionDescription, ButtonShare, CurrentProductsGrid, ButtonAddToCart, ProductSlideshow } from '@/components/products'
 import { Button } from '@/components/ui/button'
 import { titleFont } from '@/config/fonts'
 import { getImageSrc, isValidFileSystemUrl } from '@/utils'
-
-const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
 
 export const revalidate = 60 * 60 * 24 * 7 // 1 week
 
@@ -74,12 +72,16 @@ export default async function ProductPage({ params }: Props) {
     notFound()
   }
 
+  const images = product.productImage.map((image) => {
+    return image.url
+  })
+
   // Extract publicIds from the array
-  const mediaAssets = product.productImage.map((image) => ({
-    publicId: image.url,
-    altText: `Image ${image.url}`, // Optional accessibility text
-    transformation: [{ crop: 'fill' }]
-  }))
+  // const mediaAssets = product.productImage.map((image) => ({
+  //   publicId: image.url,
+  //   altText: `Image ${image.url}`, // Optional accessibility text
+  //   transformation: [{ crop: 'fill' }]
+  // }))
 
   return (
     <>
@@ -87,10 +89,11 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Images */}
         <div className=''>
-          <ProductGalleryCloudinary
+          <ProductSlideshow images={images} title={product.title} />
+          {/* <ProductGalleryCloudinary
             cloudName={cloudName || ''}
             mediaAssets={mediaAssets} // Pass transformed publicIds
-          />
+          /> */}
         </div>
 
         {/* details */}
