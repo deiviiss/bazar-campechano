@@ -73,70 +73,61 @@ export default async function ProductPage({ params }: Props) {
   }
 
   const images = product.productImage.map((image) => {
-    return image.url
+    return {
+      id: image.id,
+      src: image.url
+    }
   })
-
-  // Extract publicIds from the array
-  // const mediaAssets = product.productImage.map((image) => ({
-  //   publicId: image.url,
-  //   altText: `Image ${image.url}`, // Optional accessibility text
-  //   transformation: [{ crop: 'fill' }]
-  // }))
 
   return (
     <>
-      <div className='mb-20 mt-[104.67px] sm:mt-[60.67px] md:pt-6 md:mx-6 grid md:grid-cols-[2fr_1fr] gap-3 relative'>
+      <div className='w-full flex items-center justify-center'>
+        <div className='mb-20 mt-[104.67px] sm:mt-[60.67px] md:pt-6 md:mx-6 grid md:grid-cols-[2fr_1fr] gap-3 relative max-w-[1000px]'>
 
-        {/* Images */}
-        <div className=''>
-          <ProductSlideshow images={images} title={product.title} />
-          {/* <ProductGalleryCloudinary
-            cloudName={cloudName || ''}
-            mediaAssets={mediaAssets} // Pass transformed publicIds
-          /> */}
-        </div>
+          <ProductSlideshow images={images} altText={product.title} />
 
-        {/* details */}
-        <div className="col-span-1 p-0 px-2 h-fit">
+          {/* details */}
+          <div className="col-span-1 p-0 px-2 h-fit">
 
-          <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl md:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
+            <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl md:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
 
-          <ButtonShare className='fixed bottom-10 z-10 right-16 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 rounded-none border-black border bg-white h-12 w-12' icon={<IoShareSocialOutline size={25} />} title={product.title} description={product.description || ''} />
+            <ButtonShare className='fixed bottom-10 z-10 right-16 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 rounded-none border-black border bg-white h-12 w-12' icon={<IoShareSocialOutline size={25} />} title={product.title} description={product.description || ''} />
 
-          <div className='flex gap-2 justify-between'>
-            <h2 className={`${titleFont.className} antialiased font-bold text-2xl uppercase`}>
-              {product.title}
-            </h2>
+            <div className='flex gap-2 justify-between'>
+              <h2 className={`${titleFont.className} antialiased font-bold text-2xl uppercase`}>
+                {product.title}
+              </h2>
 
-            <h2 className={`${titleFont.className} antialiased font-extrabold text-2xl min-w-24 text-right`}>$ {product.price}</h2>
+              <h2 className={`${titleFont.className} antialiased font-extrabold text-2xl min-w-24 text-right`}>$ {product.price}</h2>
+            </div>
+
+            {
+              product.hasSize &&
+              <div className='my-5'>
+                <ProductPurchaseOptions product={product} />
+              </div>
+            }
+
+            {
+              !product.hasSize &&
+              <div className='my-5 flex justify-end'>
+                <ButtonAddToCart
+                  product={product}
+                  className="font-semibold text-black"
+                  nameButton='Agregar al carrito'
+                  selectedAttributes={[
+                    {
+                      attributeId: product.productAttributeValue[0].attributeId,
+                      valueOptionId: product.productAttributeValue[0].valueOptionId
+                    }
+                  ]}
+                />
+              </div>
+            }
+
+            {/* description */}
+            <AccordionDescription description={product.description ? product.description : ''} />
           </div>
-
-          {
-            product.hasSize &&
-            <div className='my-5'>
-              <ProductPurchaseOptions product={product} />
-            </div>
-          }
-
-          {
-            !product.hasSize &&
-            <div className='my-5 flex justify-end'>
-              <ButtonAddToCart
-                product={product}
-                className="font-semibold text-black"
-                nameButton='Agregar al carrito'
-                selectedAttributes={[
-                  {
-                    attributeId: product.productAttributeValue[0].attributeId,
-                    valueOptionId: product.productAttributeValue[0].valueOptionId
-                  }
-                ]}
-              />
-            </div>
-          }
-
-          {/* description */}
-          <AccordionDescription description={product.description ? product.description : ''} />
         </div>
       </div>
 
