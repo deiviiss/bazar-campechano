@@ -82,7 +82,7 @@ export default async function ProductPage({ params }: Props) {
   return (
     <>
       <div className='w-full flex items-center justify-center'>
-        <div className='mb-20 mt-[104.67px] sm:mt-[60.67px] md:pt-6 md:mx-6 grid md:grid-cols-[2fr_1fr] gap-3 relative max-w-[1000px]'>
+        <div className='mb-20 mt-[100.67px] sm:mt-[60.67px] md:pt-6 md:mx-6 grid md:grid-cols-[2fr_1fr] gap-3 relative max-w-[1000px]'>
 
           <ProductSlideshow images={images} altText={product.title} />
 

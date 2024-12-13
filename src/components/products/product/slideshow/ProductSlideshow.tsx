@@ -5,6 +5,7 @@ import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 import { CgSpinner } from 'react-icons/cg'
 import { Thumbnails } from './Thumbnails'
 import { ProductImage } from '../product-image/ProductImage'
+import { Button } from '@/components/ui/button'
 
 interface ProductSlideshowProps {
   images: Array<{
@@ -50,20 +51,22 @@ export const ProductSlideshow = ({ images, altText }: ProductSlideshowProps) => 
             />
 
             {/* Navigation Arrows */}
-            <button
+            <Button
               onClick={handlePrevClick}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 hover:bg-opacity-75 transition-colors duration-300"
+              size={'icon'}
+              className="absolute left-0 sm:left-2 top-1/2"
               aria-label="Previous image"
             >
-              <BsChevronLeft className="w-6 h-6 text-gray-800" />
-            </button>
-            <button
+              <BsChevronLeft className="w-5 h-5" />
+            </Button>
+            <Button
+              size={'icon'}
               onClick={handleNextClick}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 hover:bg-opacity-75 transition-colors duration-300"
+              className="absolute right-0 sm:right-2 top-1/2 "
               aria-label="Next image"
             >
-              <BsChevronRight className="w-6 h-6 text-gray-800" />
-            </button>
+              <BsChevronRight className="w-5 h-5" />
+            </Button>
           </div>)
         : (
           <div className="flex flex-col h-96 w-full items-center justify-center transition-all bg-slate-200">
@@ -82,33 +85,3 @@ export const ProductSlideshow = ({ images, altText }: ProductSlideshowProps) => 
     </div>
   )
 }
-
-// export const ProductSlideshow = ({ images, altText }: ProductSlideshowProps) => {
-//   console.log(images)
-//   return (
-//     <Carousel className="w-full"
-//       autoplay={5000}>
-//       <CarouselContent>
-//         {images.map((item, index) => (
-//           <CarouselItem key={index}>
-//             <div className="p-0 flex items-center justify-center">
-//               <Card>
-//                 <CardContent className=" w-full flex aspect-square items-center justify-center">
-//                   <ProductImage
-//                     width={600}
-//                     height={500}
-//                     src={item.src}
-//                     alt={altText}
-//                     className='object-fill'
-//                   />
-//                 </CardContent>
-//               </Card>
-//             </div>
-//           </CarouselItem>
-//         ))}
-//       </CarouselContent>
-//       <CarouselPrevious />
-//       <CarouselNext />
-//     </Carousel>
-//   )
-// }

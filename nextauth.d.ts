@@ -13,22 +13,3 @@ declare module 'next-auth' {
     } & DefaultSession['user']
   }
 }
-
-// /types/global.d.ts
-
-interface Cloudinary {
-  galleryWidget: (options: {
-    container: HTMLElement | null
-    cloudName: string
-    mediaAssets: Array<{ publicId: string }>
-    navigationButtonProps?: { shape: string, size: number, color: string, iconColor: string }
-    themeProps?: { active: string, primary: string }
-    thumbnailProps?: { selectedBorderWidth: number }
-  }) => { render: () => void, destroy: () => void }
-}
-
-declare global {
-  interface Window {
-    cloudinary?: Cloudinary
-  }
-}
