@@ -105,11 +105,11 @@ export const Thumbnails = ({ images, altText, currentImageIndex, setCurrentImage
   }, [images])
 
   return (
-    <div className='relative px-7 overflow-hidden sm:px-0 sm:pt-5'>
+    <div className='relative px-7 overflow-hidden sm:px-0 sm:pt-5 mx-1 sm:mx-0'>
       <Button
         onClick={scrollUp}
         disabled={isTopDisabled}
-        size={'icon'}
+        size={'sm'}
         className="absolute w-full top-0 z-10 hidden h-5 sm:flex">
         <MdExpandLess className='w-5 h-5' />
       </Button>
@@ -117,46 +117,52 @@ export const Thumbnails = ({ images, altText, currentImageIndex, setCurrentImage
       <Button
         onClick={scrollLeft}
         disabled={isLeftDisabled}
-        size={'icon'}
-        className="absolute h-full left-0 z-10 w-5 sm:hidden">
+        size={'sm'}
+        className="absolute h-full left-0 z-10 w-5 sm:hidden p-0 pl-1">
         <MdArrowBackIos className='w-5 h-5' />
       </Button>
 
-      <div
-        ref={scrollRef}
-        className="flex sm:flex-col sm:overflow-y-scroll gap-2 overflow-x-scroll sm:h-[450px] sm:pb-5 lg:pb-8"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className={`flex-shrink-0 cursor-pointer transition-all duration-300 border-b-[3px] ${index === currentImageIndex ? 'opacity-100 border-primary' : 'border-transparent opacity-75 hover:opacity-100'}`}
-            onClick={() => { setCurrentImageIndex(index) }}
-          >
-            {
-              isLoaded
-                ? (
+      {
+        isLoaded
+          ? (
+            <div
+              ref={scrollRef}
+              className="flex sm:flex-col sm:overflow-y-scroll gap-2 overflow-x-scroll sm:h-[450px] sm:pb-5 lg:pb-8"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {images.map((image, index) => (
+                <div
+                  key={index}
+                  className={`flex-shrink-0 cursor-pointer transition-all duration-300 border-b-[3px] ${index === currentImageIndex ? 'opacity-100 border-primary' : 'border-transparent opacity-75 hover:opacity-100'}`}
+                  onClick={() => { setCurrentImageIndex(index) }}
+                >
                   <ProductImage
                     width={75}
                     height={75}
                     src={image.src}
                     alt={altText}
                     className={'object-fill'}
-                  />)
-                : (
-                  <div className="flex flex-col h-16 w-16 items-center justify-center transition-all bg-slate-200">
+                  />
+                </div>
+              ))}
+            </div>)
+          : (
+            <div className='flex sm:flex-col gap-2'>
+              {
+                Array.from({ length: 3 }).map((_, index) => (
+                  <div key={index} className="flex flex-shrink-0 h-16 w-16 items-center justify-center transition-all bg-slate-200">
                     <CgSpinner className='text-primary animate-spin' />
-                  </div>)
-            }
-          </div>
-        ))}
-      </div>
+                  </div>
+                ))
+              }
+            </div>)
+      }
 
       <Button
         onClick={scrollRight}
         disabled={isRightDisabled}
         size={'sm'}
-        className="absolute h-full right-0 top-0 z-10 w-5 sm:hidden p-0">
+        className="absolute h-full right-0 top-0 z-10 w-5 sm:hidden p-0 pr-1">
         <MdArrowForwardIos className='w-5 h-5' />
       </Button>
 
