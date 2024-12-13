@@ -12,7 +12,7 @@ export const NavigationAndContactButtons = ({ email }: Props) => {
     <div className='grid justify-center w-full gap-2 m-8 text-center mx-auto min-[350px]:grid-cols-2 min-[400px]:gap-4 max-w-96 px-3'>
       <Button asChild className=' uppercase'>
         <Link target='_blank' href={`mailto:${email}?subject=Consulta%20sobre%20Términos%20y%20Condiciones`}>
-          Contáctanos
+          Contáctenos
         </Link>
       </Button>
 

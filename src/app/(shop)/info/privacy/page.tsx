@@ -15,14 +15,14 @@ export default async function PrivacyPage() {
       <div className='max-w-[920px]'>
         <div className='px-3 pb-4'>
           <p className='text-base antialiased'>
-            En nuestro sitio web, valoramos y respetamos su privacidad. Esta Política de Privacidad explica cómo recopilamos y utilizamos su información personal a través de nuestro sitio web y los servicios que ofrecemos.
+            En Bazar Campechano, valoramos y respetamos su privacidad. Esta Política de Privacidad explica cómo recopilamos y utilizamos su información personal a través de nuestro sitio web y los servicios que ofrecemos.
           </p>
         </div>
 
         <div className='px-3'>
           <Title title="" subtitle='1. Información que Recopilamos' />
           <p className='pb-4'>
-            Recopilamos su nombre, dirección de entrega, dirección de correo electrónico y número de teléfono cuando se registra en nuestro sitio web.
+            Recopilamos su nombre, correo electrónico, teléfono y dirección de envío cuando se registra en nuestro sitio web.
           </p>
 
           <Title title="" subtitle='2. Uso de su Información' />
@@ -45,7 +45,12 @@ export default async function PrivacyPage() {
             Usted tiene el derecho de acceder, corregir, actualizar o eliminar su información personal en cualquier momento. Puede hacerlo a través de su cuenta en nuestro sitio web o poniéndose en contacto con nosotros directamente.
           </p>
 
-          <Title title="" subtitle='5. Cambios en esta Política de Privacidad' />
+          <Title title="" subtitle='5. Validación de Productos' />
+          <p className='pb-4'>
+            Todos los productos subidos a la plataforma pasan por una validación de hasta 24 horas para garantizar el cumplimiento de nuestras políticas y estándares.
+          </p>
+
+          <Title title="" subtitle='6. Cambios en esta Política de Privacidad' />
           <p className='pb-4'>
             Nos reservamos el derecho de modificar esta política de privacidad en cualquier momento. Si realizamos cambios sustanciales, notificaremos dichos cambios en nuestro sitio web para mantenerlo informado sobre cómo afectarán a su información personal.
           </p>
