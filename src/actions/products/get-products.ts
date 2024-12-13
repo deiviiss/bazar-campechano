@@ -90,9 +90,14 @@ export const getProducts = async ({ page = 1, take = 12, query = '', category }:
 
     const totalCount = await prisma.product.count({
       where: {
-        category: {
-          name: category
-        },
+        isActive: true,
+        ...(category
+          ? {
+              category: {
+                name: category
+              }
+            }
+          : {}),
         OR: [
           {
             title: {
