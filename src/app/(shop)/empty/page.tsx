@@ -14,7 +14,7 @@ export default function EmptyPage() {
 
   return (
     <>
-      <div className='flex justify-center items-center h-[400px] mt-[100.67px] sm:mt-[56.67px] pt-10' >
+      <div className='flex justify-center items-center h-[400px] mt-[157.67px] min-[487px]:mt-[141.67px] sm:mt-[100.67px] pt-10' >
         <IoCartOutline size={90} className="mx-5" />
 
         <div>
