@@ -51,7 +51,9 @@ export const ProductImage = ({
         alt={alt}
         width={width}
         height={height}
-        className={className}
+        sizes="(max-width: 768px) 100vw, 500px"
+        priority
+        className={`${className}`}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       />)

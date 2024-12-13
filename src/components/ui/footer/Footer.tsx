@@ -40,7 +40,7 @@ export const Footer = () => {
                 href="/info/contact"
                 className="hover:text-white transition-colors"
               >
-                Contáctanos
+                Contáctenos
               </Link>
               <Link
                 href="/info/terms"
