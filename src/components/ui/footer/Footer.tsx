@@ -48,12 +48,6 @@ export const Footer = () => {
               >
                 Términos y condiciones
               </Link>
-              <Link
-                href="/info/refunds"
-                className="hover:text-white transition-colors"
-              >
-                Política de devoluciones
-              </Link>
             </nav>
           </div>
 
