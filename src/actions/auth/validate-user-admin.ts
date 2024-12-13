@@ -1,6 +1,6 @@
 'use server'
 
-import { auth } from '@/auth.config'
+import { auth } from '@/auth'
 
 export const validateUserAdmin = async () => {
   const session = await auth()

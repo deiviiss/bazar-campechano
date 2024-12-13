@@ -21,7 +21,6 @@ export { AccordionDescription } from './product/accordion-description/AccordionD
 export { ProductSearch } from './product/product-search/ProductSearch'
 export { ProductFilter } from './product/product-filter/ProductFilter'
 export { CardProduct } from './product/card/CardProduct'
-export { ProductGalleryCloudinary } from './product/product-gallery-cloudinary/ProductGalleryCloudinary'
 
 // Product Tables
 export { ProductTable } from './product-table/ProductTable'
