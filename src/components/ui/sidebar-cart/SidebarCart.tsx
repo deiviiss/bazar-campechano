@@ -28,7 +28,7 @@ export const SidebarCart = () => {
         isSideCartOpen && (
           <>
             {/* background */}
-            <div className='fixed top-0 left-0 w-screen h-screen z-30 bg-black opacity-30'>
+            <div className='fixed top-0 left-0 w-screen h-screen z-30 bg-primary opacity-30'>
             </div>
             {/* blur */}
             <div onClick={closeMenuCart} className='fade-in fixed top-0 left-0 w-screen h-screen z-30 backdrop-filter backdrop-blur-sm'>

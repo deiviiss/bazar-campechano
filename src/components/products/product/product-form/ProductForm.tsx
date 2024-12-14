@@ -292,7 +292,7 @@ export const ProductForm = ({ product, categories }: Props) => {
         {/* data general */}
         <Card>
           <CardHeader>
-            <h3 className="text-lg font-semibold p-5 bg-slate-400 text-black">Datos generales</h3>
+            <h3 className="text-lg font-semibold p-5 bg-slate-400 text-primary">Datos generales</h3>
           </CardHeader>
 
           {/* category */}
@@ -436,7 +436,7 @@ export const ProductForm = ({ product, categories }: Props) => {
           {/* productImage */}
           <Card>
             <CardHeader>
-              <h3 className="text-lg font-semibold p-5 bg-slate-400 text-black">Imágenes</h3>
+              <h3 className="text-lg font-semibold p-5 bg-slate-400 text-primary">Imágenes</h3>
             </CardHeader>
 
             {/* productImage */}

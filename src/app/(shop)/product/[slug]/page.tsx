@@ -89,9 +89,9 @@ export default async function ProductPage({ params }: Props) {
           {/* details */}
           <div className="col-span-1 p-0 px-2 h-fit">
 
-            <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl md:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
+            <ButtonBack className='text-gray-500 hover:no-underline hover:text-primary/90 text-xl md:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
 
-            <ButtonShare className='fixed bottom-10 z-10 right-16 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 rounded-none border-black border bg-white h-12 w-12' icon={<IoShareSocialOutline size={25} />} title={product.title} description={product.description || ''} />
+            <ButtonShare className='fixed bottom-10 z-10 right-16 text-primary hover:no-underline hover:text-primary/90 text-xl flex gap-1 p-2 rounded-none border-primary border bg-white h-12 w-12' icon={<IoShareSocialOutline size={25} />} title={product.title} description={product.description || ''} />
 
             <div className='flex gap-2 justify-between'>
               <h2 className={`${titleFont.className} antialiased font-bold text-2xl uppercase`}>
@@ -113,7 +113,7 @@ export default async function ProductPage({ params }: Props) {
               <div className='my-5 flex justify-end'>
                 <ButtonAddToCart
                   product={product}
-                  className="font-semibold text-black"
+                  className="font-semibold text-primary"
                   nameButton='Agregar al carrito'
                   selectedAttributes={[
                     {
@@ -131,7 +131,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
 
-      <div className='pb-10 sm:px-10 mb-10 border-t border-black'>
+      <div className='pb-10 sm:px-10 mb-10 border-t border-primary'>
         <TitleCategory
           title="Recomendados para ti"
           subtitle="Lo más nuevo"

@@ -61,7 +61,7 @@ export const ProductItem = ({ product, className }: Props) => {
                   valueOptionId
                 }
               ]}
-              className="font-semibold text-black"
+              className="font-semibold text-primary"
             />
           }
         </div>

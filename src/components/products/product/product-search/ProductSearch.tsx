@@ -30,7 +30,7 @@ export function ProductSearch({
         Buscar
       </label>
       <input
-        className='peer block w-full rounded-none border border-black py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out'
+        className='peer block w-full rounded-none border border-primary py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out'
         placeholder={placeholder}
         autoFocus={autoFocus}
         onChange={(e) => {
@@ -38,7 +38,7 @@ export function ProductSearch({
         }}
         defaultValue={searchParams.get('query')?.toString() ?? ''}
       />
-      <CiSearch className='absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-black peer-focus:text-gray-900' />
+      <CiSearch className='absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-primary peer-focus:text-gray-900' />
     </div>
   )
 }

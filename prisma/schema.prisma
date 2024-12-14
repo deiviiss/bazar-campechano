@@ -13,25 +13,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum ClotheSize {
-  XS
-  S
-  M
-  L
-  XL
-  XXL
-  XXXL
-}
-
-enum Gender {
-  men
-  women
-  kid
-  unisex
-}
-
 enum Role {
   admin
+  seller
   user
 }
 
@@ -78,50 +62,11 @@ model Product {
 
   productImage ProductImage[]
   orderItem    OrderItem[]
-  clotheStock  ClotheStock[]
-  toyStock     ToyStock[]
-  shoeStock    ShoeStock[]
 
   createdAt             DateTime                @default(now())
   productAttributeValue ProductAttributeValue[]
 
   @@map("products")
-}
-
-model ClotheStock {
-  id         String     @id @default(uuid())
-  clotheSize ClotheSize
-  inStock    Int
-
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-
-  @@unique([clotheSize, productId])
-  @@map("clothe_stocks")
-}
-
-model ShoeStock {
-  id       String @id @default(uuid())
-  shoeSize Int
-  inStock  Int
-
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-
-  @@unique([shoeSize, productId])
-  @@map("shoe_stocks")
-}
-
-model ToyStock {
-  id       String @id @default(uuid())
-  ageRange String
-  inStock  Int
-
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-
-  @@unique([ageRange, productId])
-  @@map("toy_stocks")
 }
 
 model ProductImage {
@@ -174,15 +119,17 @@ model ProductAttributeValue {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  name          String
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  phoneNumber   String
-  role          Role      @default(user)
-  isActive      Boolean   @default(true)
+  id               String  @id @default(uuid())
+  name             String
+  email            String  @unique
+  password         String?
+  emailVerified    Boolean @default(false)
+  phoneNumber      String
+  phoneVerified    Boolean @default(false)
+  hasPurchasedOnce Boolean @default(false)
+  image            String?
+  role             Role    @default(user)
+  isActive         Boolean @default(true)
 
   address UserAddress?
 

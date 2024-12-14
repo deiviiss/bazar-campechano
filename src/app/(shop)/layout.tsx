@@ -19,11 +19,11 @@ export default function ShopLayout({
       {children}
 
       <ButtonScrollTop
-        className='fixed bottom-10 right-2 z-10 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 rounded-none border-black border bg-white h-12 w-12 print:hidden'
+        className='fixed bottom-10 right-2 z-10 text-primary hover:no-underline hover:text-primary/90 text-xl flex gap-1 p-2 rounded-none border-primary border bg-white h-12 w-12 print:hidden'
         icon={<IoArrowUpOutline />}
       />
 
-      <ButtonContactWhatsApp className='fixed bottom-28 right-2 md:right-2 z-10 text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 rounded-none border-black border bg-white h-12 w-12 print:hidden'
+      <ButtonContactWhatsApp className='fixed bottom-28 right-2 md:right-2 z-10 text-primary hover:no-underline hover:text-primary/90 text-xl flex gap-1 p-2 rounded-none border-primary border bg-white h-12 w-12 print:hidden'
         icon={<IoLogoWhatsapp />}
       />
 

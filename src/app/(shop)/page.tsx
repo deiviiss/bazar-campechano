@@ -50,7 +50,7 @@ export default async function ShopPage({ searchParams }: Props) {
         </Button>
       </div>
       {/* featured products */}
-      <div className='pb-10 sm:px-10 mb-10 border-t border-black'>
+      <div className='pb-10 sm:px-10 mb-10 border-t border-primary'>
         <TitleHome
           title="Lo último"
           subtitle="ofertas"
