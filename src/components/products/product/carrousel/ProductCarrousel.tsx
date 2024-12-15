@@ -63,13 +63,13 @@ export const ProductCarrousel = ({
         <div className='absolute inset-0 items-center justify-between px-4 '>
           <button
             onClick={prev}
-            className='px-2 py-2 bg-black/50 text-white rounded-none cursor-pointer transition duration-200 ease-out hover:border-black hover:border hover:bg-white hover:text-primary absolute top-1/2 left-3 transform -translate-y-1/2'
+            className='px-2 py-2 bg-primary/50 text-white rounded-none cursor-pointer transition duration-200 ease-out hover:border-primary hover:border hover:bg-white hover:text-primary absolute top-1/2 left-3 transform -translate-y-1/2'
           >
             <IoIosArrowBack size={24} />
           </button>
           <button
             onClick={next}
-            className='px-2 py-2 bg-black/50 text-white rounded-none cursor-pointer transition duration-200 ease-out hover:border-black hover:border hover:bg-white hover:text-primary absolute top-1/2 right-3 transform -translate-y-1/2'
+            className='px-2 py-2 bg-primary/50 text-white rounded-none cursor-pointer transition duration-200 ease-out hover:border-primary hover:border hover:bg-white hover:text-primary absolute top-1/2 right-3 transform -translate-y-1/2'
           >
             <IoIosArrowForward size={24} />
           </button>

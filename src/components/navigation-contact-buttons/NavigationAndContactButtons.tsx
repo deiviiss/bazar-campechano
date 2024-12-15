@@ -16,7 +16,7 @@ export const NavigationAndContactButtons = ({ email }: Props) => {
         </Link>
       </Button>
 
-      <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 gap-1 border-black border' name='VOLVER' icon={<IoArrowBackOutline />} />
+      <ButtonBack className='text-gray-500 hover:no-underline hover:text-primary/90 gap-1 border-primary border' name='VOLVER' icon={<IoArrowBackOutline />} />
 
     </div>
   )

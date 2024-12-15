@@ -34,8 +34,8 @@ export default async function ProductPage({ params }: Props) {
       <div className='flex w-full justify-between items-start'>
         <Title title={title} subtitle={subtitle} className='text-lg' />
 
-        <ButtonBack className=' text-black hover:no-underline hover:text-gray-900 text-xl flex gap-1 p-2 min-[960px]:hidden rounded-none border-black border bg-white' icon={<IoArrowBackOutline />} />
-        <ButtonBack className='text-gray-500 hover:no-underline hover:text-gray-900 text-xl hidden min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
+        <ButtonBack className=' text-primary hover:no-underline hover:text-primary/90 text-xl flex gap-1 p-2 min-[960px]:hidden rounded-none border-primary border bg-white' icon={<IoArrowBackOutline />} />
+        <ButtonBack className='text-gray-500 hover:no-underline hover:text-primary/90 text-xl hidden min-[960px]:flex gap-1 pl-0' name='VOLVER' icon={<IoArrowBackOutline />} />
       </div>
       <ProductForm product={product} categories={categories} />
     </>

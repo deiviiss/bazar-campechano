@@ -51,7 +51,7 @@ export const ProductSizeSelector = ({ product }: Props) => {
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="font-semibold text-black"
+            className="font-semibold text-primary"
           >
             <IoAdd className="h-4 w-4" />
           </Button>

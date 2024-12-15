@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     default: 'Bazar Campechano - Ropa de Segunda Mano'
   },
   description:
-    'Bienvenido a Bazar Campechano, tu tienda en línea de ropa de segunda mano con estilo. Descubre una amplia variedad de prendas únicas y accesibles que te ayudarán a estar a la moda sin romper el banco. Desde blusas con estampados atrevidos hasta elegantes chaquetas, encuentra tesoros escondidos y ofertas increíbles en cada compra. ¡Visítenos y renueva tu armario con ropa con historia!'
+    'Bazar Campechano es una comunidad en línea donde los usuarios pueden comprar y vender ropa y artículos de segunda mano de manera sencilla y segura. Esta plataforma está diseñada para que cualquier usuario registrado que ya haya realizado una compra pueda también vender los artículos que ya no utiliza, fomentando un intercambio dinámico y accesible para todos. El proyecto combina la funcionalidad de un bazar tradicional con la comodidad del comercio electrónico, ofreciendo una experiencia amigable y directa.'
 }
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <Providers>
-        <body className={textFont.className}>{children}</body>
+        <body className={`text-primary ${textFont.className}`}>{children}</body>
       </Providers >
     </html >
   )

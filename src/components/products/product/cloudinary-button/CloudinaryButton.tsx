@@ -110,7 +110,7 @@ export function CloudinaryButton({ images, setImages }: IUploaderProps) {
         >
           {({ widget, cloudinary, open }) => (
             <Button
-              className="me-2 inline-flex items-center rounded-none bg-black px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-black/80 focus:outline-none focus:ring-4"
+              className="me-2 inline-flex items-center rounded-none bg-primary px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary/80 focus:outline-none focus:ring-4"
               type='button'
               onClick={() => {
                 open()

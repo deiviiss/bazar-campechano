@@ -115,11 +115,13 @@ export const RegisterForm = () => {
         <div className="flex-1 border-t border-gray-500"></div>
       </div>
 
-      <Link
-        href="/auth/login"
-        className="btn-secondary text-center">
-        Ingresar
-      </Link>
+      <Button asChild variant={'secondary'} className='flex items-center justify-center w-full'>
+        <Link
+          href="/auth/login"
+        >
+          Ingresar
+        </Link>
+      </Button>
 
     </form>
   )

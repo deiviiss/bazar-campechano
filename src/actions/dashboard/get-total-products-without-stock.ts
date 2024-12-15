@@ -4,32 +4,18 @@ import prisma from '@/lib/prisma'
 
 export const getTotalProductsWithoutStock = async () => {
   try {
+    // Find products where all attribute combinations have `inStock` at 0
     const productsWithoutStock = await prisma.product.findMany({
       where: {
         isActive: true,
-        AND: [
-          {
-            clotheStock: {
-              every: {
-                inStock: 0
-              }
-            }
-          },
-          {
-            shoeStock: {
-              every: {
-                inStock: 0
-              }
-            }
-          },
-          {
-            toyStock: {
-              every: {
-                inStock: 0
-              }
-            }
+        productAttributeValue: {
+          every: {
+            inStock: 0 // All attribute combinations must have 0 stock
           }
-        ]
+        }
+      },
+      select: {
+        id: true // Optional: Select only the product ID
       }
     })
 

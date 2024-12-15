@@ -49,7 +49,7 @@ export const StockDetails = ({ stockDetails, setStockDetails }: StockDetailsProp
   return (
     <Card className="h-fit">
       <CardHeader>
-        <h3 className="text-lg font-semibold p-5 bg-slate-400 text-black">
+        <h3 className="text-lg font-semibold p-5 bg-slate-400 text-primary">
           Stock
         </h3>
       </CardHeader>

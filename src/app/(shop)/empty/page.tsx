@@ -20,7 +20,7 @@ export default function EmptyPage() {
         <div>
           <h1>Tu carrito está vacío</h1>
 
-          <Link href="/" className='text-black mt-2 text-4xl hover:text-black/80'>
+          <Link href="/" className='text-primary mt-2 text-4xl hover:text-primary/80'>
             Comprar
           </Link>
         </div>

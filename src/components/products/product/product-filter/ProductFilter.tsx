@@ -55,7 +55,7 @@ export function ProductFilter({ categories }: Props): JSX.Element {
             handleFilterCategory(value)
           }}
         >
-          <SelectTrigger className="w-full border border-black flex gap-2">
+          <SelectTrigger className="w-full border border-primary flex gap-2">
             <SelectValue placeholder='Todos'>
               {filterCategory !== 'all' ? labels[filterCategory as CategoryName] : 'Todos'}
             </SelectValue>

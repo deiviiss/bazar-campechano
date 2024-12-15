@@ -20,6 +20,7 @@ export const getUserById = async (id: string): Promise<IResponse> => {
         phoneNumber: true,
         password: true,
         emailVerified: true,
+        phoneNumberVerified: true,
         image: true,
         role: true,
         isActive: true

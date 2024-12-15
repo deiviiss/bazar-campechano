@@ -60,12 +60,13 @@ export const LoginForm = () => {
         <div className="flex-1 border-t border-gray-500"></div>
       </div>
 
-      <Link
-        href={`/auth/new-account?redirectTo=${redirectTo}`}
-        className="btn-secondary text-center">
-        Crear una nueva cuenta
-      </Link>
-
+      <Button asChild variant={'secondary'} className='flex items-center justify-center w-full'>
+        <Link
+          href={`/auth/new-account?redirectTo=${redirectTo}`}
+        >
+          Crear una nueva cuenta
+        </Link>
+      </Button>
     </form >
   )
 }

@@ -34,18 +34,6 @@ export { createUpdateProduct } from './products/create-update-product'
 export { deleteProductImage } from './products/delete-product-image'
 export { deleteProductById } from './products/delete-product-by-id'
 
-// products / bazar
-export { getPaginationProducts } from './products/bazar/get-products-pagination'
-export { getPaginationProductsStock } from './products/bazar/get-products-stock-pagination'
-export { getTotalProductsStock } from './products/bazar/get-total-products-stock'
-export { getProductStockByIdAndSize } from './products/bazar/get-product-stock-by-id-and-size'
-export { updateStockByAgeRangeAndProductId } from './products/bazar/update-stock-by-age-range-and-product-id'
-export { updateStockBySizeAndProductId } from './products/bazar/update-stock-by-size-and-product-id'
-export { getSizesProductClotheStock } from './products/bazar/get-sizes-product-clothe-stock'
-export { getSizesProductShoeStock } from './products/bazar/get-sizes-product-shoe-stock'
-export { getToyAgeRangeAndStock } from './products/bazar/get-toy-age-range-and-stock'
-export { processProductByType } from './products/bazar/process-product-by-type'
-
 // users
 export { getPaginatedUsers } from './users/get-paginated-users'
 export { getUserById } from './users/get-user-by-id'

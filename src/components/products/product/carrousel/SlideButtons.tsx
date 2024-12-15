@@ -20,7 +20,7 @@ export const SlideButtons = ({
         {slides.map((slide, i) => (
           <button
             key={i}
-            className={`transition-all w-2 h-2 bg-white border border-black rounded-full ${curr === i ? 'p-1 bg-gray-950 ' : 'opacity-75'
+            className={`transition-all w-2 h-2 bg-white border border-primary rounded-full ${curr === i ? 'p-1 bg-primary/90 ' : 'opacity-75'
               }`}
             onClick={() => {
               setCurr(i)
