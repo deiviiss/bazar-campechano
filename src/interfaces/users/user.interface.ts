@@ -4,7 +4,8 @@ export interface User {
   name: string
   phoneNumber: string
   password: string | null
-  emailVerified: Date | null
+  emailVerified: boolean | null
+  phoneNumberVerified: boolean | null
   image: string | null
   role: string
   isActive: boolean

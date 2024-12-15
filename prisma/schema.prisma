@@ -119,17 +119,17 @@ model ProductAttributeValue {
 }
 
 model User {
-  id               String  @id @default(uuid())
-  name             String
-  email            String  @unique
-  password         String?
-  emailVerified    Boolean @default(false)
-  phoneNumber      String
-  phoneVerified    Boolean @default(false)
-  hasPurchasedOnce Boolean @default(false)
-  image            String?
-  role             Role    @default(user)
-  isActive         Boolean @default(true)
+  id                  String  @id @default(uuid())
+  name                String
+  email               String  @unique
+  password            String?
+  emailVerified       Boolean @default(false)
+  phoneNumber         String
+  phoneNumberVerified Boolean @default(false)
+  hasPurchasedOnce    Boolean @default(false)
+  image               String?
+  role                Role    @default(user)
+  isActive            Boolean @default(true)
 
   address UserAddress?
 
