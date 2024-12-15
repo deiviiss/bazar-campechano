@@ -2,7 +2,7 @@
 
 import { type ShippingMethod, type PaymentMethod } from '@prisma/client'
 import Link from 'next/link'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { BsTruck } from 'react-icons/bs'
 import { CgCreditCard, CgSpinnerTwo } from 'react-icons/cg'
@@ -72,7 +72,7 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
   useEffect(() => {
     setLoaded(true)
     if (itemsInCart === 0) {
-      redirect('/empty')
+      router.push('/empty')
     }
   }, [])
 
