@@ -24,18 +24,6 @@ interface ProductSlideshowProps {
 export const ProductSlideshow = ({ images, altText }: ProductSlideshowProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isLoaded, setIsLoaded] = useState(false)
-  console.log('images', images)
-  // const handlePrevClick = () => {
-  //   setCurrentImageIndex((prevIndex) =>
-  //     prevIndex === 0 ? images.length - 1 : prevIndex - 1
-  //   )
-  // }
-
-  // const handleNextClick = () => {
-  //   setCurrentImageIndex((prevIndex) =>
-  //     prevIndex === images.length - 1 ? 0 : prevIndex + 1
-  //   )
-  // }
 
   useEffect(() => {
     setIsLoaded(true)
