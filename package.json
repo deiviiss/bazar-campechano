@@ -33,6 +33,7 @@
     "@radix-ui/react-switch": "1.1.0",
     "@tailwindcss/container-queries": "0.1.1",
     "@vercel/analytics": "^1.4.1",
+    "@vercel/speed-insights": "^1.1.0",
     "bcryptjs": "2.4.3",
     "class-variance-authority": "0.7.0",
     "cloudinary": "2.2.0",
