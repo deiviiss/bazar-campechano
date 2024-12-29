@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
 import { Providers } from '@/components'
 import { textFont } from '@/config/fonts'
@@ -20,7 +21,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <Providers>
-        <body className={`text-primary ${textFont.className}`}>{children}</body>
+        <body className={`text-primary ${textFont.className}`}>
+          {children}
+        </body>
+        <Analytics />
       </Providers >
     </html >
   )
