@@ -8,7 +8,7 @@ interface Props {
   }
 }
 
-export default async function EditUserPage({ params }: Props) {
+export default async function ProfilePage({ params }: Props) {
   const { id } = params
   const { user } = await getUserById(id)
 

@@ -1,19 +1,20 @@
 'use client'
 
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { ProductImage } from '@/components/products'
 import { useCartStore } from '@/store'
 import { currencyFormat } from '@/utils'
 
 export const ProductsInCart = () => {
+  const router = useRouter()
   const [loaded, setLoaded] = useState(false)
 
   const productsInCart = useCartStore(state => state.cart)
 
   useEffect(() => {
     if (productsInCart.length === 0) {
-      redirect('/empty')
+      router.push('/empty')
     }
     setLoaded(true)
   }, [productsInCart])

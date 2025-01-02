@@ -6,6 +6,8 @@ import { getUserById, getUserSessionServer } from '@/actions'
 import { Title } from '@/components'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { ButtonChangeSeller } from '@/components/ui/button-change-seller/ButtonChangeSeller'
+import { ButtonValidateEmail } from '@/components/ui/button-validate-email/ButtonValidateEmail'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 export const metadata: Metadata = {
@@ -58,11 +60,22 @@ const ProfilePage = async () => {
         <p><span className='font-semibold'>Correo:</span> {userMail}</p>
         <p><span className='font-semibold'>Teléfono:</span> {userPhoneNumber}</p>
 
-        <Button asChild className='flex mx-auto w-3/4 mt-10'>
-          <Link href='/orders'>
-            <span>Mis pedidos</span>
-          </Link>
-        </Button>
+        <div className='flex flex-col gap-4 justify-center mt-10'>
+          <Button asChild>
+            <Link href='/orders'>
+              <span>Mis pedidos</span>
+            </Link>
+          </Button>
+
+          {
+            !user.emailVerified && !user.phoneNumberVerified && <ButtonValidateEmail userId={user.id} />
+          }
+
+          {
+            user.emailVerified && user.phoneNumberVerified && user.hasPurchasedOnce && user.role === 'user' &&
+            <ButtonChangeSeller userId={user.id} />
+          }
+        </div>
       </CardContent>
 
     </Card>

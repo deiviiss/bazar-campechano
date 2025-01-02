@@ -24,9 +24,9 @@ export default function RootLayout({
       <Providers>
         <body className={`text-primary ${textFont.className}`}>
           {children}
+          <Analytics />
+          <SpeedInsights />
         </body>
-        <Analytics />
-        <SpeedInsights />
       </Providers >
     </html >
   )

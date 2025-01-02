@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface State {
-  shippingMethod: 'pickup' | 'delivery' | null
+  shippingMethod: string | null
   paymentMethod: string | null
   setShippingMethod: (method: 'pickup' | 'delivery' | null) => void
   setPaymentMethod: (method: string | null) => void

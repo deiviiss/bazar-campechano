@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { sendNotificationsPayment } from '@/actions'
+import { getUserById, getUserSessionServer, sendNotificationsPayment } from '@/actions'
 import { type PayPalOrdersStatusResponse } from '@/interfaces'
 import prisma from '@/lib/prisma'
 
@@ -43,6 +43,33 @@ export const paypalCheckPayment = async (transactionId: string) => {
         paidAt: new Date()
       }
     })
+
+    const userSession = await getUserSessionServer()
+
+    if (!userSession) {
+      return {
+        ok: false,
+        message: 'No se ha podido obtener la información del usuario'
+      }
+    }
+
+    const { user } = await getUserById(userSession.id)
+
+    if (!user) {
+      return {
+        ok: false,
+        message: 'No se ha podido obtener la información del usuario'
+      }
+    }
+
+    if (!user.hasPurchasedOnce) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          hasPurchasedOnce: true
+        }
+      })
+    }
 
     // send notifications to user and admin
     await sendNotificationsPayment({})

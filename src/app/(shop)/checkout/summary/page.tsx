@@ -1,7 +1,7 @@
 'use client'
 
-import { type PaymentMethod } from '@prisma/client'
-import { redirect } from 'next/navigation'
+import { type ShippingMethod, type PaymentMethod } from '@prisma/client'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PlaceOrder } from './ui/PlaceOrder'
 import { ProductsInCart } from './ui/ProductsInCart'
@@ -9,6 +9,7 @@ import { ButtonSidebarCart, Title } from '@/components'
 import { useAddressStore, useCartStore, useCheckoutStore } from '@/store'
 
 export default function CheckoutSummaryPage() {
+  const router = useRouter()
   const { shippingMethod, paymentMethod } = useCheckoutStore()
   const { address } = useAddressStore()
 
@@ -17,21 +18,21 @@ export default function CheckoutSummaryPage() {
 
   const isCheckoutIncomplete = !shippingMethod || (shippingMethod === 'delivery' && !address) || !paymentMethod
 
-  if (!shippingMethod) {
-    redirect('/checkout')
+  if (!shippingMethod || !paymentMethod) {
+    router.push('/checkout')
   }
 
-  if (!paymentMethod) {
-    redirect('/checkout')
+  if (shippingMethod === null) {
+    router.push('/checkout')
   }
 
   useEffect(() => {
     if (isCheckoutIncomplete && loaded) {
-      redirect('/checkout')
+      router.push('/checkout')
     }
 
     if (productsInCart.length === 0 && loaded) {
-      redirect('/empty')
+      router.push('/empty')
     }
     setLoaded(true)
   }, [productsInCart])
@@ -57,7 +58,7 @@ export default function CheckoutSummaryPage() {
         </div>
 
         {/* summary */}
-        <PlaceOrder shippingMethod={shippingMethod} paymentMethod={paymentMethod as PaymentMethod} />
+        <PlaceOrder shippingMethod={shippingMethod as ShippingMethod} paymentMethod={paymentMethod as PaymentMethod} />
 
       </div>
     </>

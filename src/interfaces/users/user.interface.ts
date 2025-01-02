@@ -1,12 +1,13 @@
 export interface User {
   id: string
-  email: string
   name: string
-  phoneNumber: string
-  password: string | null
+  email: string
   emailVerified: boolean | null
+  phoneNumber: string
   phoneNumberVerified: boolean | null
-  image: string | null
-  role: string
+  hasPurchasedOnce: boolean
   isActive: boolean
+  image?: string | null
+  role: string
+  password?: string | null
 }
