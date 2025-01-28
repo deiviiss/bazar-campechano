@@ -31,7 +31,8 @@ export default async function FaqPage() {
             Para vender en Bazar Campechano, debes ser un usuario registrado y haber realizado al menos una compra. Una vez que estés registrado, sigue estos pasos:
           </p>
           <ul className="list-inside list-disc pb-4">
-            <li>Accede a tu cuenta y dirígete a la opción de “Vender un Producto”.</li>
+            <li>Accede a tu cuenta y dirígete a tu perfil y haz click en la opción de activar vendedor. Se activará el menu de vendedor.</li>
+            <li>Accede a la sección de productos y haz click en el botón &quot;Agregar producto&quot; para agregar un nuevo producto.</li>
             <li>Completa los detalles del producto (nombre, descripción, fotos, precio) y publícalo en la plataforma.</li>
             <li>El producto será validado por el equipo de Bazar Campechano antes de ser mostrado en la plataforma. Este proceso puede demorar hasta 24 horas.</li>
           </ul>
