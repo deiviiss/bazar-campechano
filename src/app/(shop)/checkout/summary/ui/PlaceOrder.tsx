@@ -9,6 +9,7 @@ import { CgCreditCard, CgSpinnerTwo } from 'react-icons/cg'
 import { toast } from 'sonner'
 import { placeOrder } from '@/actions'
 import { PaymentMethodNameWithIcon } from '@/components'
+import { noticeFailure } from '@/components/notification-toast/NotificationToast'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { PICKUP_LOCATION } from '@/config/checkoutConfig'
@@ -62,13 +63,6 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
     })
   }
 
-  const noticeFailedOrder = () => {
-    toast.error('No se pudo crear el pedido, intente nuevamente', {
-      position: 'top-right',
-      duration: 3000
-    })
-  }
-
   useEffect(() => {
     setLoaded(true)
     if (itemsInCart === 0) {
@@ -109,7 +103,7 @@ export const PlaceOrder = ({ paymentMethod, shippingMethod }: Props) => {
     // product sold out
     if (!ok) {
       setIsPlacingOrder(false)
-      noticeFailedOrder()
+      noticeFailure('No se pudo crear el pedido, intente nuevamente')
       setErrorMessage(String(message))
       return
     }

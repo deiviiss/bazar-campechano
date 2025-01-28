@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { toast } from 'sonner'
 import { changeUserToSeller } from '@/actions/auth/change-user-to-seller'
+import { noticeFailure, noticeSuccess } from '@/components/notification-toast/NotificationToast'
 import { Button } from '@/components/ui/button'
 
 interface ButtonChangeSellerProps {
@@ -23,18 +23,12 @@ export const ButtonChangeSeller = ({ userId }: ButtonChangeSellerProps) => {
       const { ok, message } = await changeUserToSeller({ userId })
 
       if (!ok) {
-        toast.error(message, {
-          position: 'top-right',
-          duration: 2000
-        })
+        noticeFailure(message)
         setMessage(message)
         return
       }
 
-      toast.success(message, {
-        position: 'top-right',
-        duration: 2000
-      })
+      noticeSuccess(message)
       router.refresh()
     } catch (error) {
       setMessage('Hubo un error al cambiar el usuario a vendedor.')

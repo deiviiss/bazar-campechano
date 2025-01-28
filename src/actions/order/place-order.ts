@@ -183,12 +183,8 @@ const createOrderProcess = async (
     return newOrder
   })
 
-  if (paymentMethod === 'cash') {
-    await sendNotificationsPaymentMethod({ userName: user.name, paymentMethod })
-  }
-
-  if (paymentMethod === 'transfer') {
-    await sendNotificationsPaymentMethod({ userName: user.name, paymentMethod })
+  if (paymentMethod === 'cash' || paymentMethod === 'transfer') {
+    await sendNotificationsPaymentMethod({ userName: user.name, userEmail: user.email, paymentMethod })
   }
 
   return order.id
@@ -243,6 +239,17 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
 
     const userValidated = user.emailVerified && user.phoneNumberVerified
 
+    // User not validated
+    if (!userValidated) {
+      // User has already purchased once
+      if (user.hasPurchasedOnce) {
+        return {
+          ok: false,
+          message: 'Por favor, valida tu cuenta desde tu perfil para continuar comprando.'
+        }
+      }
+    }
+
     const productStocks = await prisma.productAttributeValue.findMany({
       where: {
         productId: { in: productsId.map(product => product.productId) }
@@ -256,17 +263,6 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
         }
       }
     })
-
-    // User not validated
-    if (!userValidated) {
-      // User has already purchased once
-      if (user.hasPurchasedOnce) {
-        return {
-          ok: false,
-          message: 'Por favor, valida tu cuenta desde tu perfil para continuar comprando.'
-        }
-      }
-    }
 
     // If user is validated, proceed with order creation normally
     const orderId = await createOrderProcess(user, productsId, address, paymentMethod, shippingMethod, productStocks)

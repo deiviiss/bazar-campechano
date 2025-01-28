@@ -13,6 +13,7 @@ export const getProductBySlug = async (slug: string): Promise<IResponse> => {
   try {
     const productDB = await prisma.product.findFirst({
       include: {
+        user: true,
         productImage: {
           select: {
             id: true,
@@ -111,6 +112,11 @@ export const getProductBySlug = async (slug: string): Promise<IResponse> => {
         id: productDB.category.id,
         name: productDB.category.name,
         description: productDB.category.description
+      },
+      userId: productDB.userId,
+      user: {
+        id: productDB.userId,
+        name: productDB.user.name
       },
       productImage: productDB.productImage,
       productAttributeValue: completeAttributeValues,

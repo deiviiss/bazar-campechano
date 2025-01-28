@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { ButtonChangeSeller } from '@/components/ui/button-change-seller/ButtonChangeSeller'
 import { ButtonValidateEmail } from '@/components/ui/button-validate-email/ButtonValidateEmail'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { getRoleLabel } from '@/utils/roleDictionary'
 
 export const metadata: Metadata = {
   title: 'Perfil de usuario',
@@ -32,6 +33,7 @@ const ProfilePage = async () => {
   const userImage = user.image || '/imgs/avatar.png'
   const userMail = user.email || 'Correo electrónico'
   const userPhoneNumber = user.phoneNumber || 'Número de teléfono'
+  const userRole = getRoleLabel(user.role)
 
   return (
     <Card className='mb-10 pb-10 max-w-[400px] mx-auto' >
@@ -59,6 +61,7 @@ const ProfilePage = async () => {
         <p><span className='font-semibold'>Nombre:</span> {userName}</p>
         <p><span className='font-semibold'>Correo:</span> {userMail}</p>
         <p><span className='font-semibold'>Teléfono:</span> {userPhoneNumber}</p>
+        <p><span className='font-semibold'>Rol:</span> {userRole}</p>
 
         <div className='flex flex-col gap-4 justify-center mt-10'>
           <Button asChild>

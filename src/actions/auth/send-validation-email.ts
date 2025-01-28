@@ -7,7 +7,17 @@ import prisma from '@/lib/prisma'
 export async function sendValidationEmail(userId: string) {
   const user = await prisma.user.findUnique({ where: { id: userId } })
   if (!user) {
-    throw new Error('Usuario no encontrado')
+    return {
+      ok: false,
+      message: 'No se encontró el usuario'
+    }
+  }
+
+  if (user.emailVerified) {
+    return {
+      ok: false,
+      message: 'El correo ya ha sido verificado'
+    }
   }
 
   // Validate that the AUTH_SECRET environment variable is set
@@ -94,5 +104,8 @@ export async function sendValidationEmail(userId: string) {
 </html>`
   })
 
-  return 'Correo enviado. Revisa spam si no está en tu bandeja de entrada.'
+  return {
+    ok: true,
+    message: 'Correo enviado. Revisa spam si no está en tu bandeja de entrada.'
+  }
 }

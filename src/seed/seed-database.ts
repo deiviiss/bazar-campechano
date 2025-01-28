@@ -48,6 +48,7 @@ const main = async () => {
     const dbProduct = await prisma.product.create({
       data: {
         ...rest,
+        userId: '',
         categoryId: categoriesMap[type]
       }
     })

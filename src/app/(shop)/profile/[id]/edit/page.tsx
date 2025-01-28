@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getUserById } from '@/actions'
+import { getUserById, getUserSessionServer } from '@/actions'
 import { EditForm, Title } from '@/components'
 
 interface Props {
@@ -9,9 +9,15 @@ interface Props {
 }
 
 export default async function ProfilePage({ params }: Props) {
+  const userSession = await getUserSessionServer()
   const { id } = params
-  const { user } = await getUserById(id)
+  const isUserMatch = id === userSession?.id
 
+  if (!isUserMatch) {
+    redirect('/profile')
+  }
+
+  const { user } = await getUserById(id)
   if (!user) {
     redirect('/')
   }

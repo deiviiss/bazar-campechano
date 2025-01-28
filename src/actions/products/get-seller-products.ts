@@ -10,6 +10,7 @@ interface PaginationOptions {
   page?: number
   take?: number
   category?: string
+  userId: string
 }
 
 interface IResponse {
@@ -18,7 +19,7 @@ interface IResponse {
   products: ProductV2WithStock[]
 }
 
-export const getProducts = async ({ page = 1, take = 12, query = '', category }: PaginationOptions): Promise<IResponse> => {
+export const getSellerProducts = async ({ page = 1, take = 12, query = '', category, userId }: PaginationOptions): Promise<IResponse> => {
   page = validatePageNumber(page)
 
   try {
@@ -26,7 +27,6 @@ export const getProducts = async ({ page = 1, take = 12, query = '', category }:
       take,
       skip: (page - 1) * take,
       include: {
-        user: true,
         productImage: {
           take: 2,
           select: {
@@ -63,7 +63,7 @@ export const getProducts = async ({ page = 1, take = 12, query = '', category }:
         }
       },
       where: {
-        isActive: true,
+        userId,
         ...(category
           ? {
               category: {
@@ -154,10 +154,10 @@ export const getProducts = async ({ page = 1, take = 12, query = '', category }:
           name: product.category.name,
           description: product.category.description
         },
-        userId: product.userId || '',
+        userId: product.userId,
         user: {
-          id: product.user.id || '',
-          name: product.user.name || ''
+          id: product.userId,
+          name: product.userId
         },
         productImage: product.productImage,
         productAttributeValue,

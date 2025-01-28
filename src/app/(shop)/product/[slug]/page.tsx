@@ -100,7 +100,7 @@ export default async function ProductPage({ params }: Props) {
 
               <h2 className={`${titleFont.className} antialiased font-extrabold text-2xl min-w-24 text-right`}>$ {product.price}</h2>
             </div>
-
+            <span>Vendido por: {product.user.name}</span>
             {
               product.hasSize &&
               <div className='my-5'>
