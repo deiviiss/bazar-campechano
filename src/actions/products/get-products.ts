@@ -26,6 +26,7 @@ export const getProducts = async ({ page = 1, take = 12, query = '', category }:
       take,
       skip: (page - 1) * take,
       include: {
+        user: true,
         productImage: {
           take: 2,
           select: {
@@ -152,6 +153,11 @@ export const getProducts = async ({ page = 1, take = 12, query = '', category }:
           id: product.category.id,
           name: product.category.name,
           description: product.category.description
+        },
+        userId: product.userId || '',
+        user: {
+          id: product.user.id || '',
+          name: product.user.name || ''
         },
         productImage: product.productImage,
         productAttributeValue,

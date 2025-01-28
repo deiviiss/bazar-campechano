@@ -61,18 +61,23 @@ export const CardProduct = ({ product }: Props) => {
       </CardHeader>
 
       <CardContent className='flex items-center justify-between gap-3 pb-2'>
-        <div className='flex flex-col justify-between items-center'>
+        <div className='flex flex-col justify-between'>
           <CardTitle className="text-base font-bold h-12 overflow-hidden">{product.title}</CardTitle>
 
-          {/* starts */}
-          <p className="text-lg w-full">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <span key={index} className="text-yellow-500">
-                &#9733;
-              </span>
-            ))}
+          {
+            product.isActive
+              ? (<p className="text-lg w-full">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <span key={index} className="text-yellow-500">
+                    &#9733;
+                  </span>
+                ))}
 
-          </p>
+              </p>)
+              : (
+                <p className='text-xs bg-red-400 rounded-sm p-2 text-secondary w-3/4'>En validación</p>)
+          }
+
         </div>
 
         <h2 className='bg-gray-300 rounded-sm p-2 w-max font-bold self-start'>${product.price}</h2>

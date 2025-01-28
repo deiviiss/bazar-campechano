@@ -15,7 +15,7 @@ export const paidOrder = async (orderId: string, userId: string) => {
       }
     }
 
-    await prisma.order.update({
+    const orderUpdated = await prisma.order.update({
       where: { id: orderId },
       data: {
         isPaid: true,
@@ -24,8 +24,17 @@ export const paidOrder = async (orderId: string, userId: string) => {
       }
     })
 
+    if (!user.hasPurchasedOnce) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          hasPurchasedOnce: true
+        }
+      })
+    }
+
     // send notifications to user and admin
-    await sendNotificationsPayment({ userEmail: user.email, userName: user.name })
+    await sendNotificationsPayment({ userEmail: user.email, userName: user.name, paymentMethod: orderUpdated.paymentMethod })
 
     revalidatePath(`/orders/${orderId}`)
 

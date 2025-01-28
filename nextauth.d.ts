@@ -8,6 +8,8 @@ declare module 'next-auth' {
       email: string
       emailVerified: boolean
       phoneNumber: string
+      phoneNumberVerified: boolean
+      hasPurchasedOnce: boolean
       role: string
       image?: string
     } & DefaultSession['user']

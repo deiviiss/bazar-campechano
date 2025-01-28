@@ -102,6 +102,11 @@ export interface ProductV2 {
   category: CategoryV2 // New interface for dynamic category
   isActive: boolean
   productAttributeValue: StockDetail[] // Dynamic attribute values
+  userId: string
+  user: {
+    id: string
+    name: string
+  }
 }
 
 export interface ProductV2WithStock extends ProductV2 {

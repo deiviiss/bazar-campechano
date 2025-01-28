@@ -14,9 +14,10 @@ export const Sidebar = () => {
   const { data: session } = useSession()
   const isAuthenticated = !!session?.user
   const isAdmin = session?.user?.role === 'admin'
+  const isSeller = session?.user?.role === 'seller'
 
   return (
-    <div>
+    <>
       {
         isSideMenuOpen && (
           <>
@@ -69,7 +70,7 @@ export const Sidebar = () => {
                     onClick={() => { closeMenu() }}
                     className='flex items-center mt-10 p-2 hover:bg-primary hover:text-white rounded-none transition-all'>
                     <IoTicketOutline size={30} />
-                    <span className='ml-3 text-xl'>Pedidos</span>
+                    <span className='ml-3 text-xl'>Mis Pedidos</span>
                   </Link>
 
                   <button
@@ -121,8 +122,25 @@ export const Sidebar = () => {
             </>)
         }
 
-      </nav >
+        {
+          isSeller && (
+            <>              <Link href='/seller/products'
+              onClick={() => { closeMenu() }}
+              className='flex items-center mt-10 p-2 hover:bg-primary hover:text-white rounded-none transition-all'>
+              <IoShirtOutline size={30} />
+              <span className='ml-3 text-xl'>Productos</span>
+            </Link>
 
-    </div >
+              <Link href='/seller/orders'
+                onClick={() => { closeMenu() }}
+                className='flex items-center mt-10 p-2 hover:bg-primary hover:text-white rounded-none transition-all'>
+                <IoTicketOutline size={30} />
+                <span className='ml-3 text-xl'>Todos los pedidos </span>
+              </Link>
+            </>)
+        }
+
+      </nav >
+    </ >
   )
 }

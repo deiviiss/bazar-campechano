@@ -2,8 +2,8 @@
 
 import { type PaymentMethod, type ShippingMethod } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
-import { getUserSessionServer, sendNotificationsPaymentMethod } from '@/actions'
-import { type UserAddress, type ProductToOrder } from '@/interfaces'
+import { getUserById, getUserSessionServer, sendNotificationsPaymentMethod } from '@/actions'
+import { type UserAddress, type ProductToOrder, type User } from '@/interfaces'
 import prisma from '@/lib/prisma'
 
 interface OrderDetails {
@@ -67,6 +67,129 @@ const validateStockForProduct = (product: ProductToOrder, productStocks: Array<{
   return stock
 }
 
+// Utility function for order creation process
+const createOrderProcess = async (
+  user: User,
+  productsId: ProductToOrder[],
+  address: UserAddress,
+  paymentMethod: PaymentMethod,
+  shippingMethod: ShippingMethod,
+  productStocks: Array<{
+    id: string
+    productId: string
+    valueOptionId: string
+    attributeId: string
+    valueOption: { value: string }
+    inStock: number
+    product: {
+      title: string
+      price: number
+      categoryId: string
+    }
+  }>
+) => {
+  // check if all products are in stock
+  productsId.forEach(product => {
+    validateStockForProduct(product, productStocks)
+  })
+
+  const totalItemsInOrder = productsId.reduce((count, product) => count + product
+    .quantity, 0)
+
+  const subTotal = productsId.reduce((total, product) => {
+    const stockForProduct = validateStockForProduct(product, productStocks)
+    return total + stockForProduct.product.price * product.quantity
+  }, 0)
+
+  const shippingCost =
+  shippingMethod === 'pickup'
+    ? 0
+    : subTotal > 199
+      ? 0
+      : 45
+
+  const total = subTotal + shippingCost
+
+  const order = await prisma.$transaction(async (tx) => {
+    // Create order
+    const newOrder = await tx.order.create({
+      data: {
+        userId: user.id,
+        subtotal: subTotal,
+        shippingCost,
+        total,
+        paymentMethod,
+        shippingMethod,
+        itemsInOrder: totalItemsInOrder
+      }
+    })
+
+    // Create order items
+    for (const product of productsId) {
+      const stockForProduct = validateStockForProduct(product, productStocks)
+
+      await tx.orderItem.create({
+        data: {
+          orderId: newOrder.id, // Relation to the order
+          productId: product.productId,
+          quantity: product.quantity,
+          price: stockForProduct.product.price,
+          attributes: {
+            connect: product.attributes.map((attr) => {
+              const matchingStock = productStocks.find(
+                (stock) =>
+                  stock.productId === product.productId &&
+                stock.attributeId === attr.attributeId
+              )
+
+              if (!matchingStock) {
+                throw new Error('Atributo no válido')
+              }
+
+              return { id: matchingStock.valueOptionId }
+            })
+          }
+        }
+      })
+    }
+
+    const { country, userId, ...restAddress } = address
+
+    // Create order address
+    await tx.orderAddress.create({
+      data: {
+        ...restAddress,
+        countryId: address.country,
+        orderId: newOrder.id
+      }
+    })
+
+    // Reduce stock
+    await Promise.all(
+      productsId.map(async (product) => {
+        const stockForProduct = validateStockForProduct(product, productStocks)
+
+        return await prisma.productAttributeValue.update({
+          where: { id: stockForProduct.id },
+          data: {
+            inStock: {
+              decrement: product.quantity
+            }
+          }
+        })
+      })
+    )
+
+    return newOrder
+  })
+
+  if (paymentMethod === 'cash' || paymentMethod === 'transfer') {
+    await sendNotificationsPaymentMethod({ userName: user.name, userEmail: user.email, paymentMethod })
+  }
+
+  return order.id
+}
+
 export const placeOrder = async ({ productsId, address, paymentMethod, shippingMethod }: OrderDetails) => {
   // validate shipping and payment method
   if (!shippingMethod) {
@@ -99,12 +222,31 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
 
   try {
     // session user
-    const user = await getUserSessionServer()
-
+    const userSession = await getUserSessionServer()
+    if (!userSession) {
+      return {
+        ok: false,
+        message: 'No se ha podido obtener la información del usuario'
+      }
+    }
+    const { user } = await getUserById(userSession.id)
     if (!user) {
       return {
         ok: false,
         message: 'No se ha podido obtener la información del usuario'
+      }
+    }
+
+    const userValidated = user.emailVerified && user.phoneNumberVerified
+
+    // User not validated
+    if (!userValidated) {
+      // User has already purchased once
+      if (user.hasPurchasedOnce) {
+        return {
+          ok: false,
+          message: 'Por favor, valida tu cuenta desde tu perfil para continuar comprando.'
+        }
       }
     }
 
@@ -122,113 +264,12 @@ export const placeOrder = async ({ productsId, address, paymentMethod, shippingM
       }
     })
 
-    // check if all products are in stock
-    productsId.forEach(product => {
-      validateStockForProduct(product, productStocks)
-    })
+    // If user is validated, proceed with order creation normally
+    const orderId = await createOrderProcess(user, productsId, address, paymentMethod, shippingMethod, productStocks)
 
-    const totalItemsInOrder = productsId.reduce((count, product) => count + product
-      .quantity, 0)
+    revalidatePath('/orders')
 
-    const subTotal = productsId.reduce((total, product) => {
-      const stockForProduct = validateStockForProduct(product, productStocks)
-      return total + stockForProduct.product.price * product.quantity
-    }, 0)
-
-    const shippingCost =
-  shippingMethod === 'pickup'
-    ? 0
-    : subTotal > 199
-      ? 0
-      : 45
-
-    const total = subTotal + shippingCost
-
-    const order = await prisma.$transaction(async (tx) => {
-      // Create order
-      const newOrder = await tx.order.create({
-        data: {
-          userId: user.id,
-          subtotal: subTotal,
-          shippingCost,
-          total,
-          paymentMethod,
-          shippingMethod,
-          itemsInOrder: totalItemsInOrder
-        }
-      })
-
-      // Create order items
-      for (const product of productsId) {
-        const stockForProduct = validateStockForProduct(product, productStocks)
-
-        await tx.orderItem.create({
-          data: {
-            orderId: newOrder.id, // Relation to the order
-            productId: product.productId,
-            quantity: product.quantity,
-            price: stockForProduct.product.price,
-            attributes: {
-              connect: product.attributes.map((attr) => {
-                const matchingStock = productStocks.find(
-                  (stock) =>
-                    stock.productId === product.productId &&
-                stock.attributeId === attr.attributeId
-                )
-
-                if (!matchingStock) {
-                  throw new Error('Atributo no válido')
-                }
-
-                return { id: matchingStock.valueOptionId }
-              })
-            }
-          }
-        })
-      }
-
-      const { country, userId, ...restAddress } = address
-
-      // Create order address
-      await tx.orderAddress.create({
-        data: {
-          ...restAddress,
-          countryId: address.country,
-          orderId: newOrder.id
-        }
-      })
-
-      // Reduce stock
-      await Promise.all(
-        productsId.map(async (product) => {
-          const stockForProduct = validateStockForProduct(product, productStocks)
-
-          return await prisma.productAttributeValue.update({
-            where: { id: stockForProduct.id },
-            data: {
-              inStock: {
-                decrement: product.quantity
-              }
-            }
-          })
-        })
-      )
-
-      return newOrder
-    })
-
-    if (paymentMethod === 'cash') {
-      await sendNotificationsPaymentMethod({ userName: user.name, paymentMethod })
-    }
-
-    if (paymentMethod === 'transfer') {
-      await sendNotificationsPaymentMethod({ userName: user.name, paymentMethod })
-    }
-
-    revalidatePath('/')
-    revalidatePath('/admin')
-
-    return { ok: true, message: 'Order placed successfully', orderId: order.id }
+    return { ok: true, message: 'Order placed successfully', orderId }
   } catch (error) {
     if (error instanceof Error) {
       return { ok: false, message: error.message }

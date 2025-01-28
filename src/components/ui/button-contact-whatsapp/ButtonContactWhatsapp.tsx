@@ -29,7 +29,7 @@ export const ButtonContactWhatsApp = ({ name, className, icon }: Props) => {
   }, [])
 
   return (
-    <div className={`${isVisible ? 'fade-in' : 'opacity-0'}`}>
+    <div className={`${isVisible ? 'fade-in pointer-events-auto' : 'opacity-0  pointer-events-none'}`}>
       <Button
         asChild
         variant='outline'

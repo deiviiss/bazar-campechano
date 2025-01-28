@@ -26,6 +26,7 @@ export const getFeaturedProducts = async ({ page = 1, take = 12, query = '', cat
       take,
       skip: (page - 1) * take,
       include: {
+        user: true,
         productImage: {
           take: 2,
           select: {
@@ -157,7 +158,12 @@ export const getFeaturedProducts = async ({ page = 1, take = 12, query = '', cat
         productAttributeValue,
         hasStock,
         hasSize,
-        availableSizes
+        availableSizes,
+        user: {
+          id: product.user.id,
+          name: product.user.name
+        },
+        userId: product.user.id
       }
     })
 

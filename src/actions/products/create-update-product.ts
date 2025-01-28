@@ -2,6 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+
+import { getUserSessionServer } from '@/actions/auth/getUserSessionServer'
 import prisma from '@/lib/prisma'
 
 const productSchema = z.object({
@@ -72,7 +74,8 @@ const productSchema = z.object({
     z.object({
       id: z.string(),
       url: z.string()
-    }))
+    })),
+  userId: z.string().uuid()
 }).strict()
 
 const messages = {
@@ -82,16 +85,31 @@ const messages = {
 }
 
 export const createUpdateProduct = async (formData: FormData) => {
-  const data = Object.fromEntries(formData)
+  const user = await getUserSessionServer()
+
+  // Check if the userId arrived in the form or we take it from the session
+  const userIdFromForm = formData.get('userId')
+  const userIdFromSession = user ? user.id : null
+
+  const userIdValidate = userIdFromForm || userIdFromSession
+
+  // If there is no userId, return an error
+  if (!userIdValidate) {
+    return {
+      ok: false,
+      message: 'No se pudo obtener la información del usuario'
+    }
+  }
 
   const parsedStockDetails = JSON.parse(formData.get('stockDetails') as string)
-
   const parsedImages = JSON.parse(formData.get('images') as string)
 
+  const data = Object.fromEntries(formData)
   const dataToValidate = {
     ...data,
     stockDetails: parsedStockDetails,
-    images: parsedImages
+    images: parsedImages,
+    userId: userIdValidate
   }
 
   const productParsed = productSchema.safeParse(dataToValidate)
@@ -109,7 +127,7 @@ export const createUpdateProduct = async (formData: FormData) => {
   // config slug format
   productData.slug = productData.slug.toLowerCase().replace(/ /g, '-').trim()
 
-  const { id, stockDetails, images, ...restProduct } = productData
+  const { id, stockDetails, images, userId, ...restProduct } = productData
 
   const validStockDetails = stockDetails.filter(
     (stock) => stock.inStock > 0 || stock.id
@@ -124,6 +142,7 @@ export const createUpdateProduct = async (formData: FormData) => {
           where: { id },
           data: {
             ...restProduct,
+            userId,
             productImage: {
               deleteMany: {}, // Delete all existing images
               createMany: {
@@ -165,11 +184,13 @@ export const createUpdateProduct = async (formData: FormData) => {
       const product = await tx.product.create({
         data: {
           ...restProduct,
+          userId,
           productImage: {
             createMany: {
               data: images.map((image) => ({ url: image.url }))
             }
           },
+          isActive: false,
           productAttributeValue: {
             createMany: {
               data: validStockDetails.map((stock) => ({

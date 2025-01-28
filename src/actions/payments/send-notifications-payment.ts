@@ -1,13 +1,15 @@
 'use server'
 
+import { type PaymentMethod } from '@prisma/client'
 import { getUserSessionServer, getEmailAdmin, sendEmail } from '@/actions'
 
 interface Props {
   userEmail?: string
   userName?: string
+  paymentMethod: PaymentMethod
 }
 
-export const sendNotificationsPayment = async ({ userEmail, userName }: Props) => {
+export const sendNotificationsPayment = async ({ userEmail, userName, paymentMethod }: Props) => {
   const user = await getUserSessionServer()
 
   if (!user) {
@@ -29,26 +31,64 @@ export const sendNotificationsPayment = async ({ userEmail, userName }: Props) =
     }
   }
 
-  // send email to user to notify payment
+  if (paymentMethod !== 'cash') {
+  // Send email to user
+    await sendEmail({
+      email,
+      subject: 'Pago confirmado',
+      message: `
+      <p>Hola ${name},</p>
+      <p>¡Gracias por realizar el pago! Hemos confirmado la transacción y su pedido será enviado en el transcurso de 24 horas.</p>
+      <p>Saludos,</p>
+      <p>El equipo de Bazar Campechano</p>
+    `
+    })
+
+    // Send email to admin
+    await sendEmail({
+      email: emailAdmin.email,
+      subject: `Pago de ${name} confirmado`,
+      message: `
+      <p>Hola,</p>
+      <p>${name} ha realizado un pago mediante ${paymentMethod}. Prepara su pedido para ser enviado en el transcurso de 24 horas.</p>
+      <p>Saludos,</p>
+      <p>El equipo de Bazar Campechano</p>
+    `
+    })
+
+    return {
+      ok: true,
+      message: 'Notificaciones enviadas correctamente para otros métodos de pago'
+    }
+  }
+
+  // Send email to user
   await sendEmail({
     email,
-    subject: 'Pago confirmado',
+    subject: 'Pago pendiente en efectivo',
     message: `
-      <p>Hola</p>
-      <p>¡${user.name} gracias por realizar el pago! Ya hemos verificado la información del mismo. Su pedido será enviado en el transcurso de 24 horas.</p>
-      <p>SLDS</p>
-      `
+      <p>Hola ${name},</p>
+      <p>Gracias por elegir pagar en efectivo. Su pedido será procesado y enviado una vez se realice el pago.</p>
+      <p>Por favor, asegúrese de estar disponible para recibir su pedido.</p>
+      <p>Saludos,</p>
+      <p>El equipo de Bazar Campechano</p>
+    `
   })
 
-  // send email to admin to notify payment
+  // Send email to admin
   await sendEmail({
     email: emailAdmin.email,
-    subject: `Pago de ${name} confirmado`,
+    subject: `Pedido con pago en efectivo de ${name}`,
     message: `
-      <p>Hola</p>
-      <p>¡${name} ha realizado un pago!</p>
-      <p>Prepara su pedido.</p>
-      <p>SLDS</p>
-      `
+      <p>Hola,</p>
+      <p>${name} ha seleccionado pagar en efectivo. Por favor, asegúrate de coordinar correctamente la entrega y el cobro.</p>
+      <p>Saludos,</p>
+      <p>El equipo de Bazar Campechano</p>
+    `
   })
+
+  return {
+    ok: true,
+    message: 'Pago en efectivo'
+  }
 }

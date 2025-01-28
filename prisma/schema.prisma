@@ -60,6 +60,9 @@ model Product {
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
   productImage ProductImage[]
   orderItem    OrderItem[]
 
@@ -136,6 +139,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   order     Order[]
+  Product   Product[]
 
   @@map("users")
 }

@@ -1,31 +1,28 @@
 'use server'
 
-import nodemailer from 'nodemailer'
+import * as brevo from '@getbrevo/brevo'
+const apiInstance = new brevo.TransactionalEmailsApi()
 
-const smtpEmail = process.env.SMTP_EMAIL
-const smtpPassword = process.env.SMTP_PASSWORD
-const smtpUser = process.env.SMTP_USER
+apiInstance.setApiKey(
+  brevo.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY || ''
+)
 
-interface IEmailOptions {
+interface EmailOptionsParams {
   email: string
   subject: string
   message: string
 }
 
-export const sendEmail = async ({ message, subject, email }: IEmailOptions) => {
-  const transporter = nodemailer.createTransport({
-    host: 'smtp-mail.outlook.com',
-    port: 587,
-    secure: false,
-    auth: {
-      user: smtpEmail,
-      pass: smtpPassword
-    }
-  })
-
-  // send mail
+export const sendEmail = async ({ email, subject, message }: EmailOptionsParams) => {
   try {
-    await transporter.sendMail(createEmailOptions(email, subject, message))
+    const smtpEmail = new brevo.SendSmtpEmail()
+    smtpEmail.subject = subject
+    smtpEmail.to = [{ email, name: email }]
+    smtpEmail.htmlContent = `<html><body>${message}</body></html>`
+    smtpEmail.sender = { name: 'Bazar Campechano', email: 'bazar.campechano@hotmail.com' }
+
+    await apiInstance.sendTransacEmail(smtpEmail)
 
     return {
       ok: true,
@@ -37,15 +34,4 @@ export const sendEmail = async ({ message, subject, email }: IEmailOptions) => {
       message: 'Error al enviar este correo'
     }
   }
-}
-
-const createEmailOptions = (email: string, subject: string, message: string) => {
-  const emailOptions = {
-    from: `${smtpUser} <${smtpEmail}>`,
-    to: email,
-    subject,
-    html: message
-  }
-
-  return emailOptions
 }

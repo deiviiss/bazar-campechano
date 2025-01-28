@@ -24,7 +24,6 @@ export const ProductItem = ({ product, className }: Props) => {
   const valueOptionId = product.productAttributeValue.map(attr => {
     return attr.valueOptionId
   })[0]
-
   return (
     <div className={`flex-shrink-0 max-w-[300px] px-2 min-[400px]:max-w-[400px] md:max-w-[200px] lg:max-w-[240px] xl:max-w-[280px] ${className}`}>
       <Link href={`/product/${product.slug}`}>
@@ -45,7 +44,7 @@ export const ProductItem = ({ product, className }: Props) => {
         >
           {product.title}
         </Link>
-
+        <span>{product.user.name}</span>
         <div className='flex w-full gap-1 justify-between items-start text-sm sm:text-base mt-2'>
           <span className='font-bold mt-2'>$ {product.price}</span>
           {
